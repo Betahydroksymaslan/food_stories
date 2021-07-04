@@ -1,5 +1,8 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
-  background-color: ${({ theme }) => theme.colors.mainColor};
+export const AppWrapper = styled.div`
+  background-color: ${({ theme }) => theme.colors.mainBGC};
+  width: 100%;
+  height: 100vh;
+  overflow-y: hidden;
 `;

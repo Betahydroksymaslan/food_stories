@@ -14,6 +14,7 @@ export const GlobalStyle = createGlobalStyle`
     font-family: 'Montserrat', sans-serif;
     padding: 0;
     margin: 0;
+    color: ${({theme}) => theme.colors.mainDark};
   }
   a, button {
     font-family: 'Montserrat', sans-serif;
@@ -28,7 +29,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   h1 {
     font-size: 30px;
-    font-weight: 400;
+    font-weight: 300;
     margin: 0;
   }
 `;
