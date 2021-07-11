@@ -1,26 +1,29 @@
 {
   "files": {
-    "main.js": "/food_stories/static/js/main.b71d3314.chunk.js",
-    "main.js.map": "/food_stories/static/js/main.b71d3314.chunk.js.map",
-    "runtime-main.js": "/food_stories/static/js/runtime-main.7e72a1f1.js",
-    "runtime-main.js.map": "/food_stories/static/js/runtime-main.7e72a1f1.js.map",
+    "main.css": "/food_stories/static/css/main.3302407a.chunk.css",
+    "main.js": "/food_stories/static/js/main.403dd063.chunk.js",
+    "main.js.map": "/food_stories/static/js/main.403dd063.chunk.js.map",
+    "runtime-main.js": "/food_stories/static/js/runtime-main.09ec3686.js",
+    "runtime-main.js.map": "/food_stories/static/js/runtime-main.09ec3686.js.map",
     "static/css/2.3a6c9f29.chunk.css": "/food_stories/static/css/2.3a6c9f29.chunk.css",
-    "static/js/2.f72112a6.chunk.js": "/food_stories/static/js/2.f72112a6.chunk.js",
-    "static/js/2.f72112a6.chunk.js.map": "/food_stories/static/js/2.f72112a6.chunk.js.map",
-    "static/js/3.6148050a.chunk.js": "/food_stories/static/js/3.6148050a.chunk.js",
-    "static/js/3.6148050a.chunk.js.map": "/food_stories/static/js/3.6148050a.chunk.js.map",
+    "static/js/2.a03dcda1.chunk.js": "/food_stories/static/js/2.a03dcda1.chunk.js",
+    "static/js/2.a03dcda1.chunk.js.map": "/food_stories/static/js/2.a03dcda1.chunk.js.map",
+    "static/js/3.183ac6f0.chunk.js": "/food_stories/static/js/3.183ac6f0.chunk.js",
+    "static/js/3.183ac6f0.chunk.js.map": "/food_stories/static/js/3.183ac6f0.chunk.js.map",
     "index.html": "/food_stories/index.html",
     "service-worker.js": "/food_stories/service-worker.js",
     "service-worker.js.map": "/food_stories/service-worker.js.map",
     "static/css/2.3a6c9f29.chunk.css.map": "/food_stories/static/css/2.3a6c9f29.chunk.css.map",
-    "static/js/2.f72112a6.chunk.js.LICENSE.txt": "/food_stories/static/js/2.f72112a6.chunk.js.LICENSE.txt",
+    "static/css/main.3302407a.chunk.css.map": "/food_stories/static/css/main.3302407a.chunk.css.map",
+    "static/js/2.a03dcda1.chunk.js.LICENSE.txt": "/food_stories/static/js/2.a03dcda1.chunk.js.LICENSE.txt",
     "static/media/logo.f51cd3b4.svg": "/food_stories/static/media/logo.f51cd3b4.svg",
     "static/media/searchIcon.91175c4d.svg": "/food_stories/static/media/searchIcon.91175c4d.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.7e72a1f1.js",
+    "static/js/runtime-main.09ec3686.js",
     "static/css/2.3a6c9f29.chunk.css",
-    "static/js/2.f72112a6.chunk.js",
-    "static/js/main.b71d3314.chunk.js"
+    "static/js/2.a03dcda1.chunk.js",
+    "static/css/main.3302407a.chunk.css",
+    "static/js/main.403dd063.chunk.js"
   ]
 }
