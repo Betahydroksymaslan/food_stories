@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/food_stories/static/css/main.3302407a.chunk.css",
-    "main.js": "/food_stories/static/js/main.7ef5301d.chunk.js",
-    "main.js.map": "/food_stories/static/js/main.7ef5301d.chunk.js.map",
+    "main.js": "/food_stories/static/js/main.fe762ccf.chunk.js",
+    "main.js.map": "/food_stories/static/js/main.fe762ccf.chunk.js.map",
     "runtime-main.js": "/food_stories/static/js/runtime-main.09ec3686.js",
     "runtime-main.js.map": "/food_stories/static/js/runtime-main.09ec3686.js.map",
     "static/css/2.3a6c9f29.chunk.css": "/food_stories/static/css/2.3a6c9f29.chunk.css",
@@ -16,18 +16,18 @@
     "static/css/2.3a6c9f29.chunk.css.map": "/food_stories/static/css/2.3a6c9f29.chunk.css.map",
     "static/css/main.3302407a.chunk.css.map": "/food_stories/static/css/main.3302407a.chunk.css.map",
     "static/js/2.132381d4.chunk.js.LICENSE.txt": "/food_stories/static/js/2.132381d4.chunk.js.LICENSE.txt",
-    "static/media/favouriteIcon.a63dcf90.svg": "/food_stories/static/media/favouriteIcon.a63dcf90.svg",
-    "static/media/homeIcon.5dc9da54.svg": "/food_stories/static/media/homeIcon.5dc9da54.svg",
+    "static/media/favouriteIcon.901d8e03.svg": "/food_stories/static/media/favouriteIcon.901d8e03.svg",
+    "static/media/homeIcon.7891ab79.svg": "/food_stories/static/media/homeIcon.7891ab79.svg",
     "static/media/logo.f51cd3b4.svg": "/food_stories/static/media/logo.f51cd3b4.svg",
-    "static/media/overlapIcon.e264c30e.svg": "/food_stories/static/media/overlapIcon.e264c30e.svg",
+    "static/media/overlapIcon.feb805d0.svg": "/food_stories/static/media/overlapIcon.feb805d0.svg",
     "static/media/searchIcon.91175c4d.svg": "/food_stories/static/media/searchIcon.91175c4d.svg",
-    "static/media/userIcon.73e90b65.svg": "/food_stories/static/media/userIcon.73e90b65.svg"
+    "static/media/userIcon.f23b09a3.svg": "/food_stories/static/media/userIcon.f23b09a3.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.09ec3686.js",
     "static/css/2.3a6c9f29.chunk.css",
     "static/js/2.132381d4.chunk.js",
     "static/css/main.3302407a.chunk.css",
-    "static/js/main.7ef5301d.chunk.js"
+    "static/js/main.fe762ccf.chunk.js"
   ]
 }
