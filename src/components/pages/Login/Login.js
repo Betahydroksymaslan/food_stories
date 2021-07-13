@@ -11,12 +11,15 @@ import {
 import Input from 'components/atoms/Input/Input';
 import { ReactComponent as Logo } from 'assets/icons/logo.svg';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signin } from 'actions/authActions';
-import { HOME, SIGNUP } from 'constants/routes';
+import { SIGNUP } from 'constants/routes';
 import { Link } from 'react-router-dom';
+import Loader from 'components/atoms/Loader/Loader';
+import { useHistory } from 'react-router-dom';
 
 const Login = (props) => {
+  const history = useHistory();
   const {
     register,
     handleSubmit,
@@ -24,9 +27,10 @@ const Login = (props) => {
   } = useForm();
 
   const dispatch = useDispatch();
-
+  const { apiCallProgress } = useSelector((state) => state.apiCallsReducer);
+  const goHome = () => history.push('/food_stories');
   const onSubmit = (data) => {
-    dispatch(signin(data.email, data.password, () => props.history.push(HOME)));
+    dispatch(signin(data.email, data.password, goHome));
   };
 
   return (
@@ -51,13 +55,16 @@ const Login = (props) => {
         {errors.password && (
           <ErrorMessage role="alert">Podaj hasło!</ErrorMessage>
         )}
-        <StyledButton type="submit">ZALOGUJ SIĘ</StyledButton>
+        <StyledButton disabled={apiCallProgress === 1} type="submit">
+          Zaloguj się
+        </StyledButton>
       </StyledForm>
 
       <StyledSpan>Nie masz jeszcze konta?</StyledSpan>
       <Link to={SIGNUP}>
         <StyledSpan isColor={true}>Zarejestruj się!</StyledSpan>
       </Link>
+      {apiCallProgress === 1 ? <Loader /> : null}
     </PageWrapper>
   );
 };

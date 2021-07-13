@@ -5,6 +5,10 @@ import {
   SIGNIN_ERROR,
   LOGOUT_SUCCESS,
   LOGOUT_ERROR,
+  CHANGE_EMAIL_ERROR,
+  CHANGE_EMAIL_SUCCESS,
+  CHANGE_PASSWORD_ERROR,
+  CHANGE_PASSWORD_SUCCESS,
 } from 'constants/auth';
 
 const initialState = { payload: null };
@@ -44,6 +48,26 @@ function auth(state = initialState, action) {
       };
 
     case LOGOUT_ERROR:
+      return {
+        ...state,
+        payload,
+      };
+    case CHANGE_EMAIL_SUCCESS:
+      return {
+        ...state,
+        payload,
+      };
+    case CHANGE_EMAIL_ERROR:
+      return {
+        ...state,
+        payload,
+      };
+    case CHANGE_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        payload,
+      };
+    case CHANGE_PASSWORD_ERROR:
       return {
         ...state,
         payload,

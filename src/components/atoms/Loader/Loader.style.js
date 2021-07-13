@@ -41,56 +41,56 @@ export const StyledLoader = styled.div`
     animation-delay: 0s;
   }
   & > div:nth-child(0) > div {
-    background: #6f66ed;
+    background: #B5EAEA;
     transform: translate(74.3540735907757px, 67.52417287332267px);
   }
   & > div:nth-child(1) {
     animation-delay: -0.062s;
   }
   & > div:nth-child(1) > div {
-    background: #8366ed;
+    background: #b5ead0;
     transform: translate(67.52417287332267px, 74.3540735907757px);
   }
   & > div:nth-child(2) {
     animation-delay: -0.125s;
   }
   & > div:nth-child(2) > div {
-    background: #a466ed;
+    background: #b5d0ea;
     transform: translate(59.15928699750833px, 79.1835427029176px);
   }
   & > div:nth-child(3) {
     animation-delay: -0.187s;
   }
   & > div:nth-child(3) > div {
-    background: #a48fff;
+    background: #B5EAEA;
     transform: translate(49.829469112141915px, 81.68345987083099px);
   }
   & > div:nth-child(4) {
     animation-delay: -0.25s;
   }
   & > div:nth-child(4) > div {
-    background: #ac7df7;
+    background: #b5ead0;
     transform: translate(40.17053088785809px, 81.68345987083099px);
   }
   & > div:nth-child(5) {
     animation-delay: -0.312s;
   }
   & > div:nth-child(5) > div {
-    background: #6f66ed;
+    background: #b5d0ea;
     transform: translate(30.84071300249169px, 79.1835427029176px);
   }
   & > div:nth-child(6) {
     animation-delay: -0.375s;
   }
   & > div:nth-child(6) > div {
-    background: #8366ed;
+    background: #b5ead0;
     transform: translate(22.475827126677334px, 74.3540735907757px);
   }
   & > div:nth-child(7) {
     animation-delay: -0.437s;
   }
   & > div:nth-child(7) > div {
-    background: #a466ed;
+    background: #B5EAEA;
     transform: translate(15.645926409224302px, 67.52417287332267px);
   }
 `;

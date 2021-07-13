@@ -11,12 +11,15 @@ import {
 import Input from 'components/atoms/Input/Input';
 import { ReactComponent as Logo } from 'assets/icons/logo.svg';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signup } from 'actions/authActions';
-import { HOME, SIGNIN } from 'constants/routes';
+import { SIGNIN } from 'constants/routes';
 import { Link } from 'react-router-dom';
+import Loader from 'components/atoms/Loader/Loader';
+import { useHistory } from "react-router-dom";
 
 const Register = (props) => {
+  const history = useHistory();
   const {
     register,
     handleSubmit,
@@ -24,9 +27,10 @@ const Register = (props) => {
   } = useForm();
 
   const dispatch = useDispatch();
-
+  const { apiCallProgress } = useSelector((state) => state.apiCallsReducer);
+  const goHome = () => history.push('/');
   const onSubmit = (data) => {
-    dispatch(signup(data.email, data.password, () => props.history.push(HOME)));
+    dispatch(signup(data.email, data.password, goHome));
   };
   return (
     <PageWrapper>
@@ -62,13 +66,17 @@ const Register = (props) => {
         {errors.password && (
           <ErrorMessage role="alert">{errors.password.message}</ErrorMessage>
         )}
-        <StyledButton type="submit">ZAREJESTRUJ SIĘ</StyledButton>
+        <StyledButton disabled={apiCallProgress === 1} type="submit">
+          Zarejestruj się
+        </StyledButton>
       </StyledForm>
 
       <StyledSpan>Masz już konto?</StyledSpan>
       <Link to={SIGNIN}>
         <StyledSpan isColor={true}>Zaloguj się!</StyledSpan>
       </Link>
+
+      {apiCallProgress === 1 ? <Loader /> : null}
     </PageWrapper>
   );
 };
