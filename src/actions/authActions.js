@@ -12,6 +12,7 @@ import {
   CHANGE_PASSWORD_SUCCESS,
 } from 'constants/auth';
 import { beginApiCall, apiCallError } from 'actions/beginApiCallAction';
+import { db } from 'assets/firebase/firebase';
 
 const errorMessage = 'Coś poszło nie tak, spróbuj jeszcze raz!';
 
@@ -23,6 +24,10 @@ export const signup = (email, password, callback) => async (dispatch) => {
       .then((data) => {
         auth.onAuthStateChanged(function (user) {
           if (user) {
+            db.ref(`/users/${user.uid}`).set({
+              uid: user.uid,
+              email: user.email,
+            });
             dispatch({
               type: SIGNUP_SUCCESS,
               payload: 'Rejestracja przebiegła pomyślnie!',

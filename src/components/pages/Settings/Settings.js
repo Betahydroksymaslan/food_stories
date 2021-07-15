@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import FormField from 'components/molecules/FormField/FormField';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,18 +8,17 @@ import PageWrapper from 'components/templates/PageWrapper/PageWrapper';
 import Button from 'components/atoms/Button/Button';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import Loader from 'components/atoms/Loader/Loader';
-import {
-  StyledForm,
-  Logout,
-  ErrorSpan,
-  CurrentUserEmailBox,
-} from './Settings.style';
+import Modal from 'components/organisms/Modal/Modal';
+import AddProduct from 'components/organisms/AddProduct/AddProduct';
+import ErrorMessage from 'components/atoms/ErrorMessage/ErrorMessage';
+import { StyledForm, Logout, CurrentUserEmailBox } from './Settings.style';
 import { useForm } from 'react-hook-form';
 
 const Settings = (props) => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.firebase.auth);
   const apiCallProgress = useSelector((state) => state.apiCallsReducer);
+
   const {
     register,
     handleSubmit,
@@ -33,13 +32,19 @@ const Settings = (props) => {
   const onEmailSubmit = (data) => dispatch(changeEmail(data.email));
   const onPasswordSubmit = (data) => dispatch(changePassword(data.password));
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <PageWrapper>
       <Header>Moje Konto</Header>
-      
+
       <CurrentUserEmailBox>
         <Paragraph>Jesteś zalogowany jako:</Paragraph>
-        <Paragraph isBold={true}>{auth.email}</Paragraph>
+        <Paragraph isBold={true}>
+          {auth.email}
+        </Paragraph>
       </CurrentUserEmailBox>
 
       <StyledForm onSubmit={handleSubmit(onEmailSubmit)}>
@@ -58,7 +63,7 @@ const Settings = (props) => {
           })}
         />
         {errors.email && (
-          <ErrorSpan role="alert">{errors.email.message}</ErrorSpan>
+          <ErrorMessage role="alert">{errors.email.message}</ErrorMessage>
         )}
         <Button type="submit" disabled={apiCallProgress === 1}>
           zmień
@@ -81,14 +86,27 @@ const Settings = (props) => {
           })}
         />
         {errorsPassword.password && (
-          <ErrorSpan role="alert">{errorsPassword.password.message}</ErrorSpan>
+          <ErrorMessage role="alert">
+            {errorsPassword.password.message}
+          </ErrorMessage>
         )}
         <Button type="submit" disabled={apiCallProgress === 1}>
           zmień
         </Button>
       </StyledForm>
 
+      <Button onClick={openModal}>+ dodaj nowy produkt</Button>
+
       <Logout onClick={() => dispatch(logout())}>wyloguj</Logout>
+
+      <Modal
+        isOpen={isModalOpen}
+        shouldCloseOnOverlayClick={false}
+        handleClose={closeModal}
+      >
+        <AddProduct closeModal={closeModal} />
+      </Modal>
+
       {apiCallProgress === 1 ? <Loader /> : null}
     </PageWrapper>
   );

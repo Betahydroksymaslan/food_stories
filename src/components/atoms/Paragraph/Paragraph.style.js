@@ -7,6 +7,6 @@ export const StyledParagraph = styled.p`
     if (size === 'big') return theme.fontSize.l;
   }};
   font-weight: ${({ isBold }) => (isBold ? '600' : '400')};
-  margin: 2px 0;
+  margin: ${({ customMargin }) => customMargin || '2px 0'};
   text-align: center;
 `;

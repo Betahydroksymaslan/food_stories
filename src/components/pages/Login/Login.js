@@ -6,7 +6,6 @@ import {
   LogoWrapper,
   StyledButton,
   StyledSpan,
-  ErrorMessage,
 } from './Login.style';
 import Input from 'components/atoms/Input/Input';
 import { ReactComponent as Logo } from 'assets/icons/logo.svg';
@@ -17,6 +16,7 @@ import { SIGNUP } from 'constants/routes';
 import { Link } from 'react-router-dom';
 import Loader from 'components/atoms/Loader/Loader';
 import { useHistory } from 'react-router-dom';
+import ErrorMessage from 'components/atoms/ErrorMessage/ErrorMessage';
 
 const Login = (props) => {
   const history = useHistory();

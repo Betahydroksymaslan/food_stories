@@ -28,6 +28,7 @@ export const theme = {
   },
   media: {
     phone: '@media (max-width: 600px)',
+    phoneKeyboard: '@media (max-height: 600px)',
     tablet: '@media (min-width: 601px)',
     desktop: '@media (min-width: 992px)',
   },

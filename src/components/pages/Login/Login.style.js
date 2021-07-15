@@ -55,9 +55,3 @@ export const StyledSpan = styled.span`
   color: ${({ isColor, theme }) => isColor && theme.colors.mainColor};
   text-decoration: ${({ isColor }) => isColor && 'underline'};
 `;
-
-export const ErrorMessage = styled.span`
-  text-align: center;
-  font-size: ${({ theme }) => theme.fontSize.m};
-  color: ${({ theme }) => theme.colors.error};
-`;

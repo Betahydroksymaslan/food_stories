@@ -5,7 +5,7 @@ import { Wrapper, StyledLabel } from './FormField.style';
 
 const FormField = forwardRef(
   (
-    { id, label, onChange, name, type = 'text', placeholder, value, ...rest },
+    { id, label, onChange, name, type = 'text', placeholder, value, small = false, ...rest },
     ref
   ) => {
     return (
@@ -21,6 +21,7 @@ const FormField = forwardRef(
           value={value}
           onChange={onChange}
           placeholder={placeholder}
+          small={small}
         />
       </Wrapper>
     );

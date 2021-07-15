@@ -5,8 +5,7 @@ import {
   StyledForm,
   LogoWrapper,
   StyledButton,
-  StyledSpan,
-  ErrorMessage,
+  StyledSpan
 } from 'components/pages/Login/Login.style';
 import Input from 'components/atoms/Input/Input';
 import { ReactComponent as Logo } from 'assets/icons/logo.svg';
@@ -17,6 +16,7 @@ import { SIGNIN } from 'constants/routes';
 import { Link } from 'react-router-dom';
 import Loader from 'components/atoms/Loader/Loader';
 import { useHistory } from "react-router-dom";
+import ErrorMessage from 'components/atoms/ErrorMessage/ErrorMessage';
 
 const Register = (props) => {
   const history = useHistory();
