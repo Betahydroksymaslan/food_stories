@@ -35,7 +35,7 @@ const expanseWrapperAnimation = keyframes`
 export const MenuWrapper = styled.nav`
   width: 90%;
   height: 55px;
-  background-color: ${({ theme }) => theme.colors.mainColor};
+  background-color: ${({ theme }) => theme.colors.secondColor};
   position: fixed;
   bottom: 0;
   left: 50%;
@@ -50,6 +50,17 @@ export const MenuWrapper = styled.nav`
   box-shadow: 0 -1px 10px rgba(115, 124, 142, 0.09);
 
   ${({ theme }) => theme.media.desktop} {
+    width: 100%;
+    height: 100%;
+    transform: translateX(0);
+    position: static;
+    grid-column: 1/1;
+    grid-row: 1/3;
+    border-bottom-right-radius: 35px;
+    border-top-left-radius: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 70px;
   }
 `;
 
@@ -62,49 +73,46 @@ export const StyledLink = styled(NavLink).attrs({ activeClassName })`
   font-size: ${({ theme }) => theme.fontSize.l};
   margin: 0;
   position: relative;
-  ${({ theme }) => theme.media.desktop} {
+  padding: 2px;
+  background-color: transparent;
+  border-radius: 100%;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
   }
+
   &.${activeClassName} {
+    background-color: rgba(255, 255, 255, 0.2);
     svg {
       animation: ${expanseAnimation} 0.5s cubic-bezier(0.28, 0.84, 0.42, 1) 1
         forwards;
     }
-    #favouriteIconID {
-      path {
-        fill: ${({ theme }) => theme.colors.secondColor};
-      }
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: transparent;
+      width: 30px;
+      height: 30px;
+      border-radius: 100%;
     }
-    #userIconID {
-      path {
-        fill: ${({ theme }) => theme.colors.secondColor};
-      }
-      
-    }
-    #homeIconID {
-      path {
-        stroke: ${({ theme }) => theme.colors.secondColor};
-      }
-    }
-    #overlapIconID {
-      path {
-        stroke: ${({ theme }) => theme.colors.secondColor};
-      }
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: transparent;
-    width: 30px;
-    height: 30px;
-    border-radius: 100%;
-  }
-  &.${activeClassName}::after {
+    &.${activeClassName}::after {
       animation: ${expanseWrapperAnimation} 0.5s
         cubic-bezier(0.28, 0.84, 0.42, 1) 1 forwards;
     }
+  }
+  ${({ theme }) => theme.media.desktop} {
+    margin-bottom: 15px;
+    padding: 8px;
+    border-radius: 100%;
+    background-color: transparent;
+    &.${activeClassName} {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
 `;
 
 export const IconWrapper = styled.div`
@@ -119,12 +127,19 @@ export const IconWrapper = styled.div`
     path {
       transition: all 0.4s ease-in-out;
     }
-    height: 30px;
+    height: 25px;
   }
-  #favouriteIconID {
-    height: 30px;
-  }
+
   #homeIconID {
-    height: 27px;
+    height: 23px;
+  }
+
+  ${({ theme }) => theme.media.desktop} {
+    svg {
+      height: 22px;
+    }
+    #homeIconID {
+      height: 19px;
+    }
   }
 `;

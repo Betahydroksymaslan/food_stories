@@ -10,4 +10,8 @@ export const StyledLabel = styled.label`
   font-size: ${({ theme }) => theme.fontSize.s};
   font-weight: 600;
   margin: 10px 0;
+
+  ${({theme}) => theme.media.desktop} {
+    font-size: ${({ theme }) => theme.fontSize.xs};
+  }
 `;

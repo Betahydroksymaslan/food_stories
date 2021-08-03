@@ -1,10 +1,9 @@
-import { theme } from 'assets/styles/theme';
 import styled from 'styled-components';
 
 export const StyledInput = styled.input`
   width: ${({ small }) => (small ? '100px' : '100%')};
   border: 1px solid ${({ theme }) => theme.colors.inputBorder};
-  background-color: transparent;
+  background-color: ${({ theme }) => theme.colors.mainBGC};
   box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
   border-radius: 30px;
   font-size: ${({ theme }) => theme.fontSize.m};
@@ -15,6 +14,10 @@ export const StyledInput = styled.input`
   &::placeholder {
     color: ${({ theme }) => theme.colors.inputBorder};
     font-weight: 500;
+  }
+
+  ${({ theme }) => theme.media.desktop} {
+    font-size: ${({ theme }) => theme.fontSize.xs};
   }
 `;
 

@@ -2,8 +2,9 @@ export const theme = {
   colors: {
     white: '#FFFFFF',
     mainBGC: '#F7F8FA',
+    mainBGCdesktop: '#f0f4f7',
     mainDark: '#737C8E',
-    secondColor: '#F38BA0',
+    secondColor: '#fc797a',
     mainColor: '#B5EAEA',
     inputBorder: '#C0C7D6',
     mainColorLight: '#353766',

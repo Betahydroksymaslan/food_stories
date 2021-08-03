@@ -16,7 +16,7 @@ const clickAnimation = keyframes`
 
 export const StyledButton = styled.button`
   border: none;
-  background-color: ${({ theme }) => theme.colors.mainColor};
+  background-color: ${({ theme }) => theme.colors.secondColor};
   color: ${({ theme }) => theme.colors.mainBGC};
   border-radius: 20px;
   padding: 8px 20px;
@@ -47,5 +47,15 @@ export const StyledButton = styled.button`
         ${clickAnimation} 0.8s cubic-bezier(0.28, 0.84, 0.42, 1) 1
         forwards
       `};
+  }
+
+  ${({theme}) => theme.media.desktop} {
+    font-size: ${({ theme }) => theme.fontSize.xs};
+    cursor: pointer;
+    transition: opacity 0.2s ease-in-out;
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
 `;

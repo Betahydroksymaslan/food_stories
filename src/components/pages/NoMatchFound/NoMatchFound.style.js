@@ -6,4 +6,8 @@ export const NotFoundWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  ${({ theme }) => theme.media.desktop} {
+    grid-column: 2;
+    grid-row: 2/3;
+  }
 `;

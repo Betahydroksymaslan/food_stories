@@ -18,6 +18,8 @@ import { db } from 'assets/firebase/firebase';
 import { addDatabase } from 'actions/databaseActions';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { useWatchDatabase } from 'hooks/useWatchDatabase';
+import Close from 'components/atoms/Close/Close';
 
 const AddProduct = ({ closeModal }) => {
   /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CONTROLL FORM AREA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -28,10 +30,16 @@ const AddProduct = ({ closeModal }) => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
 
+  const errorIsRequired = 'To pole jest wymagane';
+  const watchName = watch('productName');
+  const watchDatabase = useWatchDatabase(`products/${watchName}`, watchName);
+
   const onSubmit = (data) => {
+    if (watchDatabase) return;
     if (choosenType.name === '') return setTypeError('Wybierz typ produktu');
 
     const dataObject = {
@@ -48,8 +56,6 @@ const AddProduct = ({ closeModal }) => {
     dispatch(addDatabase(path, dataObject, message));
     closeModal();
   };
-
-  const errorIsRequired = 'To pole jest wymagane';
 
   /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! PICK TYPE OF A PRODUCT AREA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
@@ -111,6 +117,7 @@ const AddProduct = ({ closeModal }) => {
 
   return (
     <Wrapper>
+      <Close closePosition="top-right" onClick={closeModal} />
       <Paragraph isBold size="big">
         Dodaj nowy produkt
       </Paragraph>
@@ -123,8 +130,16 @@ const AddProduct = ({ closeModal }) => {
           {...register('productName', { required: true })}
         />
         {errors.productName && <ErrorMessage>{errorIsRequired}</ErrorMessage>}
+        {watchDatabase && (
+          <ErrorMessage>Taki produkt już istnieje</ErrorMessage>
+        )}
 
-        <Paragraph customMargin="35px 0 0" isBold onClick={openProductType}>
+        <Paragraph
+          customMargin="35px 0 0"
+          hoverEffect
+          isBold
+          onClick={openProductType}
+        >
           Dopasuj typ produktu &rarr;
         </Paragraph>
         {choosenType?.name ? (

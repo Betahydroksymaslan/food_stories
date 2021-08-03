@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PageWrapper from 'components/templates/PageWrapper/PageWrapper';
+import { Wrapper } from 'components/pages/Login/Login.style';
 import {
   StyledForm,
   LogoWrapper,
   StyledButton,
-  StyledSpan
+  StyledSpan,
 } from 'components/pages/Login/Login.style';
 import Input from 'components/atoms/Input/Input';
 import { ReactComponent as Logo } from 'assets/icons/logo.svg';
@@ -15,7 +15,7 @@ import { signup } from 'actions/authActions';
 import { SIGNIN } from 'constants/routes';
 import { Link } from 'react-router-dom';
 import Loader from 'components/atoms/Loader/Loader';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import ErrorMessage from 'components/atoms/ErrorMessage/ErrorMessage';
 
 const Register = (props) => {
@@ -33,7 +33,7 @@ const Register = (props) => {
     dispatch(signup(data.email, data.password, goHome));
   };
   return (
-    <PageWrapper>
+    <Wrapper>
       <LogoWrapper>
         <Logo />
       </LogoWrapper>
@@ -77,7 +77,7 @@ const Register = (props) => {
       </Link>
 
       {apiCallProgress === 1 ? <Loader /> : null}
-    </PageWrapper>
+    </Wrapper>
   );
 };
 

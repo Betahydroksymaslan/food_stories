@@ -8,8 +8,12 @@ export const Wrapper = styled.div`
   overflow-x: hidden;
   overflow-y: scroll;
   position: relative;
+  padding: 20px 40px 0;
   ${({ theme }) => theme.media.phoneKeyboard} {
     width: 100vw;
+  }
+  ${({ theme }) => theme.media.desktop} {
+    width: auto;
   }
 `;
 
@@ -22,6 +26,7 @@ export const TypeOfProductWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 20px 40px;
   top: 0;
   left: 0;
   transform: translateX(
@@ -38,9 +43,9 @@ export const StyledForm = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   margin: 20px 0;
-  padding: 0 30px;
+  padding: 0 15px;
 
   button {
     align-self: center;
@@ -58,6 +63,15 @@ export const ListItemWrapper = styled.div`
   display: flex;
   align-items: center;
   margin: 10px 0;
+
+  ${({ theme }) => theme.media.desktop} {
+    border-radius: 15px;
+    transition: background-color 0.1s ease;
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.07);
+    }
+  }
 `;
 
 export const ListItem = styled.li`
@@ -65,9 +79,18 @@ export const ListItem = styled.li`
   margin: 0 0 0 50px;
   padding: 0;
   font-size: ${({ theme }) => theme.fontSize.m};
+
+  ${({ theme }) => theme.media.desktop} {
+    font-size: ${({ theme }) => theme.fontSize.xs};
+  }
 `;
 
 export const Icon = styled.img`
   width: 40px;
   height: 50px;
+
+  ${({ theme }) => theme.media.desktop} {
+    width: 25px;
+    height: 40px;
+  }
 `;

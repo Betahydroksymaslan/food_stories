@@ -4,5 +4,10 @@ export const StyledSpan = styled.span`
   text-align: center;
   font-size: ${({ theme }) => theme.fontSize.s};
   color: ${({ theme }) => theme.colors.error};
-  margin: 3px 0;
+  margin: 10px 0;
+
+  ${({theme}) => theme.media.desktop} {
+    font-size: ${({ theme }) => theme.fontSize.xs};
+    margin: 10px 0;
+  }
 `;

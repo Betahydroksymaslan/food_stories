@@ -48,4 +48,18 @@ export const GlobalStyle = createGlobalStyle`
 .ReactModal__Overlay--before-close{
     opacity: 0;
 }
+::-webkit-scrollbar{
+width: 6px;
+height: 4px;
+}
+::-webkit-scrollbar-thumb{
+background: #DBDBDB;
+border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover{
+background: #B3AFB3;
+}
+::-webkit-scrollbar-track{
+background: transparent;
+}
 `;

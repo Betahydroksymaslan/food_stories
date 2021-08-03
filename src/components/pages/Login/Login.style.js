@@ -1,5 +1,17 @@
 import styled from 'styled-components';
 
+export const Wrapper = styled.div`
+  width: 100;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  grid-column: 1/ -1;
+  grid-row: 1 / -1;
+  padding: 50px 0;
+`;
+
 export const LogoWrapper = styled.div`
   width: 200px;
   margin: 100px 0 40px;
@@ -33,7 +45,7 @@ export const StyledButton = styled.button`
   box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
   border: none;
   border-radius: 30px;
-  background: ${({ theme }) => theme.colors.mainColor};
+  background: ${({ theme }) => theme.colors.secondColor};
   padding: 12px 0;
   color: ${({ theme }) => theme.colors.mainBGC};
   outline: none;
@@ -52,6 +64,6 @@ export const StyledButton = styled.button`
 
 export const StyledSpan = styled.span`
   font-size: ${({ theme }) => theme.fontSize.m};
-  color: ${({ isColor, theme }) => isColor && theme.colors.mainColor};
+  color: ${({ isColor, theme }) => isColor && theme.colors.secondColor};
   text-decoration: ${({ isColor }) => isColor && 'underline'};
 `;

@@ -12,6 +12,9 @@ export const Template = styled.div`
   ${({ theme }) => theme.media.desktop} {
     display: grid;
     grid-template-rows: 80px 1fr;
-    grid-template-columns: 150px 1fr 0.4fr;
+    grid-template-columns: 80px 1fr 0.3fr;
+    max-height: 100vh;
+    overflow: hidden;
+    background-color: transparent;
   }
 `;

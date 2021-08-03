@@ -6,8 +6,12 @@ import { ReactComponent as HomeIcon } from 'assets/icons/homeIcon.svg';
 import { ReactComponent as FavouriteIcon } from 'assets/icons/favouriteIcon.svg';
 import { ReactComponent as UserIcon } from 'assets/icons/userIcon.svg';
 import { ReactComponent as OverlapIcon } from 'assets/icons/overlapIcon.svg';
+import Logout from 'components/atoms/Logout/Logout';
+import { useMedia } from 'hooks/useMedia';
 
 const Menu = (props) => {
+  const media = useMedia('(min-width: 600px)');
+
   const routes = [
     {
       route: '/food_stories/',
@@ -35,7 +39,12 @@ const Menu = (props) => {
       <IconWrapper>{route.icon}</IconWrapper>
     </StyledLink>
   ));
-  return <MenuWrapper>{renderRoutes}</MenuWrapper>;
+  return (
+    <MenuWrapper>
+      {renderRoutes}
+      {media && <Logout />}
+    </MenuWrapper>
+  );
 };
 
 Menu.propTypes = {};

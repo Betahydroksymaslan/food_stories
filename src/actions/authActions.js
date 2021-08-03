@@ -33,11 +33,6 @@ export const signup = (email, password, callback) => async (dispatch) => {
               payload: 'Rejestracja przebiegła pomyślnie!',
             });
             callback();
-          } else {
-            dispatch({
-              type: SIGNUP_ERROR,
-              payload: errorMessage,
-            });
           }
         });
       })

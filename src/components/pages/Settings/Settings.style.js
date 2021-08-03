@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { ErrorMessage } from 'components/pages/Login/Login.style';
 
 export const StyledForm = styled.form`
   width: 100%;
@@ -12,20 +11,34 @@ export const StyledForm = styled.form`
     align-self: flex-start;
     margin: 20px 0 0 50px;
   }
-`;
 
-export const Logout = styled.span`
-  font-size: ${({ theme }) => theme.fontSize.m};
-  margin: 40px 0 0;
-  font-weight: 600;
-  padding: 14px 30px;
-  background-color: ${({ theme }) => theme.colors.mainColor};
-  color: ${({ theme }) => theme.colors.mainBGC};
-  border-radius: 30px;
-  box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
+  ${({ theme }) => theme.media.desktop} {
+    width: 280px;
+    background-color: ${({ theme }) => theme.colors.mainBGC};
+    border-radius: 15px;
+    box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
+    padding: 20px 0;
+    margin: 30px 50px;
+
+    button {
+      align-self: center;
+      margin: 20px 0 0 0;
+    }
+  }
 `;
 
 export const CurrentUserEmailBox = styled.div`
   width: 100%;
   margin: 40px 0 30px;
+
+  ${({ theme }) => theme.media.desktop} {
+    display: none;
+  }
+`;
+
+export const ImageButtonsWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 `;

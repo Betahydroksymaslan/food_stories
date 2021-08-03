@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ModalWrapper } from './Modal.style';
-import Button from 'components/atoms/Button/Button';
 
 const Modal = ({ handleClose, isOpen, children }) => {
   return (
@@ -12,7 +11,6 @@ const Modal = ({ handleClose, isOpen, children }) => {
       onRequestClose={handleClose}
     >
       {children}
-      <Button onClick={handleClose}>zamknij</Button>
     </ModalWrapper>
   );
 };

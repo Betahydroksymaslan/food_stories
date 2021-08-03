@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import FormField from 'components/molecules/FormField/FormField';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, changeEmail, changePassword } from 'actions/authActions';
+import { changeEmail, changePassword } from 'actions/authActions';
 import Header from 'components/atoms/Header/Header';
 import PageWrapper from 'components/templates/PageWrapper/PageWrapper';
 import Button from 'components/atoms/Button/Button';
@@ -10,11 +10,22 @@ import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import Loader from 'components/atoms/Loader/Loader';
 import Modal from 'components/organisms/Modal/Modal';
 import AddProduct from 'components/organisms/AddProduct/AddProduct';
+import AddMeal from 'components/organisms/AddMeal/AddMeal';
 import ErrorMessage from 'components/atoms/ErrorMessage/ErrorMessage';
-import { StyledForm, Logout, CurrentUserEmailBox } from './Settings.style';
+import {
+  StyledForm,
+  CurrentUserEmailBox,
+  ImageButtonsWrapper,
+} from './Settings.style';
 import { useForm } from 'react-hook-form';
+import { useMedia } from 'hooks/useMedia';
+import { ReactComponent as AddIngredientsImage } from 'assets/images/addIngredientsImage.svg';
+import { ReactComponent as AddMealImage } from 'assets/images/addMealImage.svg';
+import ImageButton from 'components/molecules/ImageButton/ImageButton';
+import Logout from 'components/atoms/Logout/Logout';
 
 const Settings = (props) => {
+  const media = useMedia('(max-width: 600px)');
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.firebase.auth);
   const apiCallProgress = useSelector((state) => state.apiCallsReducer);
@@ -32,19 +43,21 @@ const Settings = (props) => {
   const onEmailSubmit = (data) => dispatch(changeEmail(data.email));
   const onPasswordSubmit = (data) => dispatch(changePassword(data.password));
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const [isAddProductOpen, setIsAddProductOpen] = useState(false);
+  const openAddProductModal = () => setIsAddProductOpen(true);
+  const closeAddProductModal = () => setIsAddProductOpen(false);
+
+  const [isAddMealOpen, setIsAddMealOpen] = useState(false);
+  const openAddMealModal = () => setIsAddMealOpen(true);
+  const closeAddmealModal = () => setIsAddMealOpen(false);
 
   return (
     <PageWrapper>
-      <Header>Moje Konto</Header>
+      {media && <Header>Moje Konto</Header>}
 
       <CurrentUserEmailBox>
         <Paragraph>Jesteś zalogowany jako:</Paragraph>
-        <Paragraph isBold={true}>
-          {auth.email}
-        </Paragraph>
+        <Paragraph isBold={true}>{auth.email}</Paragraph>
       </CurrentUserEmailBox>
 
       <StyledForm onSubmit={handleSubmit(onEmailSubmit)}>
@@ -95,16 +108,27 @@ const Settings = (props) => {
         </Button>
       </StyledForm>
 
-      <Button onClick={openModal}>+ dodaj nowy produkt</Button>
+      <ImageButtonsWrapper>
+        <ImageButton onClick={openAddProductModal} text="+ dodaj nowy produkt">
+          <AddIngredientsImage />
+        </ImageButton>
+        <ImageButton onClick={openAddMealModal} text="+ dodaj nowy posiłek">
+          <AddMealImage />
+        </ImageButton>
+      </ImageButtonsWrapper>
 
-      <Logout onClick={() => dispatch(logout())}>wyloguj</Logout>
+      {media && <Logout />}
 
       <Modal
-        isOpen={isModalOpen}
+        isOpen={isAddProductOpen}
         shouldCloseOnOverlayClick={false}
-        handleClose={closeModal}
+        handleClose={closeAddProductModal}
       >
-        <AddProduct closeModal={closeModal} />
+        <AddProduct closeModal={closeAddProductModal} />
+      </Modal>
+
+      <Modal isOpen={isAddMealOpen} handleClose={closeAddmealModal}>
+        <AddMeal closeModal={closeAddmealModal} />
       </Modal>
 
       {apiCallProgress === 1 ? <Loader /> : null}

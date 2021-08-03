@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PageWrapper from 'components/templates/PageWrapper/PageWrapper';
 import {
   StyledForm,
   LogoWrapper,
   StyledButton,
   StyledSpan,
+  Wrapper
 } from './Login.style';
 import Input from 'components/atoms/Input/Input';
 import { ReactComponent as Logo } from 'assets/icons/logo.svg';
@@ -34,7 +34,7 @@ const Login = (props) => {
   };
 
   return (
-    <PageWrapper>
+    <Wrapper>
       <LogoWrapper>
         <Logo />
       </LogoWrapper>
@@ -65,7 +65,7 @@ const Login = (props) => {
         <StyledSpan isColor={true}>Zarejestruj się!</StyledSpan>
       </Link>
       {apiCallProgress === 1 ? <Loader /> : null}
-    </PageWrapper>
+    </Wrapper>
   );
 };
 
