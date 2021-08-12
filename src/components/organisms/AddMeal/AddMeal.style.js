@@ -28,3 +28,10 @@ export const IngredientBox = styled.div`
   border-radius: 20px;
   margin: 10px 0;
 `;
+
+export const InlineWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-end;
+`;

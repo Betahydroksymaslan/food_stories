@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { db } from 'assets/firebase/firebase';
 import PropTypes from 'prop-types';
-import { AddMealWrapper, StyledForm, IngredientBox } from './AddMeal.style';
+import {
+  AddMealWrapper,
+  StyledForm,
+  IngredientBox,
+  InlineWrapper,
+} from './AddMeal.style';
 import Close from 'components/atoms/Close/Close';
 import FormField from 'components/molecules/FormField/FormField';
 import { useForm, Controller } from 'react-hook-form';
@@ -25,6 +30,16 @@ const AddMeal = ({ closeModal }) => {
     formState: { errors },
   } = useForm();
 
+  const units = [
+    {label: 'g',value: 'g'},
+    {label: 'kg',value: 'kg'},
+    {label: 'l',value: 'l'},
+    {label: 'ml',value: 'ml'},
+    {label: 'ząbek',value: 'ząbek'},
+    {label: 'ćwiartka',value: 'ćwiartka'},
+    {label: 'połówka',value: 'połówka'},
+  ]
+
   const renderIngredients = ingredients.map((item, index) => (
     <IngredientBox key={item.id}>
       <FormField
@@ -36,16 +51,18 @@ const AddMeal = ({ closeModal }) => {
           required: 'podaj nazwę składnika!',
         })}
       />
-      {errors.ingredients && errors.ingredients[index].name && (
+      {errors.ingredients && errors.ingredients[index]?.name && (
         <ErrorMessage>{errors.ingredients[index].name.message}</ErrorMessage>
       )}
+
       <Controller
         control={control}
-        rules={{ required: 'Wybierz typ produktu!' }}
+        rules={{required: 'Wybierz typ produktu!'}}
         name={`ingredients[${index}].type`}
         render={({ field: { onChange, value, ref, name } }) => (
           <Select
             inputRef={ref}
+            isMulti
             id="select"
             label="wybierz typ"
             onChange={onChange}
@@ -55,8 +72,41 @@ const AddMeal = ({ closeModal }) => {
           />
         )}
       />
-      {errors.ingredients && errors.ingredients[index].type && (
+      {errors.ingredients && errors.ingredients[index]?.type && (
         <ErrorMessage>{errors.ingredients[index].type.message}</ErrorMessage>
+      )}
+
+      <InlineWrapper>
+        <FormField
+          small
+          {...register(`ingredients[${index}].quantity`, {
+            required: 'podaj ilość!',
+          })}
+          type="number"
+          name={`ingredients[${index}].quantity`}
+          id={`ingredients[${index}].quantity`}
+          placeholder="ilość"
+        />
+        <Controller
+          control={control}
+          name={`ingredients[${index}].unit`}
+          defaultValue={units[0].value}
+          render={({ field: { onChange, value, ref, name } }) => (
+            <Select
+              inputRef={ref}
+              id="select"
+              inputSize="small"
+              defaultValue={units[0]}
+              onChange={onChange}
+              value={value}
+              optionsValue={units}
+              name={name}
+            />
+          )}
+        />
+      </InlineWrapper>
+      {errors.ingredients && errors.ingredients[index]?.quantity && (
+        <ErrorMessage>{errors.ingredients[index].quantity.message}</ErrorMessage>
       )}
     </IngredientBox>
   ));

@@ -30,7 +30,11 @@ export const SelectInput = styled(Select)`
 
 export const Wrapper = styled.div`
   display: flex;
-  width: 100%;
+  width: ${({ inputSize }) => {
+    if (inputSize === 'small') return '120px';
+    if (inputSize === 'medium') return '150px';
+    else return '100%';
+  }};
   flex-direction: column;
   align-items: flex-start;
 `;
@@ -40,7 +44,7 @@ export const StyledLabel = styled.label`
   font-weight: 600;
   margin: 10px 0;
 
-  ${({theme}) => theme.media.desktop} {
+  ${({ theme }) => theme.media.desktop} {
     font-size: ${({ theme }) => theme.fontSize.xs};
   }
 `;
