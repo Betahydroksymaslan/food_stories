@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/food_stories/static/css/main.3302407a.chunk.css",
-    "main.js": "/food_stories/static/js/main.ff535fe4.chunk.js",
-    "main.js.map": "/food_stories/static/js/main.ff535fe4.chunk.js.map",
+    "main.js": "/food_stories/static/js/main.d37ee867.chunk.js",
+    "main.js.map": "/food_stories/static/js/main.d37ee867.chunk.js.map",
     "runtime-main.js": "/food_stories/static/js/runtime-main.dcba7934.js",
     "runtime-main.js.map": "/food_stories/static/js/runtime-main.dcba7934.js.map",
     "static/css/2.3a6c9f29.chunk.css": "/food_stories/static/css/2.3a6c9f29.chunk.css",
-    "static/js/2.c8fe975b.chunk.js": "/food_stories/static/js/2.c8fe975b.chunk.js",
-    "static/js/2.c8fe975b.chunk.js.map": "/food_stories/static/js/2.c8fe975b.chunk.js.map",
+    "static/js/2.c5a8bb90.chunk.js": "/food_stories/static/js/2.c5a8bb90.chunk.js",
+    "static/js/2.c5a8bb90.chunk.js.map": "/food_stories/static/js/2.c5a8bb90.chunk.js.map",
     "static/js/3.e1bb8d94.chunk.js": "/food_stories/static/js/3.e1bb8d94.chunk.js",
     "static/js/3.e1bb8d94.chunk.js.map": "/food_stories/static/js/3.e1bb8d94.chunk.js.map",
     "index.html": "/food_stories/index.html",
@@ -15,7 +15,7 @@
     "service-worker.js.map": "/food_stories/service-worker.js.map",
     "static/css/2.3a6c9f29.chunk.css.map": "/food_stories/static/css/2.3a6c9f29.chunk.css.map",
     "static/css/main.3302407a.chunk.css.map": "/food_stories/static/css/main.3302407a.chunk.css.map",
-    "static/js/2.c8fe975b.chunk.js.LICENSE.txt": "/food_stories/static/js/2.c8fe975b.chunk.js.LICENSE.txt",
+    "static/js/2.c5a8bb90.chunk.js.LICENSE.txt": "/food_stories/static/js/2.c5a8bb90.chunk.js.LICENSE.txt",
     "static/media/addIngredientsImage.686af1a9.svg": "/food_stories/static/media/addIngredientsImage.686af1a9.svg",
     "static/media/addMealImage.99d63c7f.svg": "/food_stories/static/media/addMealImage.99d63c7f.svg",
     "static/media/favouriteIcon.901d8e03.svg": "/food_stories/static/media/favouriteIcon.901d8e03.svg",
@@ -29,8 +29,8 @@
   "entrypoints": [
     "static/js/runtime-main.dcba7934.js",
     "static/css/2.3a6c9f29.chunk.css",
-    "static/js/2.c8fe975b.chunk.js",
+    "static/js/2.c5a8bb90.chunk.js",
     "static/css/main.3302407a.chunk.css",
-    "static/js/main.ff535fe4.chunk.js"
+    "static/js/main.d37ee867.chunk.js"
   ]
 }
