@@ -17,33 +17,11 @@ export const Wrapper = styled.div`
   }
 `;
 
-export const TypeOfProductWrapper = styled.div`
-  position: absolute;
-  width: 100%;
-  max-height: 95vh;
-  overflow-y: scroll;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px 40px;
-  top: 0;
-  left: 0;
-  transform: translateX(
-    ${({ isTypeVisible }) => (isTypeVisible ? '0' : '100%')}
-  );
-  background-color: ${({ theme }) => theme.colors.white};
-  transition: transform 0.3s ease-in-out;
-  ${({ theme }) => theme.media.phoneKeyboard} {
-    max-height: 100vh;
-  }
-`;
-
 export const StyledForm = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   margin: 20px 0;
   padding: 0 15px;
 
@@ -51,32 +29,32 @@ export const StyledForm = styled.form`
     align-self: center;
     margin-top: 20px;
   }
-`;
 
-export const ListWrapper = styled.ul`
-  width: 100%;
-  margin: 40px 0 0;
-  padding: 0 0 0 50px;
+  ${({ theme }) => theme.media.desktop} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 15px;
+
+    button {
+      grid-column: 1 / -1;
+      justify-self: center;
+    }
+  }
 `;
 
 export const ListItemWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin: 10px 0;
 
   ${({ theme }) => theme.media.desktop} {
     border-radius: 15px;
     transition: background-color 0.1s ease;
-    &:hover {
-      cursor: pointer;
-      background-color: rgba(0, 0, 0, 0.07);
-    }
   }
 `;
 
 export const ListItem = styled.li`
   list-style: none;
-  margin: 0 0 0 50px;
+  margin: 0 0 0 20px;
   padding: 0;
   font-size: ${({ theme }) => theme.fontSize.m};
 
@@ -86,8 +64,8 @@ export const ListItem = styled.li`
 `;
 
 export const Icon = styled.img`
-  width: 40px;
-  height: 50px;
+  width: 30px;
+  height: 35px;
 
   ${({ theme }) => theme.media.desktop} {
     width: 25px;

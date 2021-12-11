@@ -26,6 +26,18 @@ export const SelectInput = styled(Select)`
     color: ${({ theme }) => theme.colors.inputBorder};
     font-weight: 500;
   }
+
+  .Select__menu {
+    z-index: 2000;
+  }
+
+  ${({theme}) => theme.media.desktop} {
+    font-size: ${({ theme }) => theme.fontSize.xs};
+
+    .Select__control {
+    padding: 2px 0 2px 20px;
+  }
+  }
 `;
 
 export const Wrapper = styled.div`

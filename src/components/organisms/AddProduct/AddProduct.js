@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import {
   Wrapper,
   StyledForm,
-  TypeOfProductWrapper,
-  ListWrapper,
   ListItem,
   Icon,
   ListItemWrapper,
@@ -13,24 +11,35 @@ import Button from 'components/atoms/Button/Button';
 import FormField from 'components/molecules/FormField/FormField';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import ErrorMessage from 'components/atoms/ErrorMessage/ErrorMessage';
-import Input from 'components/atoms/Input/Input';
 import { db } from 'assets/firebase/firebase';
 import { addDatabase } from 'actions/databaseActions';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useWatchDatabase } from 'hooks/useWatchDatabase';
 import Close from 'components/atoms/Close/Close';
+import Select from 'components/atoms/Select/Select';
+import { components } from 'react-select';
 
 const AddProduct = ({ closeModal }) => {
   /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CONTROLL FORM AREA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
   const dispatch = useDispatch();
-  const [choosenType, setChoosenType] = useState({ path: '', name: '' });
-  const [typeError, setTypeError] = useState('');
+
+  const units = [
+    { label: 'g', value: 'g' },
+    { label: 'kg', value: 'kg' },
+    { label: 'l', value: 'l' },
+    { label: 'ml', value: 'ml' },
+    { label: 'ząbek', value: 'ząbek' },
+    { label: 'jedno/a', value: 'jedno/a' },
+    { label: 'ćwiartka', value: 'ćwiartka' },
+    { label: 'połówka', value: 'połówka' },
+  ];
 
   const {
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors },
   } = useForm();
 
@@ -39,29 +48,59 @@ const AddProduct = ({ closeModal }) => {
   const watchDatabase = useWatchDatabase(`products/${watchName}`, watchName);
 
   const onSubmit = (data) => {
-    if (watchDatabase) return;
-    if (choosenType.name === '') return setTypeError('Wybierz typ produktu');
+    if (watchDatabase) return; //IF PRODUCT EXISTS IN DATABASE
 
     const dataObject = {
       name: data.productName,
       protein: Number(data.productProtein),
       carbs: Number(data.productCarbs),
       fat: Number(data.productFat),
-      iconPath: choosenType.path,
-      iconName: choosenType.name,
+      productType: data.productType,
+      units: data.productUnits.map((unit) => {
+        return {
+          name: unit,
+          value: Number(data.units[unit]),
+        };
+      }),
     };
     const path = `products/${data.productName}`;
     const message = 'Dodano nowy produkt!';
 
     dispatch(addDatabase(path, dataObject, message));
     closeModal();
+  }; 
+  const countDefaultUnitValue = (value) => {
+    if (value === 'kg' || value === 'l') return 1000;
+    if (value === 'g' || value === 'ml') return 1;
+    return null;
   };
 
-  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! PICK TYPE OF A PRODUCT AREA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+  const choosenUnits = watch('productUnits');
 
-  const [isTypeVisible, setIsTypeVisible] = useState(false);
-  const openProductType = () => setIsTypeVisible(true);
-  const closeProductType = () => setIsTypeVisible(false);
+  const renderUnitBoxes = Array.isArray(choosenUnits)
+    ? choosenUnits.map((item, index) => (
+        <div key={item}>
+          <FormField
+            defaultValue={countDefaultUnitValue(item)}
+            id={item}
+            name={item}
+            type="number"
+            label={`"${item}" to:`}
+            placeholder="wartość w gramch"
+            {...register(`units.${item}`, {
+              required: `Podaj przelicznik ${item} na gramy!`,
+            })}
+          />
+          {errors.units && errors.units[index]?.[item] && (
+            <ErrorMessage>
+              error {errors.units[index][item].message}
+            </ErrorMessage>
+          )}
+        </div>
+      ))
+    : null;
+  //console.log(errors);
+  //const onSubmit = (data) => console.log(data);
 
   const [productTypes, setProductTypes] = useState([]);
 
@@ -73,7 +112,12 @@ const AddProduct = ({ closeModal }) => {
         const data = snapshot.val();
         const temporaryData = [];
         for (let id in data) {
-          temporaryData.push({ name: id, path: data[id] });
+          temporaryData.push({
+            name: id,
+            path: data[id],
+            value: id,
+            label: id,
+          });
         }
         setProductTypes(temporaryData);
       });
@@ -82,38 +126,23 @@ const AddProduct = ({ closeModal }) => {
     return () => unsubscribe;
   }, []);
 
-  const [searchValue, setSearchValue] = useState('');
+  const { Option, Control } = components;
 
-  const filterList = productTypes.filter((item) => {
-    if (!searchValue) return productTypes;
-    return item.name.includes(searchValue);
-  });
+  const IconOption = (props) => (
+    <Option {...props}>
+      <ListItemWrapper>
+        <Icon src={props.data.path} />
+        <ListItem>{props.data.name}</ListItem>
+      </ListItemWrapper>
+    </Option>
+  );
 
-  const handleOnChange = (e) => {
-    setSearchValue(e.target.value.toLowerCase());
-  };
-
-  const pickTypeOfProduct = (e) => {
-    setChoosenType({
-      path: e.target.dataset.path,
-      name: e.target.dataset.name,
-    });
-    closeProductType();
-  };
-
-  const renderProductList = filterList.map((item) => (
-    <ListItemWrapper
-      key={item.name}
-      data-path={item.path}
-      data-name={item.name}
-      onClick={pickTypeOfProduct}
-    >
-      <Icon src={item.path} data-path={item.path} data-name={item.name} />
-      <ListItem data-path={item.path} data-name={item.name}>
-        {item.name}
-      </ListItem>
-    </ListItemWrapper>
-  ));
+  const IconControl = ({ children, ...props }) => (
+    <Control {...props}>
+      {props?.data?.path && <Icon src={props.data.path} />}
+      {children}
+    </Control>
+  );
 
   return (
     <Wrapper>
@@ -122,80 +151,113 @@ const AddProduct = ({ closeModal }) => {
         Dodaj nowy produkt
       </Paragraph>
       <StyledForm onSubmit={handleSubmit(onSubmit)}>
-        <FormField
-          name="productName"
-          id="productName"
-          placeholder="nazwij produkt"
-          label="Nazwa produktu"
-          {...register('productName', { required: true })}
-        />
-        {errors.productName && <ErrorMessage>{errorIsRequired}</ErrorMessage>}
-        {watchDatabase && (
-          <ErrorMessage>Taki produkt już istnieje</ErrorMessage>
-        )}
+        <div>
+          <FormField
+            name="productName"
+            id="productName"
+            placeholder="nazwij produkt"
+            label="Nazwa produktu"
+            {...register('productName', { required: true })}
+          />
+          {errors.productName && <ErrorMessage>{errorIsRequired}</ErrorMessage>}
+          {watchDatabase && (
+            <ErrorMessage>Taki produkt już istnieje</ErrorMessage>
+          )}
+        </div>
 
-        <Paragraph
-          customMargin="35px 0 0"
-          hoverEffect
-          isBold
-          onClick={openProductType}
-        >
-          Dopasuj typ produktu &rarr;
-        </Paragraph>
-        {choosenType?.name ? (
-          <ListItemWrapper>
-            <Icon src={choosenType.path} />
-            <ListItem>{choosenType.name}</ListItem>
-          </ListItemWrapper>
-        ) : (
-          <Paragraph customMargin="0 0 25px" size="small">
-            Nie wybrano jeszcze typu
-          </Paragraph>
-        )}
-        <ErrorMessage>{typeError && typeError}</ErrorMessage>
-        <FormField
-          name="productProtein"
-          id="productProtein"
-          label="Białko (g)"
-          type="number"
-          small={true}
-          {...register('productProtein', { required: true })}
-        />
-        {errors.productProtein && (
-          <ErrorMessage>{errorIsRequired}</ErrorMessage>
-        )}
+        <div>
+          <Controller
+            control={control}
+            rules={{ required: 'Wybierz typ produktu!' }}
+            name="productType"
+            render={({ field: { onChange, value, ref, name } }) => (
+              <Select
+                inputRef={ref}
+                id="select"
+                label="wybierz typ produktu"
+                components={{ Option: IconOption, Control: IconControl }}
+                onChange={onChange}
+                value={value}
+                optionsValue={productTypes}
+                name={name}
+              />
+            )}
+          />
+          {errors.productType && (
+            <ErrorMessage>{errors.productType.message}</ErrorMessage>
+          )}
+        </div>
 
-        <FormField
-          name="productCarbs"
-          id="productCarbs"
-          label="Węglowodany (g)"
-          type="number"
-          small={true}
-          {...register('productCarbs', { required: true })}
-        />
-        {errors.productCarbs && <ErrorMessage>{errorIsRequired}</ErrorMessage>}
+        <div>
+          <FormField
+            name="productProtein"
+            id="productProtein"
+            label="Białko (g)"
+            step="0.1"
+            type="number"
+            small={true}
+            {...register('productProtein', { required: true })}
+          />
+          {errors.productProtein && (
+            <ErrorMessage>{errorIsRequired}</ErrorMessage>
+          )}
+        </div>
 
-        <FormField
-          name="productFat"
-          id="productFat"
-          label="Tłuszcze (g)"
-          type="number"
-          small={true}
-          {...register('productFat', { required: true })}
-        />
-        {errors.productFat && <ErrorMessage>{errorIsRequired}</ErrorMessage>}
+        <div>
+          <FormField
+            name="productCarbs"
+            id="productCarbs"
+            label="Węglowodany (g)"
+            type="number"
+            step="0.1"
+            small={true}
+            {...register('productCarbs', { required: true })}
+          />
+          {errors.productCarbs && (
+            <ErrorMessage>{errorIsRequired}</ErrorMessage>
+          )}
+        </div>
 
-        <Button type="submit">dodaj produkt</Button>
+        <div>
+          <FormField
+            name="productFat"
+            id="productFat"
+            step="0.1"
+            label="Tłuszcze (g)"
+            type="number"
+            small={true}
+            {...register('productFat', { required: true })}
+          />
+          {errors.productFat && <ErrorMessage>{errorIsRequired}</ErrorMessage>}
+        </div>
+
+        <div>
+          <Controller
+            control={control}
+            rules={{ required: 'Wybierz jednostki!' }}
+            name="productUnits"
+            render={({ field: { onChange, value, ref, name } }) => (
+              <Select
+                inputRef={ref}
+                id="select"
+                label="wybierz jednostki"
+                isMulti
+                onChange={onChange}
+                value={value}
+                optionsValue={units}
+                name={name}
+              />
+            )}
+          />
+          {errors.productUnits && (
+            <ErrorMessage>{errors.productUnits.message}</ErrorMessage>
+          )}
+        </div>
+
+        {renderUnitBoxes}
+
+        <Button isBig={true} type="submit">dodaj produkt</Button>
       </StyledForm>
-
-      {/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! PICK TYPE OF A PRODUCT AREA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/}
-
-      <TypeOfProductWrapper isTypeVisible={isTypeVisible}>
-        <span onClick={closeProductType}>wróc</span>
-
-        <Input value={searchValue} onChange={handleOnChange} search={true} />
-        <ListWrapper>{renderProductList}</ListWrapper>
-      </TypeOfProductWrapper>
     </Wrapper>
   );
 };
@@ -203,3 +265,5 @@ const AddProduct = ({ closeModal }) => {
 AddProduct.propTypes = { closeModal: PropTypes.func };
 
 export default AddProduct;
+
+

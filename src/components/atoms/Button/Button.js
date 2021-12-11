@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { StyledButton } from './Button.style';
 
-const Button = ({ children, ...rest }) => {
+const Button = ({ children, isBig = false, ...rest }) => {
   const [startAnimation, setStartAnimation] = useState(false);
   const changeAnimationState = () =>
     setStartAnimation((prevState) => !prevState);
@@ -11,6 +11,7 @@ const Button = ({ children, ...rest }) => {
       animationTriger={startAnimation}
       onClick={changeAnimationState}
       onAnimationEnd={changeAnimationState}
+      isBig={isBig}
       {...rest}
     >
       {children}

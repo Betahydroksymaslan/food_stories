@@ -16,10 +16,11 @@ const clickAnimation = keyframes`
 
 export const StyledButton = styled.button`
   border: none;
+  width: ${({isBig}) => isBig && '100%'};
   background-color: ${({ theme }) => theme.colors.secondColor};
   color: ${({ theme }) => theme.colors.mainBGC};
-  border-radius: 20px;
-  padding: 8px 20px;
+  border-radius: ${({isBig}) => isBig ? '10px' : '20px'};
+  padding: ${({isBig}) => isBig ? '10px 20px' : '8px 20px'};
   font-size: ${({ theme }) => theme.fontSize.s};
   font-weight: 600;
   outline: none;
@@ -39,8 +40,8 @@ export const StyledButton = styled.button`
     transform: translate(-50%, -50%) scale(0);
     border-radius: 100%;
     background-color: #cbf7f7;
-    width: 20px;
-    height: 20px;
+    width: ${({isBig}) => isBig ? '60px' : '20px'};
+    height: ${({isBig}) => isBig ? '60px' : '20px'};
     animation: ${({ animationTriger }) =>
       animationTriger &&
       css`

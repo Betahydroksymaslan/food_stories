@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyledInput, IconWrapper, SearchInputWrapper } from './Input.style';
 import { ReactComponent as SearchIcon } from 'assets/icons/searchIcon.svg';
 
-const Input = forwardRef(({ search, ...rest }, ref) => {
+const Input = forwardRef(({ search, textareaSize, ...rest }, ref) => {
   return search ? (
     <SearchInputWrapper>
       <IconWrapper>
@@ -17,6 +17,8 @@ const Input = forwardRef(({ search, ...rest }, ref) => {
         ref={ref}
       ></StyledInput>
     </SearchInputWrapper>
+  ) : textareaSize ? (
+    <StyledInput {...rest} as="textarea" textareaSize={textareaSize} ref={ref} />
   ) : (
     <StyledInput {...rest} ref={ref} />
   );
@@ -24,6 +26,7 @@ const Input = forwardRef(({ search, ...rest }, ref) => {
 
 Input.propTypes = {
   search: PropTypes.bool,
+  textareaSize: PropTypes.bool,
 };
 
 export default Input;
