@@ -15,6 +15,7 @@ export const LoaderWrapper = styled.div`
   display: inline-block;
   overflow: hidden;
   background: none;
+  z-index: 1000;
 `;
 
 export const StyledLoader = styled.div`

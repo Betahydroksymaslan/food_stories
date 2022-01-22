@@ -11,6 +11,7 @@ import Loader from 'components/atoms/Loader/Loader';
 import Modal from 'components/organisms/Modal/Modal';
 import AddProduct from 'components/organisms/AddProduct/AddProduct';
 import AddMeal from 'components/organisms/AddMeal/AddMeal';
+import AddNewMealCategory from 'components/organisms/AddNewMealCategory/AddNewMealCategory';
 import ErrorMessage from 'components/atoms/ErrorMessage/ErrorMessage';
 import {
   StyledForm,
@@ -21,6 +22,7 @@ import { useForm } from 'react-hook-form';
 import { useMedia } from 'hooks/useMedia';
 import { ReactComponent as AddIngredientsImage } from 'assets/images/addIngredientsImage.svg';
 import { ReactComponent as AddMealImage } from 'assets/images/addMealImage.svg';
+import { ReactComponent as AddMealCategoryImage } from 'assets/images/addMealCategoryImage.svg';
 import ImageButton from 'components/molecules/ImageButton/ImageButton';
 import Logout from 'components/atoms/Logout/Logout';
 
@@ -28,7 +30,7 @@ const Settings = (props) => {
   const media = useMedia('(max-width: 600px)');
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.firebase.auth);
-  const apiCallProgress = useSelector((state) => state.apiCallsReducer);
+  const apiCallProgress = useSelector((state) => state.apiCallsReducer.apiCallsReducer);
 
   const {
     register,
@@ -50,6 +52,10 @@ const Settings = (props) => {
   const [isAddMealOpen, setIsAddMealOpen] = useState(false);
   const openAddMealModal = () => setIsAddMealOpen(true);
   const closeAddmealModal = () => setIsAddMealOpen(false);
+
+  const [isAddNewCategoryOpen, setIsAddNewCategoryOpen] = useState(false);
+  const openAddNewCategory = () => setIsAddNewCategoryOpen(true);
+  const closeAddNewCategory = () => setIsAddNewCategoryOpen(false);
 
   return (
     <PageWrapper>
@@ -115,6 +121,9 @@ const Settings = (props) => {
         <ImageButton onClick={openAddMealModal} text="+ dodaj nowy posiłek">
           <AddMealImage />
         </ImageButton>
+        <ImageButton onClick={openAddNewCategory} text="+ dodaj nową kategorię">
+          <AddMealCategoryImage />
+        </ImageButton>
       </ImageButtonsWrapper>
 
       {media && <Logout />}
@@ -129,6 +138,10 @@ const Settings = (props) => {
 
       <Modal isOpen={isAddMealOpen} handleClose={closeAddmealModal}>
         <AddMeal closeModal={closeAddmealModal} />
+      </Modal>
+
+      <Modal isOpen={isAddNewCategoryOpen} handleClose={closeAddNewCategory}>
+        <AddNewMealCategory closeModal={closeAddNewCategory} />
       </Modal>
 
       {apiCallProgress === 1 ? <Loader /> : null}

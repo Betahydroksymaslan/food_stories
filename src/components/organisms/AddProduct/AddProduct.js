@@ -69,6 +69,7 @@ const AddProduct = ({ closeModal }) => {
     dispatch(addDatabase(path, dataObject, message));
     closeModal();
   }; 
+  
   const countDefaultUnitValue = (value) => {
     if (value === 'kg' || value === 'l') return 1000;
     if (value === 'g' || value === 'ml') return 1;

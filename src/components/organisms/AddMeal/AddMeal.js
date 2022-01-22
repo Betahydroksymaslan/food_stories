@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { db } from 'assets/firebase/firebase';
 import PropTypes from 'prop-types';
 import {
@@ -6,10 +6,9 @@ import {
   StyledForm,
   IngredientBox,
   InlineWrapper,
-  DeleteBox,
   AddPhotoButton,
-  ImagePreview,
   ImagesWrapper,
+  RemoveButton,
 } from './AddMeal.style';
 import Close from 'components/atoms/Close/Close';
 import FormField from 'components/molecules/FormField/FormField';
@@ -39,9 +38,14 @@ const AddMeal = ({ closeModal }) => {
     formState: { errors },
   } = useForm();
 
-  const deleteIngredientBox = (e) => {
-    const newArray = ingredients.filter((item) => e.target.id !== item.id);
+  const deleteLastIngredientElement = () => {
+    const newArray = ingredients.slice(0, -1);
     setIngredients(newArray);
+  };
+
+  const deleteLastRecipeElement = () => {
+    const newArray = recipes.slice(0, -1);
+    setRecipes(newArray);
   };
 
   const renderIngredients = ingredients.map((item, index) => {
@@ -50,12 +54,9 @@ const AddMeal = ({ closeModal }) => {
     const renderOptions = dbIngredients.filter(
       (item) => item.value === currentTypeValue
     );
-    console.log(ingredients);
+
     return (
       <IngredientBox key={item.id} id={item.id}>
-        <DeleteBox id={item.id} onClick={deleteIngredientBox}>
-          <span id={item.id}></span>
-        </DeleteBox>
         <FormField
           id={item.id}
           name={item.id}
@@ -134,14 +135,38 @@ const AddMeal = ({ closeModal }) => {
     );
   });
 
-  const mainImage = watch('images.mainImage[0]');
-  const secondImage = watch('images.secondImage[0]', []);
-  const restImagesList = watch('images.restImages', []);
+  const mainImageRef = useRef(null);
+  const secondImageRef = useRef(null);
+  const restImagesRef = useRef(null);
 
-  console.log(mainImage);
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === 'images.mainImage' && value.images.mainImage[0]) {
+        console.log(value);
+        mainImageRef.current.setAttribute(
+          'src',
+          URL.createObjectURL(value.images.mainImage[0])
+        );
+      }
+      if (name === 'images.secondImage' && value.images.secondImage[0]) {
+        secondImageRef.current.setAttribute(
+          'src',
+          URL.createObjectURL(value.images.secondImage[0])
+        );
+      }
+      if (name === 'images.restImages' && value.images.restImages[0]) {
+        restImagesRef.current.setAttribute(
+          'src',
+          URL.createObjectURL(value.images.restImages[0])
+        );
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, mainImageRef, secondImageRef, restImagesRef]);
+
   /*const renderRestImages = restImagesList.map((item, index) => (
     <ImagePreview key={index}>
-      <img src={() => URL.createObjectURL(watch(`images.restImages[${index}]`))} />
+      <img />
     </ImagePreview>
   ));*/
 
@@ -205,9 +230,17 @@ const AddMeal = ({ closeModal }) => {
     return () => unsubscribe;
   }, []);
 
+  const tags = [
+    { label: 'meksykańska', value: 'meksykańska' },
+    { label: 'koreańska', value: 'koreańska' },
+  ];
+
   return (
     <AddMealWrapper>
       <Close onClick={closeModal} closePosition="top-right" />
+      <Paragraph isBold size="big">
+        Dodaj nowy posiłek
+      </Paragraph>
       <StyledForm onSubmit={handleSubmit(onSubmit)}>
         <FormField
           name="mealName"
@@ -221,28 +254,41 @@ const AddMeal = ({ closeModal }) => {
           Dodaj skdniki:
         </Paragraph>
         {renderIngredients}
-        <Button onClick={addNewIngredient}>dodaj</Button>
+        <InlineWrapper>
+          <Button type="button" onClick={addNewIngredient}>
+            dodaj
+          </Button>
+          <RemoveButton type="button" onClick={deleteLastIngredientElement}>
+            usuń ostatni
+          </RemoveButton>
+        </InlineWrapper>
+
         <Paragraph customMargin="30px 0 20px" isBold>
           Dodaj przepis:
         </Paragraph>
         {renderRecipes}
-        <Button onClick={addNewRecipe}>dodaj</Button>
+        <InlineWrapper>
+          <Button type="button" onClick={addNewRecipe}>
+            dodaj
+          </Button>
+          <RemoveButton type="button" onClick={deleteLastRecipeElement}>
+            usuń ostatni
+          </RemoveButton>
+        </InlineWrapper>
 
         <Paragraph customMargin="30px 0 20px" isBold>
           Zdjęcie główne (miniatura):
         </Paragraph>
         <ImagesWrapper>
           <AddPhotoButton
+            accept="image/*"
             type="file"
             {...register('images.mainImage', {
               required: 'wybierz zdjęcie główne!',
             })}
           />
-          {mainImage && (
-            <ImagePreview>
-              <img src={URL.createObjectURL(watch(`images.mainImage[0]`))} />
-            </ImagePreview>
-          )}
+
+          <img ref={mainImageRef} />
         </ImagesWrapper>
         {errors.images && errors.images?.mainImage && (
           <ErrorMessage>{errors.images.mainImage.message}</ErrorMessage>
@@ -253,16 +299,13 @@ const AddMeal = ({ closeModal }) => {
         </Paragraph>
         <ImagesWrapper>
           <AddPhotoButton
+            accept="image/*"
             type="file"
             {...register('images.secondImage', {
               required: 'wybierz zdjęcie poglądowe!',
             })}
           />
-          {/*secondImage && (
-            <ImagePreview>
-              <img src={() => URL.createObjectURL(secondImage)} />
-            </ImagePreview>
-          )*/}
+          <img ref={secondImageRef} />
         </ImagesWrapper>
         {errors.images && errors.images?.secondImage && (
           <ErrorMessage>{errors.images.secondImage.message}</ErrorMessage>
@@ -273,15 +316,41 @@ const AddMeal = ({ closeModal }) => {
         </Paragraph>
         <ImagesWrapper>
           <AddPhotoButton
+            accept="image/*"
+            multiple={true}
             type="file"
             {...register('images.restImages', {
               required: 'wybierz przynajmniej jedno zdjęcie!',
             })}
           />
-          {/* restImagesList && renderRestImages */}
+          <img ref={restImagesRef} />
         </ImagesWrapper>
         {errors.images && errors.images?.restImages && (
           <ErrorMessage>{errors.images.restImages.message}</ErrorMessage>
+        )}
+
+        <Paragraph customMargin="30px 0 20px" isBold>
+          Dodaj tagi:
+        </Paragraph>
+        <Controller
+          control={control}
+          rules={{ required: 'Dopasuj !' }}
+          name="productUnits"
+          render={({ field: { onChange, value, ref, name } }) => (
+            <Select
+              inputRef={ref}
+              id="select"
+              label="wybierz jednostki"
+              isMulti
+              onChange={onChange}
+              value={value}
+              optionsValue={tags}
+              name={name}
+            />
+          )}
+        />
+        {errors.productUnits && (
+          <ErrorMessage>{errors.productUnits.message}</ErrorMessage>
         )}
 
         <Button isBig={true} type="submit">

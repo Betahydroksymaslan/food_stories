@@ -1,5 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import { Wrapper } from 'components/organisms/AddProduct/AddProduct.style';
+import Button from 'components/atoms/Button/Button';
 
 const fadeAnimation = keyframes`
   from {
@@ -48,36 +49,28 @@ export const InlineWrapper = styled.div`
   z-index: 1000;
 `;
 
-export const DeleteBox = styled.div`
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 30px;
-  height: 30px;
-  border-radius: 100%;
-  background-color: ${({ theme }) => theme.colors.error};
+export const ImagesWrapper = styled.div`
+  width: 150px;
+  height: 150px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  position: relative;
 
-  & span {
-    width: 10px;
-    height: 3px;
-    background-color: ${({ theme }) => theme.colors.mainBGC};
-    border-radius: 3px;
+  & img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
   }
 `;
 
-export const ImagesWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
 export const AddPhotoButton = styled.input`
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   position: relative;
+  z-index: 2;
 
   &::-webkit-file-upload-button {
     visibility: hidden;
@@ -112,15 +105,8 @@ export const AddPhotoButton = styled.input`
   }
 `;
 
-export const ImagePreview = styled.div`
-  width: 100px;
-  height: 100px;
-  border-radius: 5px;
-  overflow: hidden;
-  margin-left: 20px;
 
-  & img {
-    width: 100%;
-    height: 100%;
-  }
+
+export const RemoveButton = styled(Button)`
+  background-color: ${({ theme }) => theme.colors.inputBorder};
 `;
