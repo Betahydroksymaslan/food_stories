@@ -12,7 +12,13 @@ const fadeAnimation = keyframes`
   }
 `;
 
-export const AddMealWrapper = styled(Wrapper)``;
+export const AddMealWrapper = styled(Wrapper)`
+  height: 100vh;
+  overflow-y: scroll;
+
+  ${({ theme }) => theme.media.desktop} {
+  }
+`;
 
 export const StyledForm = styled.form`
   width: 100%;
@@ -25,6 +31,21 @@ export const StyledForm = styled.form`
   button {
     align-self: center;
     margin-top: 20px;
+  }
+
+  ${({ theme }) => theme.media.desktop} {
+    width: 90vw;
+  }
+`;
+
+export const IngredientAndRecipesWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  ${({ theme }) => theme.media.desktop} {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
   }
 `;
 
@@ -39,6 +60,12 @@ export const IngredientBox = styled.div`
   border-radius: 20px;
   margin: 10px 0;
   animation: ${fadeAnimation} 0.5s cubic-bezier(0.28, 0.84, 0.42, 1) 1 forwards;
+  z-index: 998;
+
+  ${({ theme }) => theme.media.desktop} {
+    width: 250px;
+    margin-right: 20px;
+  }
 `;
 
 export const InlineWrapper = styled.div`
@@ -46,7 +73,22 @@ export const InlineWrapper = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: flex-end;
-  z-index: 1000;
+  z-index: 0;
+`;
+
+export const InlineWrapperForButtons = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  z-index: 0;
+
+  ${({ theme }) => theme.media.desktop} {
+    flex-direction: column;
+    width: 150px;
+    justify-content: center;
+    align-items: flex-start;
+  }
 `;
 
 export const ImagesWrapper = styled.div`
@@ -71,6 +113,10 @@ export const AddPhotoButton = styled.input`
   height: 100%;
   position: relative;
   z-index: 2;
+
+  &:hover {
+    cursor: pointer;
+  }
 
   &::-webkit-file-upload-button {
     visibility: hidden;
@@ -102,11 +148,100 @@ export const AddPhotoButton = styled.input`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    transition: transform 0.4s ease-in-out;
+    transform-origin: center;
+  }
+
+  &:hover::after {
+      transform: translate(-50%, -50%) scale(1.3) rotate(180deg);
+    }
+`;
+
+export const AddRemoveButton = styled.button`
+  background-color: white;
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+  border: none;
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.25);
+  position: relative;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${({ theme: { colors } }) => colors.lightBlue};
+  }
+
+  &::before,
+  &::after {
+    content: '';
+    width: 50%;
+    height: 4px;
+    background-color: ${({ theme: { colors } }) => colors.darkBlue};
+    position: absolute;
+    border-radius: 2px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &::after {
+    display: ${({ remove }) => (remove ? 'none' : 'block')};
+    transform: translate(-50%, -50%) rotate(90deg);
+    transform-origin: center;
   }
 `;
 
+export const LoaderWrapper = styled.div`
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
 
+  span {
+    font-size: 22px;
+    margin: 40px 0 30px;
+    font-weight: 500;
 
-export const RemoveButton = styled(Button)`
-  background-color: ${({ theme }) => theme.colors.inputBorder};
+    ${({ theme }) => theme.media.desktop} {
+      margin: 60px 0 4 0px;
+    }
+  }
+`;
+
+export const ProgressBar = styled.div`
+  width: 80%;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #d9f2d9;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+    transform: ${({ proggress }) => `scaleX(${proggress}%)`};
+    transform-origin: left;
+    height: 100%;
+    background-color: #339933;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 5px;
+  }
+
+  ${({ theme }) => theme.media.desktop} {
+    width: 50%;
+  }
 `;

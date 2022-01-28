@@ -38,6 +38,19 @@ export const GlobalStyle = createGlobalStyle`
 .Toastify__toast--success {
   background: #77dd77;
 }
+.Toastify__toast-container--top-center {
+  @media (max-width: 600px) {
+    width: 90%;
+    
+    margin-top: 10px;
+    transform: translateX(5%)
+  }
+}
+.Toastify__toast {
+  @media (max-width: 600px) {
+    border-radius: 8px;
+  }
+}
 .ReactModal__Overlay {
     opacity: 0;
     transition: opacity 200ms ease-in-out;
@@ -63,3 +76,4 @@ background: #B3AFB3;
 background: transparent;
 }
 `;
+

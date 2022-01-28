@@ -11,6 +11,7 @@ export const SelectInput = styled(Select)`
     padding: 7px 0 5px 20px;
     box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
     border: 1px solid ${({ theme }) => theme.colors.inputBorder};
+    
   }
   .Select__value-container {
     padding: 0;
@@ -18,17 +19,24 @@ export const SelectInput = styled(Select)`
   }
   .Select__input {
     color: ${({ theme }) => theme.colors.mainDark};
+    z-index: 1000;
   }
   .Select__menu {
     color: ${({ theme }) => theme.colors.mainDark};
+    z-index: 999;
+    
+  }
+  .Select__menu-list {
+    color: ${({ theme }) => theme.colors.mainDark};
+    z-index: 999;
+    
+  }
+  .Select__option {
+    z-index: 2;
   }
   .Select__placeholder {
     color: ${({ theme }) => theme.colors.inputBorder};
     font-weight: 500;
-  }
-
-  .Select__menu {
-    z-index: 2000;
   }
 
   ${({theme}) => theme.media.desktop} {

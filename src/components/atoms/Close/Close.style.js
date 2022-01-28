@@ -27,6 +27,7 @@ export const CloseIcon = styled.div`
   ${({ theme }) => theme.media.desktop} {
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
+    transform-origin: center;
 
     &:hover {
       transform: scale(1.05);

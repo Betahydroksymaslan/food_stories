@@ -27,6 +27,7 @@ export const StyledButton = styled.button`
   box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
   position: relative;
   overflow: hidden;
+  z-index: 0;
 
   &:disabled {
     opacity: 0.5;

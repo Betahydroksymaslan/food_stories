@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const AppWrapper = styled.div`
-  width: 100%;
+  width: 100vw;
   max-height: 100vh;
   overflow: hidden;
   ${({ theme }) => theme.media.desktop} {

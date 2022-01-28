@@ -21,7 +21,7 @@ export const addDatabase = (ref, object, message) => async (dispatch) => {
     dispatch(apiCallError());
     dispatch({
       type: DATABASE_ADD_ERROR,
-      payload: 'Coś poszło nie tak, spróbuj jeszcze raz!',
+      payload: error.message,
     });
   }
 };
@@ -56,6 +56,54 @@ export const addDatabaseWithFiles =
           });
         }
       );
+    } catch (error) {
+      dispatch(apiCallError());
+      console.log(error.message);
+      dispatch({
+        type: DATABASE_ADD_ERROR,
+        payload: error.message,
+      });
+    }
+  };
+
+export const addNewMealDatabase =
+  (ref, object, message, images = [], setProggress, callback) =>
+  async (dispatch) => {
+    const uploadAllImages = async () => {
+      let proggress = 0;
+      await db.ref(ref).set(object);
+
+      for await (const image of images) {
+        const imageName = image.name.replace('.', 'Format');
+        const imageRef = `${ref}/images/${imageName}`;
+        await db.ref(imageRef).update({ name: imageName });
+      }
+
+      for await (const image of images) {
+        const imageName = image.name.replace('.', 'Format');
+        const imageRefDb = `${ref}/images/${imageName}`;
+        const imageRefStorage = `${ref}/${imageName}`;
+
+        const uploadTask = await storage.ref(imageRefStorage).put(image);
+        const downloadURL = await uploadTask.ref.getDownloadURL();
+        await db.ref(imageRefDb).update({ imagePath: downloadURL });
+        if (imageName === images[0].name.replace('.', 'Format')) {
+          await db.ref(ref).update({ mainImage: downloadURL });
+        }
+        if (imageName === images[1].name.replace('.', 'Format')) {
+          await db.ref(ref).update({ secondImage: downloadURL });
+        }
+        proggress += 100 / images.length;
+        setProggress(proggress);
+      }
+
+      dispatch({ type: DATABASE_ADD_SUCCESS, payload: message });
+      callback();
+    };
+
+    try {
+      dispatch(beginApiCall());
+      uploadAllImages();
     } catch (error) {
       dispatch(apiCallError());
       console.log(error.message);

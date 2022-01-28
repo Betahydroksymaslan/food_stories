@@ -30,9 +30,13 @@ const AddProduct = ({ closeModal }) => {
     { label: 'l', value: 'l' },
     { label: 'ml', value: 'ml' },
     { label: 'ząbek', value: 'ząbek' },
-    { label: 'jedno/a', value: 'jedno/a' },
+    { label: 'szt.', value: 'szt.' },
     { label: 'ćwiartka', value: 'ćwiartka' },
     { label: 'połówka', value: 'połówka' },
+    { label: 'szczypta/y', value: 'szczypta/y' },
+    { label: 'szklanka/i', value: 'szklanka/i' },
+    { label: 'łyżka/i', value: 'łyżka/i' },
+    { label: 'łyżeczka/i', value: 'łyżeczka/i' },
   ];
 
   const {
@@ -55,7 +59,7 @@ const AddProduct = ({ closeModal }) => {
       protein: Number(data.productProtein),
       carbs: Number(data.productCarbs),
       fat: Number(data.productFat),
-      productType: data.productType,
+      imagePath: data.productType,
       units: data.productUnits.map((unit) => {
         return {
           name: unit,
@@ -68,8 +72,8 @@ const AddProduct = ({ closeModal }) => {
 
     dispatch(addDatabase(path, dataObject, message));
     closeModal();
-  }; 
-  
+  };
+
   const countDefaultUnitValue = (value) => {
     if (value === 'kg' || value === 'l') return 1000;
     if (value === 'g' || value === 'ml') return 1;
@@ -86,7 +90,7 @@ const AddProduct = ({ closeModal }) => {
             id={item}
             name={item}
             type="number"
-            label={`"${item}" to:`}
+            label={`"${item}" to (w gramach):`}
             placeholder="wartość w gramch"
             {...register(`units.${item}`, {
               required: `Podaj przelicznik ${item} na gramy!`,
@@ -100,23 +104,21 @@ const AddProduct = ({ closeModal }) => {
         </div>
       ))
     : null;
-  //console.log(errors);
-  //const onSubmit = (data) => console.log(data);
 
   const [productTypes, setProductTypes] = useState([]);
 
   useEffect(() => {
     const ref = db.ref('/ingredients_icons');
-    let unsubscribe;
+
     const watch = () => {
-      unsubscribe = ref.on('value', (snapshot) => {
+      ref.on('value', (snapshot) => {
         const data = snapshot.val();
         const temporaryData = [];
         for (let id in data) {
           temporaryData.push({
             name: id,
             path: data[id],
-            value: id,
+            value: data[id],
             label: id,
           });
         }
@@ -124,7 +126,7 @@ const AddProduct = ({ closeModal }) => {
       });
     };
     watch();
-    return () => unsubscribe;
+    return () => watch;
   }, []);
 
   const { Option, Control } = components;
@@ -257,7 +259,9 @@ const AddProduct = ({ closeModal }) => {
 
         {renderUnitBoxes}
 
-        <Button isBig={true} type="submit">dodaj produkt</Button>
+        <Button isBig={true} type="submit">
+          dodaj produkt
+        </Button>
       </StyledForm>
     </Wrapper>
   );
@@ -266,5 +270,3 @@ const AddProduct = ({ closeModal }) => {
 AddProduct.propTypes = { closeModal: PropTypes.func };
 
 export default AddProduct;
-
-

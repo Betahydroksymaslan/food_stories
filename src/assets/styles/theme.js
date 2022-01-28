@@ -6,6 +6,8 @@ export const theme = {
     mainDark: '#737C8E',
     secondColor: '#fc797a',
     mainColor: '#B5EAEA',
+    darkBlue: '#4991f0',
+    lightBlue: '#dfebfa',
     inputBorder: '#C0C7D6',
     mainColorLight: '#353766',
     inputBorderLight: '#f2f2f2',

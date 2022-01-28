@@ -8,7 +8,11 @@ import {
   InlineWrapper,
   AddPhotoButton,
   ImagesWrapper,
-  RemoveButton,
+  AddRemoveButton,
+  LoaderWrapper,
+  ProgressBar,
+  IngredientAndRecipesWrapper,
+  InlineWrapperForButtons,
 } from './AddMeal.style';
 import Close from 'components/atoms/Close/Close';
 import FormField from 'components/molecules/FormField/FormField';
@@ -18,6 +22,10 @@ import Button from 'components/atoms/Button/Button';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import Select from 'components/atoms/Select/Select';
 import { v4 as randomid } from 'uuid';
+import { useSelector, useDispatch } from 'react-redux';
+import { addNewMealDatabase } from 'actions/databaseActions';
+import Loader from 'components/atoms/Loader/Loader';
+import { useMedia } from 'hooks/useMedia';
 
 const AddMeal = ({ closeModal }) => {
   const [dbIngredients, setDbIngredients] = useState([]);
@@ -25,6 +33,15 @@ const AddMeal = ({ closeModal }) => {
   const initialRecipesState = { id: randomid() };
   const [ingredients, setIngredients] = useState([initialIngredientsState]);
   const [recipes, setRecipes] = useState([initialRecipesState]);
+  const [foodCategories, setFoodcategories] = useState([]);
+  const [proggressBar, setProggressBar] = useState(0);
+
+  const media = useMedia('(min-width: 600px)');
+
+  const dispatch = useDispatch();
+  const apiCallProgress = useSelector(
+    (state) => state.apiCallsReducer.apiCallProgress
+  );
 
   const addNewIngredient = () =>
     setIngredients([...ingredients, initialIngredientsState]);
@@ -142,7 +159,6 @@ const AddMeal = ({ closeModal }) => {
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === 'images.mainImage' && value.images.mainImage[0]) {
-        console.log(value);
         mainImageRef.current.setAttribute(
           'src',
           URL.createObjectURL(value.images.mainImage[0])
@@ -200,8 +216,52 @@ const AddMeal = ({ closeModal }) => {
       )}
     </IngredientBox>
   ));
+  const changeProggress = (proggress) => setProggressBar(proggress);
+  const onSubmit = (data) => {
+    const imagesArray = [
+      data.images.mainImage[0],
+      data.images.secondImage[0],
+      ...data.images.restImages,
+    ];
 
-  const onSubmit = (data) => console.log(data);
+    const dataObject = {
+      mealname: data.mealName,
+      ingredients: data.ingredients.map((item) => {
+        return {
+          ingredientName: item.name,
+          ingredientQuantity: Number(item.quantity),
+          ingredientType: item.type.name,
+          ingredientImagePath: item.type.path,
+          ingredientUnit: item.unit,
+        };
+      }),
+      recipe: data.recipes.map((item) => {
+        return {
+          stepName: item.name,
+          stepBody: item.body,
+        };
+      }),
+      categories: data.foodCategories.map((item) => {
+        return {
+          categoryName: item.name,
+          categoryPath: item.path,
+        };
+      }),
+    };
+    const path = `meals/${data.mealName}`;
+    const message = 'Pomyślnie dodano kolejny przepis!';
+
+    dispatch(
+      addNewMealDatabase(
+        path,
+        dataObject,
+        message,
+        imagesArray,
+        changeProggress,
+        closeModal
+      )
+    );
+  };
   const errorIsRequired = 'To pole jest wymagane';
 
   useEffect(() => {
@@ -219,7 +279,11 @@ const AddMeal = ({ closeModal }) => {
               value: data[id].units[i].name,
             });
           }
-          temporaryData.push({ value: id, label: id, unitsData });
+          temporaryData.push({
+            value: { path: data[id].imagePath, name: id },
+            label: id,
+            unitsData,
+          });
           unitsData = [];
         }
         setDbIngredients(temporaryData);
@@ -230,134 +294,191 @@ const AddMeal = ({ closeModal }) => {
     return () => unsubscribe;
   }, []);
 
-  const tags = [
-    { label: 'meksykańska', value: 'meksykańska' },
-    { label: 'koreańska', value: 'koreańska' },
-  ];
+  useEffect(() => {
+    const ref = db.ref('/mealCategories');
+    let unsubscribe;
+    const watch = () => {
+      unsubscribe = ref.on('value', (snapshot) => {
+        const data = snapshot.val();
+        const temporaryData = [];
+        for (let id in data) {
+          temporaryData.push({
+            value: { name: data[id].name, path: data[id].imagePath },
+            label: data[id].name,
+          });
+        }
+        setFoodcategories(temporaryData);
+      });
+    };
+
+    watch();
+    return () => unsubscribe;
+  }, []);
 
   return (
-    <AddMealWrapper>
-      <Close onClick={closeModal} closePosition="top-right" />
-      <Paragraph isBold size="big">
-        Dodaj nowy posiłek
-      </Paragraph>
-      <StyledForm onSubmit={handleSubmit(onSubmit)}>
-        <FormField
-          name="mealName"
-          id="mealName"
-          label="nazwa posiłku"
-          placeholder="nazwij posiłek"
-          {...register('mealName', { required: true })}
-        />
-        {errors.mealName && <ErrorMessage>{errorIsRequired}</ErrorMessage>}
-        <Paragraph customMargin="30px 0 20px" isBold>
-          Dodaj skdniki:
+    <>
+      <AddMealWrapper>
+        <Close onClick={closeModal} closePosition="top-right" />
+        <Paragraph isBold size="big">
+          Dodaj nowy posiłek
         </Paragraph>
-        {renderIngredients}
-        <InlineWrapper>
-          <Button type="button" onClick={addNewIngredient}>
-            dodaj
-          </Button>
-          <RemoveButton type="button" onClick={deleteLastIngredientElement}>
-            usuń ostatni
-          </RemoveButton>
-        </InlineWrapper>
-
-        <Paragraph customMargin="30px 0 20px" isBold>
-          Dodaj przepis:
-        </Paragraph>
-        {renderRecipes}
-        <InlineWrapper>
-          <Button type="button" onClick={addNewRecipe}>
-            dodaj
-          </Button>
-          <RemoveButton type="button" onClick={deleteLastRecipeElement}>
-            usuń ostatni
-          </RemoveButton>
-        </InlineWrapper>
-
-        <Paragraph customMargin="30px 0 20px" isBold>
-          Zdjęcie główne (miniatura):
-        </Paragraph>
-        <ImagesWrapper>
-          <AddPhotoButton
-            accept="image/*"
-            type="file"
-            {...register('images.mainImage', {
-              required: 'wybierz zdjęcie główne!',
-            })}
+        <StyledForm onSubmit={handleSubmit(onSubmit)}>
+          <FormField
+            name="mealName"
+            id="mealName"
+            label="nazwa posiłku"
+            placeholder="nazwij posiłek"
+            {...register('mealName', { required: true })}
           />
+          {errors.mealName && <ErrorMessage>{errorIsRequired}</ErrorMessage>}
+          <Paragraph
+            size={media ? 'big' : 'medium'}
+            customMargin="30px 0 20px"
+            isBold
+          >
+            Dodaj skdniki:
+          </Paragraph>
+          <IngredientAndRecipesWrapper>
+            {renderIngredients}
+            <InlineWrapperForButtons>
+              <AddRemoveButton type="button" onClick={addNewIngredient} />
 
-          <img ref={mainImageRef} />
-        </ImagesWrapper>
-        {errors.images && errors.images?.mainImage && (
-          <ErrorMessage>{errors.images.mainImage.message}</ErrorMessage>
-        )}
+              <AddRemoveButton
+                remove={true}
+                type="button"
+                onClick={deleteLastIngredientElement}
+              />
+            </InlineWrapperForButtons>
+          </IngredientAndRecipesWrapper>
 
-        <Paragraph customMargin="30px 0 20px" isBold>
-          Zdjęcie poglądowe:
-        </Paragraph>
-        <ImagesWrapper>
-          <AddPhotoButton
-            accept="image/*"
-            type="file"
-            {...register('images.secondImage', {
-              required: 'wybierz zdjęcie poglądowe!',
-            })}
-          />
-          <img ref={secondImageRef} />
-        </ImagesWrapper>
-        {errors.images && errors.images?.secondImage && (
-          <ErrorMessage>{errors.images.secondImage.message}</ErrorMessage>
-        )}
+          <Paragraph
+            size={media ? 'big' : 'medium'}
+            customMargin="30px 0 20px"
+            isBold
+          >
+            Dodaj przepis:
+          </Paragraph>
+          <IngredientAndRecipesWrapper>
+            {renderRecipes}
+            <InlineWrapperForButtons>
+              <AddRemoveButton type="button" onClick={addNewRecipe} />
 
-        <Paragraph customMargin="30px 0 20px" isBold>
-          Pozostałe zdjęcia:
-        </Paragraph>
-        <ImagesWrapper>
-          <AddPhotoButton
-            accept="image/*"
-            multiple={true}
-            type="file"
-            {...register('images.restImages', {
-              required: 'wybierz przynajmniej jedno zdjęcie!',
-            })}
-          />
-          <img ref={restImagesRef} />
-        </ImagesWrapper>
-        {errors.images && errors.images?.restImages && (
-          <ErrorMessage>{errors.images.restImages.message}</ErrorMessage>
-        )}
+              <AddRemoveButton
+                remove={true}
+                type="button"
+                onClick={deleteLastRecipeElement}
+              />
+            </InlineWrapperForButtons>
+          </IngredientAndRecipesWrapper>
 
-        <Paragraph customMargin="30px 0 20px" isBold>
-          Dodaj tagi:
-        </Paragraph>
-        <Controller
-          control={control}
-          rules={{ required: 'Dopasuj !' }}
-          name="productUnits"
-          render={({ field: { onChange, value, ref, name } }) => (
-            <Select
-              inputRef={ref}
-              id="select"
-              label="wybierz jednostki"
-              isMulti
-              onChange={onChange}
-              value={value}
-              optionsValue={tags}
-              name={name}
+          <Paragraph
+            size={media ? 'big' : 'medium'}
+            customMargin="30px 0 20px"
+            isBold
+          >
+            Zdjęcie główne (miniatura):
+          </Paragraph>
+          <ImagesWrapper>
+            <AddPhotoButton
+              accept="image/*"
+              type="file"
+              {...register('images.mainImage', {
+                required: 'wybierz zdjęcie główne!',
+              })}
             />
-          )}
-        />
-        {errors.productUnits && (
-          <ErrorMessage>{errors.productUnits.message}</ErrorMessage>
-        )}
 
-        <Button isBig={true} type="submit">
-          dodaj
-        </Button>
-      </StyledForm>
-    </AddMealWrapper>
+            <img ref={mainImageRef} />
+          </ImagesWrapper>
+          {errors.images && errors.images?.mainImage && (
+            <ErrorMessage>{errors.images.mainImage.message}</ErrorMessage>
+          )}
+
+          <Paragraph
+            size={media ? 'big' : 'medium'}
+            customMargin="30px 0 20px"
+            isBold
+          >
+            Zdjęcie poglądowe:
+          </Paragraph>
+          <ImagesWrapper>
+            <AddPhotoButton
+              accept="image/*"
+              type="file"
+              {...register('images.secondImage', {
+                required: 'wybierz zdjęcie poglądowe!',
+              })}
+            />
+            <img ref={secondImageRef} />
+          </ImagesWrapper>
+          {errors.images && errors.images?.secondImage && (
+            <ErrorMessage>{errors.images.secondImage.message}</ErrorMessage>
+          )}
+
+          <Paragraph
+            size={media ? 'big' : 'medium'}
+            customMargin="30px 0 20px"
+            isBold
+          >
+            Pozostałe zdjęcia:
+          </Paragraph>
+          <ImagesWrapper>
+            <AddPhotoButton
+              accept="image/*"
+              multiple={true}
+              type="file"
+              {...register('images.restImages', {
+                required: 'wybierz przynajmniej jedno zdjęcie!',
+              })}
+            />
+            <img ref={restImagesRef} />
+          </ImagesWrapper>
+          {errors.images && errors.images?.restImages && (
+            <ErrorMessage>{errors.images.restImages.message}</ErrorMessage>
+          )}
+
+          <Paragraph
+            size={media ? 'big' : 'medium'}
+            customMargin="30px 0 20px"
+            isBold
+          >
+            Dodaj tagi:
+          </Paragraph>
+          <div style={{ width: '350px' }}>
+            <Controller
+              control={control}
+              rules={{ required: 'Dopasuj !' }}
+              name="foodCategories"
+              render={({ field: { onChange, value, ref, name } }) => (
+                <Select
+                  inputRef={ref}
+                  id="select"
+                  label="wybierz kategorie"
+                  isMulti
+                  onChange={onChange}
+                  value={value}
+                  optionsValue={foodCategories}
+                  name={name}
+                />
+              )}
+            />
+            {errors.foodCategories && (
+              <ErrorMessage>{errors.foodCategories.message}</ErrorMessage>
+            )}
+
+            <Button isBig={true} disabled={apiCallProgress === 1} type="submit">
+              dodaj
+            </Button>
+          </div>
+        </StyledForm>
+      </AddMealWrapper>
+      {apiCallProgress === 1 ? (
+        <LoaderWrapper>
+          <Loader positionStatic={true} />
+          <span>trwa dodawanie przepisu...</span>
+          <ProgressBar proggress={proggressBar} />
+        </LoaderWrapper>
+      ) : null}
+    </>
   );
 };
 

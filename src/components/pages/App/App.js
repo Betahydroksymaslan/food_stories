@@ -22,8 +22,10 @@ import Home from 'components/pages/Home/Home';
 import Settings from 'components/pages/Settings/Settings';
 import MainTemplate from 'components/templates/MainTemplate/MainTemplate';
 import NoMatchFound from 'components/pages/NoMatchFound/NoMatchFound';
+import { useMedia } from 'hooks/useMedia';
 
 function App() {
+  const media = useMedia('(max-width: 600px)');
   const store = configureStore();
 
   function AuthIsLoaded({ children }) {
@@ -50,7 +52,7 @@ function App() {
             <GlobalStyle />
             <Router>
               <AppWrapper>
-                <ToastContainer />
+                <ToastContainer position={media ? 'top-center' : 'top-right'} />
 
                 <MainTemplate>
                   <Switch>
