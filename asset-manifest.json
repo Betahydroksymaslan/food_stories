@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/food_stories/static/css/main.3302407a.chunk.css",
-    "main.js": "/food_stories/static/js/main.0cc1288e.chunk.js",
-    "main.js.map": "/food_stories/static/js/main.0cc1288e.chunk.js.map",
+    "main.js": "/food_stories/static/js/main.d215f0c0.chunk.js",
+    "main.js.map": "/food_stories/static/js/main.d215f0c0.chunk.js.map",
     "runtime-main.js": "/food_stories/static/js/runtime-main.78b5046a.js",
     "runtime-main.js.map": "/food_stories/static/js/runtime-main.78b5046a.js.map",
     "static/css/2.3a6c9f29.chunk.css": "/food_stories/static/css/2.3a6c9f29.chunk.css",
@@ -19,19 +19,19 @@
     "static/media/addIngredientsImage.686af1a9.svg": "/food_stories/static/media/addIngredientsImage.686af1a9.svg",
     "static/media/addMealCategoryImage.89b8e4a7.svg": "/food_stories/static/media/addMealCategoryImage.89b8e4a7.svg",
     "static/media/addMealImage.99d63c7f.svg": "/food_stories/static/media/addMealImage.99d63c7f.svg",
-    "static/media/favouriteIcon.901d8e03.svg": "/food_stories/static/media/favouriteIcon.901d8e03.svg",
-    "static/media/homeIcon.7891ab79.svg": "/food_stories/static/media/homeIcon.7891ab79.svg",
+    "static/media/favouriteIcon.cf0f0753.svg": "/food_stories/static/media/favouriteIcon.cf0f0753.svg",
+    "static/media/homeIcon.76da443e.svg": "/food_stories/static/media/homeIcon.76da443e.svg",
     "static/media/logo.f51cd3b4.svg": "/food_stories/static/media/logo.f51cd3b4.svg",
     "static/media/logoutIcon.26552606.svg": "/food_stories/static/media/logoutIcon.26552606.svg",
-    "static/media/overlapIcon.feb805d0.svg": "/food_stories/static/media/overlapIcon.feb805d0.svg",
+    "static/media/overlapIcon.f32b900c.svg": "/food_stories/static/media/overlapIcon.f32b900c.svg",
     "static/media/searchIcon.91175c4d.svg": "/food_stories/static/media/searchIcon.91175c4d.svg",
-    "static/media/userIcon.d4c28566.svg": "/food_stories/static/media/userIcon.d4c28566.svg"
+    "static/media/userIcon.fce54329.svg": "/food_stories/static/media/userIcon.fce54329.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.78b5046a.js",
     "static/css/2.3a6c9f29.chunk.css",
     "static/js/2.cec83f61.chunk.js",
     "static/css/main.3302407a.chunk.css",
-    "static/js/main.0cc1288e.chunk.js"
+    "static/js/main.d215f0c0.chunk.js"
   ]
 }
