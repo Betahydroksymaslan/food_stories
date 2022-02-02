@@ -3,10 +3,8 @@
 <svg version="1.1" id="overlapIconID" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
 	 y="0px" viewBox="0 0 34 51" style="enable-background:new 0 0 34 51;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:none;stroke:#F7F8FA;stroke-width:4;}
-	.st1{fill:#F7F8FA;}
+	.st0{fill:#F7F8FA;}
 </style>
-<path class="st0" d="M3,4c0-0.6,0.4-1,1-1h26c0.6,0,1,0.4,1,1v43.1c0,1-1.2,1.4-1.8,0.6L17.8,33c-0.4-0.5-1.2-0.5-1.6,0L4.8,47.7
-	C4.2,48.4,3,48,3,47.1V4z"/>
-<polygon class="st1" points="3,3 3.3,47.8 17,32.6 30.1,48.1 30.8,3.4 "/>
+<path class="st0" d="M1.3,1.4c0-0.7,0.4-1.1,1.1-1.1h29.1c0.7,0,1.1,0.4,1.1,1.1v48.2c0,1.1-1.3,1.6-2,0.7L17.9,33.8
+	c-0.4-0.6-1.3-0.6-1.8,0L3.3,50.3c-0.7,0.8-2,0.3-2-0.7V1.4z"/>
 </svg>
