@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/food_stories/static/css/main.3302407a.chunk.css",
-    "main.js": "/food_stories/static/js/main.95ca0381.chunk.js",
-    "main.js.map": "/food_stories/static/js/main.95ca0381.chunk.js.map",
+    "main.js": "/food_stories/static/js/main.c5255c9c.chunk.js",
+    "main.js.map": "/food_stories/static/js/main.c5255c9c.chunk.js.map",
     "runtime-main.js": "/food_stories/static/js/runtime-main.78b5046a.js",
     "runtime-main.js.map": "/food_stories/static/js/runtime-main.78b5046a.js.map",
     "static/css/2.3a6c9f29.chunk.css": "/food_stories/static/css/2.3a6c9f29.chunk.css",
@@ -21,20 +21,20 @@
     "static/media/addMealImage.99d63c7f.svg": "/food_stories/static/media/addMealImage.99d63c7f.svg",
     "static/media/clockIcon.fdc31196.svg": "/food_stories/static/media/clockIcon.fdc31196.svg",
     "static/media/cookHatIcon.2f1d2681.svg": "/food_stories/static/media/cookHatIcon.2f1d2681.svg",
-    "static/media/favouriteIcon.9c46ba33.svg": "/food_stories/static/media/favouriteIcon.9c46ba33.svg",
-    "static/media/homeIcon.76da443e.svg": "/food_stories/static/media/homeIcon.76da443e.svg",
+    "static/media/favouriteIcon.d8f567e5.svg": "/food_stories/static/media/favouriteIcon.d8f567e5.svg",
+    "static/media/homeIcon.061c8400.svg": "/food_stories/static/media/homeIcon.061c8400.svg",
     "static/media/logo.f51cd3b4.svg": "/food_stories/static/media/logo.f51cd3b4.svg",
     "static/media/logoutIcon.26552606.svg": "/food_stories/static/media/logoutIcon.26552606.svg",
-    "static/media/overlapIcon.78539dd9.svg": "/food_stories/static/media/overlapIcon.78539dd9.svg",
+    "static/media/overlapIcon.36b2ee76.svg": "/food_stories/static/media/overlapIcon.36b2ee76.svg",
     "static/media/searchIcon.91175c4d.svg": "/food_stories/static/media/searchIcon.91175c4d.svg",
     "static/media/starIcon.e029f7e7.svg": "/food_stories/static/media/starIcon.e029f7e7.svg",
-    "static/media/userIcon.f0ae7d38.svg": "/food_stories/static/media/userIcon.f0ae7d38.svg"
+    "static/media/userIcon.44542308.svg": "/food_stories/static/media/userIcon.44542308.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.78b5046a.js",
     "static/css/2.3a6c9f29.chunk.css",
     "static/js/2.6b5889df.chunk.js",
     "static/css/main.3302407a.chunk.css",
-    "static/js/main.95ca0381.chunk.js"
+    "static/js/main.c5255c9c.chunk.js"
   ]
 }
