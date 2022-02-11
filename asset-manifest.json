@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/food_stories/static/css/main.3302407a.chunk.css",
-    "main.js": "/food_stories/static/js/main.adfac4b2.chunk.js",
-    "main.js.map": "/food_stories/static/js/main.adfac4b2.chunk.js.map",
+    "main.js": "/food_stories/static/js/main.f1e60428.chunk.js",
+    "main.js.map": "/food_stories/static/js/main.f1e60428.chunk.js.map",
     "runtime-main.js": "/food_stories/static/js/runtime-main.78b5046a.js",
     "runtime-main.js.map": "/food_stories/static/js/runtime-main.78b5046a.js.map",
     "static/css/2.3a6c9f29.chunk.css": "/food_stories/static/css/2.3a6c9f29.chunk.css",
-    "static/js/2.6b5889df.chunk.js": "/food_stories/static/js/2.6b5889df.chunk.js",
-    "static/js/2.6b5889df.chunk.js.map": "/food_stories/static/js/2.6b5889df.chunk.js.map",
+    "static/js/2.c8d84616.chunk.js": "/food_stories/static/js/2.c8d84616.chunk.js",
+    "static/js/2.c8d84616.chunk.js.map": "/food_stories/static/js/2.c8d84616.chunk.js.map",
     "static/js/3.b10051d1.chunk.js": "/food_stories/static/js/3.b10051d1.chunk.js",
     "static/js/3.b10051d1.chunk.js.map": "/food_stories/static/js/3.b10051d1.chunk.js.map",
     "index.html": "/food_stories/index.html",
@@ -15,7 +15,7 @@
     "service-worker.js.map": "/food_stories/service-worker.js.map",
     "static/css/2.3a6c9f29.chunk.css.map": "/food_stories/static/css/2.3a6c9f29.chunk.css.map",
     "static/css/main.3302407a.chunk.css.map": "/food_stories/static/css/main.3302407a.chunk.css.map",
-    "static/js/2.6b5889df.chunk.js.LICENSE.txt": "/food_stories/static/js/2.6b5889df.chunk.js.LICENSE.txt",
+    "static/js/2.c8d84616.chunk.js.LICENSE.txt": "/food_stories/static/js/2.c8d84616.chunk.js.LICENSE.txt",
     "static/media/addIngredientsImage.686af1a9.svg": "/food_stories/static/media/addIngredientsImage.686af1a9.svg",
     "static/media/addMealCategoryImage.89b8e4a7.svg": "/food_stories/static/media/addMealCategoryImage.89b8e4a7.svg",
     "static/media/addMealImage.99d63c7f.svg": "/food_stories/static/media/addMealImage.99d63c7f.svg",
@@ -33,8 +33,8 @@
   "entrypoints": [
     "static/js/runtime-main.78b5046a.js",
     "static/css/2.3a6c9f29.chunk.css",
-    "static/js/2.6b5889df.chunk.js",
+    "static/js/2.c8d84616.chunk.js",
     "static/css/main.3302407a.chunk.css",
-    "static/js/main.adfac4b2.chunk.js"
+    "static/js/main.f1e60428.chunk.js"
   ]
 }
