@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/food_stories/static/css/main.3302407a.chunk.css",
-    "main.js": "/food_stories/static/js/main.633e954b.chunk.js",
-    "main.js.map": "/food_stories/static/js/main.633e954b.chunk.js.map",
+    "main.js": "/food_stories/static/js/main.b5ca47cd.chunk.js",
+    "main.js.map": "/food_stories/static/js/main.b5ca47cd.chunk.js.map",
     "runtime-main.js": "/food_stories/static/js/runtime-main.fbfb9b46.js",
     "runtime-main.js.map": "/food_stories/static/js/runtime-main.fbfb9b46.js.map",
     "static/css/2.3a6c9f29.chunk.css": "/food_stories/static/css/2.3a6c9f29.chunk.css",
@@ -17,7 +17,7 @@
     "static/css/main.3302407a.chunk.css.map": "/food_stories/static/css/main.3302407a.chunk.css.map",
     "static/js/2.5575288f.chunk.js.LICENSE.txt": "/food_stories/static/js/2.5575288f.chunk.js.LICENSE.txt",
     "static/media/addIngredientsImage.686af1a9.svg": "/food_stories/static/media/addIngredientsImage.686af1a9.svg",
-    "static/media/addMealCategoryImage.b48e6e2a.svg": "/food_stories/static/media/addMealCategoryImage.b48e6e2a.svg",
+    "static/media/addMealCategoryImage.9cf1c7dc.svg": "/food_stories/static/media/addMealCategoryImage.9cf1c7dc.svg",
     "static/media/addMealImage.99d63c7f.svg": "/food_stories/static/media/addMealImage.99d63c7f.svg",
     "static/media/clockIcon.fdc31196.svg": "/food_stories/static/media/clockIcon.fdc31196.svg",
     "static/media/cookHatIcon.2f1d2681.svg": "/food_stories/static/media/cookHatIcon.2f1d2681.svg",
@@ -35,6 +35,6 @@
     "static/css/2.3a6c9f29.chunk.css",
     "static/js/2.5575288f.chunk.js",
     "static/css/main.3302407a.chunk.css",
-    "static/js/main.633e954b.chunk.js"
+    "static/js/main.b5ca47cd.chunk.js"
   ]
 }
