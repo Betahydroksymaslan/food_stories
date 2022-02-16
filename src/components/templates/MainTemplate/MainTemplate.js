@@ -5,7 +5,6 @@ import Menu from 'components/organisms/Menu/Menu';
 import { useLocation } from 'react-router-dom';
 import { SIGNIN, SIGNUP } from 'constants/routes';
 import Aside from 'components/organisms/Aside/Aside';
-import Search from 'components/organisms/Search/Search';
 import { useMedia } from 'hooks/useMedia';
 
 const MainTemplate = ({ children }) => {
@@ -15,9 +14,6 @@ const MainTemplate = ({ children }) => {
   return (
     <Template>
       {location.pathname !== SIGNIN && location.pathname !== SIGNUP && <Menu />}
-      {location.pathname !== SIGNIN &&
-        location.pathname !== SIGNUP &&
-        !media && <Search />}
       {location.pathname !== SIGNIN && location.pathname !== SIGNUP && (
         <Aside />
       )}

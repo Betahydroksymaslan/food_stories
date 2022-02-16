@@ -1,145 +1,250 @@
 import styled, { keyframes } from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
-const expanseAnimation = keyframes`
+const rescaleBefore = keyframes`
   from {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  to {
-    transform: scaleX(1);
+    transform: scaleY(0)
+  } to {
+    transform: scaleY(1)
   }
 `;
 
-const expanseWrapperAnimation = keyframes`
+const fadeMenuName = keyframes`
   from {
-    transform: translate(-50%, -50%) scale(1);
-    background-color: transparent;
-  }
-  1% {
-    transform: translate(-50%, -50%) scale(1);
-    background-color: #cbf7f7;
-  }
-  99% {
-    transform: translate(-50%, -50%) scale(5);
-    background-color: transparent;
-  }
-  to {
-    transform: translate(-50%, -50%) scale(0);
-    background-color: transparent;
+    opacity: 0;
+    transform: translateX(-30px);
+  } to {
+    opacity: 1;
+    transform: translateX(0);
   }
 `;
 
 export const MenuWrapper = styled.nav`
-  width: 90%;
-  height: 55px;
-  background-color: ${({ theme }) => theme.colors.secondColor};
   position: fixed;
-  bottom: 0;
-  left: 50%;
-  right: 50%;
-  transform: translateX(-50%);
+  bottom: 47px;
+  left: 47px;
+  z-index: 100;
+  width: 160%;
+  border-radius: 100%;
+  aspect-ratio: 1 /1;
+  background-color: ${({ theme }) => theme.colors.mainYellow};
+  transform-origin: center;
+  padding: 20% 0 0 80%;
+  transition: transform 0.3s cubic-bezier(0.25, 0.75, 0.7, 1.35);
+  transform: ${({ isOpen }) =>
+    isOpen ? 'translate(-50%, 50%) scale(1)' : 'translate(-50%, 50%) scale(0)'};
   display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  overflow: hidden;
-  border-top-left-radius: 35px;
-  border-top-right-radius: 35px;
-  box-shadow: 0 -1px 10px rgba(115, 124, 142, 0.09);
+  flex-direction: column;
+  box-shadow: ${({ theme }) => theme.boxShadow.mainShadow};
+  a:nth-child(2) {
+    margin-left: 10%;
+  }
+  a:nth-child(3) {
+    margin-left: 20%;
+  }
+  a:nth-child(4) {
+    margin-left: 30%;
+  }
 
   ${({ theme }) => theme.media.desktop} {
-    width: 100%;
-    height: 100%;
-    transform: translateX(0);
     position: static;
-    grid-column: 1/1;
-    grid-row: 1/3;
-    border-bottom-right-radius: 35px;
-    border-top-left-radius: 0;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding-top: 70px;
+    grid-columns: 1;
+    gap: 10px;
+    transition: width 0.3s ease-in-out;
+    width: ${({isOpen}) => isOpen ? '170px' : '70px'};
+    height: 100vh;
+    border-radius: 0;
+    transform: translate(0, 0);
+    padding: 100px 0 0 0;
+    align-items: center;
+    background: transparent;
+    box-shadow: ${({ theme }) => theme.boxShadow.mainShadow};
+
+    a:nth-child(2) {
+      margin-left: 0;
+    }
+    a:nth-child(3) {
+      margin-left: 0;
+    }
+    a:nth-child(4) {
+      margin-left: 0;
+    }
+  }
+`;
+
+export const ExpandIconBtn = styled.button`
+  width: 55px;
+  height: 55px;
+  background: ${({ theme }) => theme.colors.mainYellow};
+  border: none;
+  outline: none;
+  border-radius: 100%;
+  display: grid;
+  place-items: center;
+  position: fixed;
+  z-index: 1000;
+  box-shadow: ${({ theme, isOpen }) => !isOpen && theme.boxShadow.inputShadow};
+  bottom: 20px;
+  left: 20px;
+
+  ${({ theme }) => theme.media.desktop} {
+    top: 10px;
+    left: 7px;
+    background: transparent;
+    box-shadow: none;
+    transition: background 0.2s ease-in-out;
+
+    &:hover {
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.05);
+    }
+  }
+`;
+
+export const ExpandIcon = styled.div`
+  width: 25px;
+  height: 3px;
+  transition: background 0.3s ease-in-out;
+  background-color: ${({ theme, isOpen }) =>
+    isOpen ? 'transparent' : theme.colors.white};
+  position: relative;
+  border-radius: 3px;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: ${({ theme }) => theme.colors.white};
+    top: 0;
+    right: 0;
+    transform-origin: center;
+    transition: transform 0.3s ease-in-out;
+    border-radius: 3px;
+  }
+  &::before {
+    transform: ${({ isOpen }) =>
+      isOpen ? 'translateY(0) rotate(45deg) scaleX(1.5)' : 'translateY(-8px)'};
+  }
+  &::after {
+    transform: ${({ isOpen }) =>
+      isOpen ? 'translateY(0) rotate(-45deg) scaleX(1.5)' : 'translateY(8px)'};
+  }
+
+  ${({ theme }) => theme.media.desktop} {
+    background: ${({ theme, isOpen }) =>
+      isOpen ? 'transparent' : theme.colors.mainDark};
+    height: 2px;
+
+    &::before,
+    &::after {
+      background: ${({ theme }) => theme.colors.mainDark};
+    }
+
+    &::before {
+      transform: ${({ isOpen }) =>
+        isOpen ? 'translateY(0) rotate(45deg)' : 'translateY(-8px)'};
+    }
+    &::after {
+      transform: ${({ isOpen }) =>
+        isOpen ? 'translateY(0) rotate(-45deg)' : 'translateY(8px)'};
+    }
   }
 `;
 
 const activeClassName = 'active-link';
-export const StyledLink = styled(NavLink).attrs({ activeClassName })`
-  cursor: pointer;
-  text-decoration: none;
-  color: ${({ theme }) => theme.colors.mainBGC};
-  position: relative;
-  font-size: ${({ theme }) => theme.fontSize.l};
-  margin: 0;
-  position: relative;
-  padding: 2px;
-  background-color: transparent;
-  border-radius: 100%;
-  transition: background-color 0.2s ease-in-out;
 
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
+export const StyledLink = styled(NavLink).attrs({ activeClassName })`
+  margin: 10px 0;
+  transform-origin: center;
+  position: relative;
 
   &.${activeClassName} {
-    background-color: rgba(255, 255, 255, 0.2);
+    span {
+      color: ${({theme}) => theme.colors.mainGreen};
+    }
     svg {
-      animation: ${expanseAnimation} 0.5s cubic-bezier(0.28, 0.84, 0.42, 1) 1
-        forwards;
-    }
-    &::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: transparent;
-      width: 30px;
-      height: 30px;
-      border-radius: 100%;
-    }
-    &.${activeClassName}::after {
-      animation: ${expanseWrapperAnimation} 0.5s
-        cubic-bezier(0.28, 0.84, 0.42, 1) 1 forwards;
+      path,
+      line {
+        transition: all 0.3s ease-in-out;
+        stroke-width: 18;
+      stroke: ${({theme}) => theme.colors.mainGreen};
     }
   }
+    }
+  }
+
   ${({ theme }) => theme.media.desktop} {
-    margin-bottom: 15px;
-    padding: 8px;
-    border-radius: 100%;
-    background-color: transparent;
-    &.${activeClassName} {
-      background-color: rgba(255, 255, 255, 0.2);
+    width: 100%;
+    display: flex;
+    margin: 0;
+    padding: 10px 0 10px 20px;
+    justify-content: flex-start;
+    transition: background 0.1s ease-in-out;
+
+    &:hover {
+      background: rgba(0,0,0,0.04);
+    }
+
+    &::before {
+    content: '';
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 6px;
+    height: 100%;
+    background: ${({theme}) => theme.colors.mainGreen};
+    transform-origin: center;
+    animation: ${rescaleBefore} 0.3s 1 both ease-in-out;
+  }
+
+    &.${activeClassName}::before {
+      display: block;
+      
     }
   }
 `;
 
+export const LinkName = styled.span`
+  color: ${({ theme }) => theme.colors.white};
+  font-size: ${({ theme }) => theme.fontSize.s};
+  transition: color 0.3s ease-in-out;
+  
+
+  ${({ theme }) => theme.media.desktop} {
+    display: ${({ isOpen }) => (isOpen ? 'inline' : 'none')};
+    color: ${({ theme }) => theme.colors.mainDark};
+    font-size: ${({ theme }) => theme.fontSize.xs};
+    margin-left: 15px;
+    animation: ${fadeMenuName} 0.3s 1 both ease-in-out;
+  }
+`;
+
 export const IconWrapper = styled.div`
-  height: 45px;
-  width: 45px;
-  border-radius: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
 
   svg {
-    path {
-      transition: all 0.4s ease-in-out;
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+    path,
+    line {
+      stroke: white;
     }
-    height: 25px;
-  }
-
-  #homeIconID {
-    height: 23px;
   }
 
   ${({ theme }) => theme.media.desktop} {
     svg {
-      height: 22px;
-    }
-    #homeIconID {
-      height: 19px;
+      width: 30px;
+      height: 30px;
+      margin: 0;
+      path,
+      line {
+        stroke: ${({ theme }) => theme.colors.mainDark};
+      }
     }
   }
 `;

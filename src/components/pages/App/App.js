@@ -14,8 +14,8 @@ import Loader from 'components/atoms/Loader/Loader';
 import { isLoaded } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
 import PrivateRoute from 'helpers/PrivateRoute';
-import { HOME, SIGNIN, SIGNUP, SETTINGS } from 'constants/routes';
-
+import { HOME, SIGNIN, SIGNUP, SETTINGS, RECIPES } from 'constants/routes';
+import Recipe from '../Recipe/Recipe';
 import Login from 'components/pages/Login/Login';
 import Register from 'components/pages/Register/Register';
 import Home from 'components/pages/Home/Home';
@@ -60,6 +60,7 @@ function App() {
                     <Route path={SIGNUP} component={Register} />
                     <PrivateRoute exact path={HOME} component={Home} />
                     <PrivateRoute path={SETTINGS} component={Settings} />
+                    <PrivateRoute exact path={RECIPES} component={Recipe} />
                     <Route component={NoMatchFound} />
                   </Switch>
                 </MainTemplate>

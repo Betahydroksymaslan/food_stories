@@ -19,7 +19,7 @@ export const Wrapper = styled.div`
   }
 
   ${({ theme }) => theme.media.desktop} {
-    background-color: ${({ theme }) => theme.colors.mainBGC};
+    background-color: ${({ theme }) => theme.colors.white};
     cursor: pointer;
     transform-origin: center;
 

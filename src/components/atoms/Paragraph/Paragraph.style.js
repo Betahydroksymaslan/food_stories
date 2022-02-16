@@ -8,7 +8,7 @@ export const StyledParagraph = styled.p`
   }};
   font-weight: ${({ isBold }) => (isBold ? '600' : '400')};
   margin: ${({ customMargin }) => customMargin || '2px 0'};
-  text-align: center;
+  text-align: ${({alignText}) => alignText || 'center'};
 
   ${({ theme }) => theme.media.desktop} {
     font-size: ${({ theme, size }) => {

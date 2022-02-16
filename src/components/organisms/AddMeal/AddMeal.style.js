@@ -1,6 +1,5 @@
 import styled, { keyframes } from 'styled-components';
 import { Wrapper } from 'components/organisms/AddProduct/AddProduct.style';
-import Button from 'components/atoms/Button/Button';
 
 const fadeAnimation = keyframes`
   from {
@@ -15,6 +14,7 @@ const fadeAnimation = keyframes`
 export const AddMealWrapper = styled(Wrapper)`
   height: 100vh;
   overflow-y: scroll;
+  z-index: 999;
 
   ${({ theme }) => theme.media.desktop} {
   }
@@ -169,7 +169,7 @@ export const AddRemoveButton = styled.button`
 
   &:hover {
     cursor: pointer;
-    background-color: ${({ theme: { colors } }) => colors.lightBlue};
+    background-color: ${({ theme: { colors } }) => colors.secondYellow};
   }
 
   &::before,
@@ -177,7 +177,7 @@ export const AddRemoveButton = styled.button`
     content: '';
     width: 50%;
     height: 4px;
-    background-color: ${({ theme: { colors } }) => colors.darkBlue};
+    background-color: ${({ theme: { colors } }) => colors.secondColor};
     position: absolute;
     border-radius: 2px;
     top: 50%;

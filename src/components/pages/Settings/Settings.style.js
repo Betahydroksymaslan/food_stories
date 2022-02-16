@@ -14,7 +14,7 @@ export const StyledForm = styled.form`
 
   ${({ theme }) => theme.media.desktop} {
     width: 280px;
-    background-color: ${({ theme }) => theme.colors.mainBGC};
+    background-color: ${({ theme }) => theme.colors.white};
     border-radius: 15px;
     box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
     padding: 20px 0;

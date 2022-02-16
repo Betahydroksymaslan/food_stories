@@ -1,17 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  SearchWrapper,
-  SearchInput,
-} from './Search.style';
+import { SearchWrapper } from './Search.style';
 import Input from 'components/atoms/Input/Input';
 
-const Search = (props) => {
-  
+const Search = ({ ...rest }) => {
   return (
     <>
-      <SearchWrapper >
-        <Input search type="search" placeholder="czego szukasz?" />
+      <SearchWrapper>
+        <Input search type="search" placeholder="czego szukasz?" {...rest} />
       </SearchWrapper>
     </>
   );

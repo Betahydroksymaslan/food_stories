@@ -4,7 +4,7 @@ export const StyledInput = styled.input`
   width: ${({ small }) => (small ? '100px' : '100%')};
   height: ${({ textareaSize }) => (textareaSize ? '120px' : 'auto')};
   border: 1px solid ${({ theme }) => theme.colors.inputBorder};
-  background-color: ${({ theme }) => theme.colors.mainBGC};
+  background-color: ${({ theme }) => theme.colors.mainBGCLight};
   box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
   border-radius: ${({textareaSize}) => textareaSize ? '10px' : '30px'};
   font-size: ${({ theme }) => theme.fontSize.m};
@@ -15,7 +15,7 @@ export const StyledInput = styled.input`
   color: ${({ theme }) => theme.colors.mainDark};
   &::placeholder {
     color: ${({ theme }) => theme.colors.inputBorder};
-    font-weight: 500;
+    font-weight: 400;
   }
 
   ${({ theme }) => theme.media.desktop} {
@@ -25,7 +25,7 @@ export const StyledInput = styled.input`
 
 export const SearchInputWrapper = styled.div`
   position: relative;
-  width: 90%;
+  width: 100%;
 `;
 
 export const IconWrapper = styled.div`

@@ -9,12 +9,19 @@ export const Template = styled.div`
   height: 100vh;
   overflow-y: scroll;
   position: relative;
+  ::-webkit-scrollbar {
+    display: none;
+  }
   ${({ theme }) => theme.media.desktop} {
     display: grid;
-    grid-template-rows: 80px 1fr;
-    grid-template-columns: 80px 1fr 0.3fr;
+    grid-template-rows: 1fr;
+    grid-template-columns: auto 1fr 0.3fr;
     max-height: 100vh;
     overflow: hidden;
     background-color: transparent;
+
+    ::-webkit-scrollbar {
+    display: block;
+  }
   }
 `;

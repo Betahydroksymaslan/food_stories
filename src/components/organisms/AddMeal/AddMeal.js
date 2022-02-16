@@ -38,11 +38,17 @@ const AddMeal = ({ closeModal }) => {
 
   const media = useMedia('(min-width: 600px)');
 
+  const difficultyOptions = [
+    { value: 'łatwy', label: 'łatwy' },
+    { value: 'średni', label: 'średni' },
+    { value: 'trudny', label: 'trudny' },
+  ];
+
   const dispatch = useDispatch();
   const apiCallProgress = useSelector(
     (state) => state.apiCallsReducer.apiCallProgress
   );
-
+  console.log(dbIngredients);
   const addNewIngredient = () =>
     setIngredients([...ingredients, initialIngredientsState]);
   const addNewRecipe = () => setRecipes([...recipes, initialRecipesState]);
@@ -217,7 +223,11 @@ const AddMeal = ({ closeModal }) => {
     </IngredientBox>
   ));
   const changeProggress = (proggress) => setProggressBar(proggress);
+
   const onSubmit = (data) => {
+    const date = new Date().toLocaleString('pl', {
+      dateStyle: 'long',
+    });
     const imagesArray = [
       data.images.mainImage[0],
       data.images.secondImage[0],
@@ -226,6 +236,9 @@ const AddMeal = ({ closeModal }) => {
 
     const dataObject = {
       mealname: data.mealName,
+      date,
+      difficulty: data.difficulty,
+      cookTime: Number(data.cookTime),
       ingredients: data.ingredients.map((item) => {
         return {
           ingredientName: item.name,
@@ -233,8 +246,12 @@ const AddMeal = ({ closeModal }) => {
           ingredientType: item.type.name,
           ingredientImagePath: item.type.path,
           ingredientUnit: item.unit,
+          fat: item.type.fat,
+          protein: item.type.protein,
+          carbs: item.type.carbs,
         };
       }),
+
       recipe: data.recipes.map((item) => {
         return {
           stepName: item.name,
@@ -270,6 +287,7 @@ const AddMeal = ({ closeModal }) => {
     const watch = () => {
       unsubscribe = ref.on('value', (snapshot) => {
         const data = snapshot.val();
+        console.log(data);
         let unitsData = [];
         const temporaryData = [];
         for (let id in data) {
@@ -280,7 +298,13 @@ const AddMeal = ({ closeModal }) => {
             });
           }
           temporaryData.push({
-            value: { path: data[id].imagePath, name: id },
+            value: {
+              path: data[id].imagePath,
+              name: id,
+              carbs: data[id].carbs,
+              fat: data[id].fat,
+              protein: data[id].protein,
+            },
             label: id,
             unitsData,
           });
@@ -441,7 +465,7 @@ const AddMeal = ({ closeModal }) => {
             customMargin="30px 0 20px"
             isBold
           >
-            Dodaj tagi:
+            Tagi, poziom trudności, czas przygotowania:
           </Paragraph>
           <div style={{ width: '350px' }}>
             <Controller
@@ -464,6 +488,37 @@ const AddMeal = ({ closeModal }) => {
             {errors.foodCategories && (
               <ErrorMessage>{errors.foodCategories.message}</ErrorMessage>
             )}
+
+            <Controller
+              control={control}
+              rules={{ required: 'Dopasuj poziom trudności!' }}
+              name="difficulty"
+              render={({ field: { onChange, value, ref, name } }) => (
+                <Select
+                  inputRef={ref}
+                  id="select"
+                  label="dopasuj poziom trudności"
+                  onChange={onChange}
+                  value={value}
+                  optionsValue={difficultyOptions}
+                  name={name}
+                />
+              )}
+            />
+            {errors.difficulty && (
+              <ErrorMessage>{errors.difficulty.message}</ErrorMessage>
+            )}
+
+            <FormField
+              name="cookTime"
+              id="cookTime"
+              type="number"
+              step="1"
+              label="czas przygotowania (min)"
+              placeholder="oszacuj czas"
+              {...register('cookTime', { required: true })}
+            />
+            {errors.cookTime && <ErrorMessage>{errorIsRequired}</ErrorMessage>}
 
             <Button isBig={true} disabled={apiCallProgress === 1} type="submit">
               dodaj

@@ -13,6 +13,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { signin } from 'actions/authActions';
 import { SIGNUP } from 'constants/routes';
+import { HOME } from 'constants/routes';
 import { Link } from 'react-router-dom';
 import Loader from 'components/atoms/Loader/Loader';
 import { useHistory } from 'react-router-dom';
@@ -28,7 +29,7 @@ const Login = (props) => {
 
   const dispatch = useDispatch();
   const { apiCallProgress } = useSelector((state) => state.apiCallsReducer);
-  const goHome = () => history.push('/food_stories');
+  const goHome = () => history.push(HOME);
   const onSubmit = (data) => {
     dispatch(signin(data.email, data.password, goHome));
   };

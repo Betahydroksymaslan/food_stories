@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  width: 100;
+  width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -14,19 +14,19 @@ export const Wrapper = styled.div`
 
 export const LogoWrapper = styled.div`
   width: 200px;
-  margin: 100px 0 40px;
+  margin: 60px 0 40px;
   svg {
     width: 100%;
     height: 90px;
   }
   ${({ theme }) => theme.media.desktop} {
-    margin: 65px 0 40px;
+    margin: 35px 0 40px;
   }
 `;
 
 export const StyledForm = styled.form`
   width: 75%;
-  height: 40vh;
+  height: 60vh;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;

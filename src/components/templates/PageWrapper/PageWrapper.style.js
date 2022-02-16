@@ -5,16 +5,17 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 30px 0 80px 0;
+  padding: 15px 0 80px 0;
   ${({ theme }) => theme.media.desktop} {
     width: 100%;
-    grid-column: 2/3;
-    grid-row: 2/3;
+    inline-size: min(100%);
+    margin-inline: auto;
+    grid-column: 2;
+    grid-row: 1/-1;
     height: 100%;
     padding: 0;
     overflow-y: scroll;
-    flex-direction: row;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
   }
 `;

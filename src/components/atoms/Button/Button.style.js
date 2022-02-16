@@ -17,11 +17,11 @@ const clickAnimation = keyframes`
 export const StyledButton = styled.button`
   border: none;
   width: ${({isBig}) => isBig && '100%'};
-  background-color: ${({ theme }) => theme.colors.secondColor};
-  color: ${({ theme }) => theme.colors.mainBGC};
+  background-color: ${({ theme }) => theme.colors.secondYellow};
+  color: ${({ theme }) => theme.colors.secondColor};
   border-radius: ${({isBig}) => isBig ? '10px' : '20px'};
   padding: ${({isBig}) => isBig ? '10px 20px' : '8px 20px'};
-  font-size: ${({ theme }) => theme.fontSize.s};
+  font-size: ${({ theme }) => theme.fontSize.xs};
   font-weight: 600;
   outline: none;
   box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};

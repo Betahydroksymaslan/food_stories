@@ -7,6 +7,7 @@ const Paragraph = ({
   isBold,
   customMargin,
   hoverEffect,
+  alignText,
   size = 'medium',
   ...rest
 }) => {
@@ -16,6 +17,7 @@ const Paragraph = ({
       customMargin={customMargin}
       size={size}
       hoverEffect={hoverEffect}
+      alignText={alignText}
       {...rest}
     >
       {children}
@@ -28,6 +30,7 @@ Paragraph.propTypes = {
   size: PropTypes.oneOf(['small', 'medium', 'big']),
   customMargin: PropTypes.string,
   hoverEffect: PropTypes.bool,
+  alignText: PropTypes.string
 };
 
 export default Paragraph;

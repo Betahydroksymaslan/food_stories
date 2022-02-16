@@ -4,11 +4,13 @@
   "private": true,
   "homepage": "https://betahydroksymaslan.github.io/food_stories/",
   "dependencies": {
+    "@craco/craco": "^6.4.3",
     "@reduxjs/toolkit": "^1.6.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "firebase": "^8.7.0",
+    "framer-motion": "^6.2.6",
     "gh-pages": "^3.2.3",
     "lodash.debounce": "^4.0.8",
     "react": "^17.0.2",
@@ -42,11 +44,11 @@
     "workbox-streams": "^5.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "craco start",
+    "build": "craco build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "test": "react-scripts test",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "lint-staged": {

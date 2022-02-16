@@ -16,23 +16,24 @@ import { db } from 'assets/firebase/firebase';
 
 const errorMessage = 'Coś poszło nie tak, spróbuj jeszcze raz!';
 
-export const signup = (email, password, callback) => async (dispatch) => {
+export const signup = (email, password, name, callback) => async (dispatch) => {
   try {
     dispatch(beginApiCall());
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((data) => {
-        auth.onAuthStateChanged(function (user) {
+        auth.onAuthStateChanged(async function (user) {
           if (user) {
-            db.ref(`/users/${user.uid}`).set({
+            await db.ref(`/users/${user.uid}`).set({
               uid: user.uid,
               email: user.email,
+              name,
             });
+            user.updateProfile({displayName: name})
             dispatch({
               type: SIGNUP_SUCCESS,
               payload: 'Rejestracja przebiegła pomyślnie!',
             });
-            callback();
           }
         });
       })
@@ -47,6 +48,7 @@ export const signup = (email, password, callback) => async (dispatch) => {
               : errorMessage,
         });
       });
+      callback();
   } catch (error) {
     dispatch(apiCallError());
     dispatch({
@@ -62,18 +64,12 @@ export const signup = (email, password, callback) => async (dispatch) => {
 export const signin = (email, password, callback) => async (dispatch) => {
   try {
     dispatch(beginApiCall());
-    auth
+    await auth
       .signInWithEmailAndPassword(email, password)
       .then((data) => {
         if (data.user) {
           dispatch({ type: SIGNIN_SUCCESS, payload: 'Zalogowano pomyślnie!' });
-          callback();
-        } else {
-          dispatch({
-            type: SIGNIN_ERROR,
-            payload: errorMessage,
-          });
-        }
+        } 
       })
       .catch((error) => {
         console.log(error);
@@ -83,6 +79,7 @@ export const signin = (email, password, callback) => async (dispatch) => {
           payload: errorMessage,
         });
       });
+      callback();
   } catch (error) {
     console.log(error);
     dispatch(apiCallError());

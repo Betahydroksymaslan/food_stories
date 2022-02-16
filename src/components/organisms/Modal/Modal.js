@@ -6,7 +6,7 @@ const Modal = ({ handleClose, isOpen, children }) => {
   return (
     <ModalWrapper
       closeTimeoutMS={100} /* Clases for transitions available in GlobalStyled */
-      appElement={document.getElementById('root')}
+      appElement={document.getElementById('modals')}
       isOpen={isOpen}
       onRequestClose={handleClose}
     >

@@ -13,6 +13,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { signup } from 'actions/authActions';
 import { SIGNIN } from 'constants/routes';
+import { HOME } from 'constants/routes';
 import { Link } from 'react-router-dom';
 import Loader from 'components/atoms/Loader/Loader';
 import { useHistory } from 'react-router-dom';
@@ -28,9 +29,9 @@ const Register = (props) => {
 
   const dispatch = useDispatch();
   const { apiCallProgress } = useSelector((state) => state.apiCallsReducer);
-  const goHome = () => history.push('/');
+  const goHome = () => history.push(HOME);
   const onSubmit = (data) => {
-    dispatch(signup(data.email, data.password, goHome));
+    dispatch(signup(data.email, data.password, data.name, goHome));
   };
   return (
     <Wrapper>
@@ -51,6 +52,16 @@ const Register = (props) => {
         />
         {errors.email && (
           <ErrorMessage role="alert">{errors.email.message}</ErrorMessage>
+        )}
+        <Input
+          placeholder="Twoje imię"
+          type="name"
+          {...register('name', {
+            required: { value: true, message: 'Podaj swoje imię' },
+          })}
+        />
+        {errors.name && (
+          <ErrorMessage role="alert">{errors.name.message}</ErrorMessage>
         )}
         <Input
           placeholder="Hasło"

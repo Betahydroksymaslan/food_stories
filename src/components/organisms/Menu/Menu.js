@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { MenuWrapper, StyledLink, IconWrapper } from './Menu.style';
+import {
+  MenuWrapper,
+  StyledLink,
+  IconWrapper,
+  ExpandIcon,
+  ExpandIconBtn,
+  LinkName,
+} from './Menu.style';
 import { SETTINGS } from 'constants/routes';
 import { ReactComponent as HomeIcon } from 'assets/icons/homeIcon.svg';
 import { ReactComponent as FavouriteIcon } from 'assets/icons/favouriteIcon.svg';
@@ -11,6 +18,10 @@ import { useMedia } from 'hooks/useMedia';
 
 const Menu = (props) => {
   const media = useMedia('(min-width: 600px)');
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleMenu = () => {
+    setIsOpen((prevState) => !prevState);
+  };
 
   const routes = [
     {
@@ -34,16 +45,37 @@ const Menu = (props) => {
     { route: SETTINGS, name: 'Konto', icon: <UserIcon />, isExact: false },
   ];
 
-  const renderRoutes = routes.map((route) => (
-    <StyledLink key={route.name} exact={route.isExact} to={route.route}>
-      <IconWrapper>{route.icon}</IconWrapper>
-    </StyledLink>
-  ));
+  const renderRoutes = routes.map((route) =>
+    media ? (
+      <StyledLink key={route.name} exact={route.isExact} to={route.route}>
+        <IconWrapper>
+          {route.icon}
+          <LinkName isOpen={isOpen}>{route.name}</LinkName>
+        </IconWrapper>
+      </StyledLink>
+    ) : (
+      <StyledLink
+        key={route.name}
+        exact={route.isExact}
+        to={route.route}
+        onClick={toggleMenu}
+      >
+        <IconWrapper>
+          {route.icon}
+          <LinkName isOpen={isOpen}>{route.name}</LinkName>
+        </IconWrapper>
+      </StyledLink>
+    )
+  );
+
   return (
-    <MenuWrapper>
-      {renderRoutes}
+    <>
+      <ExpandIconBtn onClick={toggleMenu} isOpen={isOpen}>
+        <ExpandIcon />
+      </ExpandIconBtn>
       {media && <Logout />}
-    </MenuWrapper>
+      <MenuWrapper isOpen={isOpen}>{renderRoutes}</MenuWrapper>
+    </>
   );
 };
 

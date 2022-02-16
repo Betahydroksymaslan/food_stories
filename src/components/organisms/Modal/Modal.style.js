@@ -17,6 +17,7 @@ export const ModalWrapper = styled(ReactModal)`
   justify-content: space-evenly;
   align-items: center;
   flex-direction: column;
+  z-index: 999;
 
   &:focus {
     outline: none;

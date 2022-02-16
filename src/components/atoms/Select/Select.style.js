@@ -7,7 +7,7 @@ export const SelectInput = styled(Select)`
   font-size: ${({ theme }) => theme.fontSize.m};
   .Select__control {
     border-radius: 30px;
-    background-color: ${({ theme }) => theme.colors.mainBGC};
+    background-color: ${({ theme }) => theme.colors.mainBGCLight};
     padding: 7px 0 5px 20px;
     box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
     border: 1px solid ${({ theme }) => theme.colors.inputBorder};

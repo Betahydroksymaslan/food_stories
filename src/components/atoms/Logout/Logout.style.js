@@ -5,21 +5,21 @@ export const Wrapper = styled.div`
   padding: 10px 30px;
   border-radius: 40px;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.secondColor};
+  background-color: ${({ theme }) => theme.colors.secondYellow};
   box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
 
   span {
-    font-size: ${({ theme }) => theme.fontSize.m};
-    font-weight: 600;
-    color: ${({ theme }) => theme.colors.mainBGC};
+    font-size: ${({ theme }) => theme.fontSize.s};
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.secondColor};
     margin-left: 10px;
   }
 
   ${({ theme }) => theme.media.desktop} {
     position: absolute;
     bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 5px;
+    z-index: 1000;
     box-shadow: none;
     background-color: transparent;
     padding: 17px;
@@ -29,7 +29,7 @@ export const Wrapper = styled.div`
     transition: background-color 0.1s ease-in-out;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.05);
     }
 
     span {
@@ -40,13 +40,24 @@ export const Wrapper = styled.div`
 
 export const IconWrapper = styled.div`
   width: 25px;
+  display: grid;
+  place-items: center;
 
   svg {
     width: 100%;
+    path {
+      fill: ${({ theme }) => theme.colors.secondColor};
+    }
   }
 
   ${({ theme }) => theme.media.desktop} {
     width: 28px;
     transform: translate(-3px, 2px);
+
+    svg {
+    path {
+      fill: ${({ theme }) => theme.colors.mainDark};
+    }
+  }
   }
 `;
