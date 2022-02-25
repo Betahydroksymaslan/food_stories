@@ -32,9 +32,8 @@ const Home = (props) => {
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
-    let unsubcribe;
-    const dbRef = db.ref('mealCategories');
-    unsubcribe = dbRef.on('value', (snapshot) => {
+    const ref = db.ref('mealCategories');
+    const listener = ref.on('value', (snapshot) => {
       const data = snapshot.val();
       const temporaryData = [];
       for (let id in data) {
@@ -43,13 +42,12 @@ const Home = (props) => {
       setCategories(temporaryData);
     });
 
-    return () => unsubcribe;
+    return () => ref.off('value', listener);
   }, []);
 
   useEffect(() => {
-    let unsubcribe;
-    const dbRef = db.ref('meals');
-    unsubcribe = dbRef.on('value', (snapshot) => {
+    const ref = db.ref('meals');
+    const listener = ref.on('value', (snapshot) => {
       const data = snapshot.val();
       let categoriesArray = [];
       const temporaryData = [];
@@ -63,9 +61,9 @@ const Home = (props) => {
       setMeals(temporaryData);
     });
 
-    return () => unsubcribe;
+    return () => ref.off('value', listener);
   }, []);
-
+console.log(meals)
   const onSearchChange = (e) => setSearchValue(e.target.value);
 
   const filterMeals = meals
@@ -77,11 +75,7 @@ const Home = (props) => {
   const renderFoodBoxes = filterMeals.map((meal) => (
     <AnimatePresence key={meal.mealname}>
       <FoodBoxItem
-        mealImage={meal.mainImage}
-        mealName={meal.mealname}
-        mealDate={meal.date}
-        mealTime={meal.cookTime}
-        mealDifficulty={meal.difficulty}
+        data={meal}
       />
     </AnimatePresence>
   ));

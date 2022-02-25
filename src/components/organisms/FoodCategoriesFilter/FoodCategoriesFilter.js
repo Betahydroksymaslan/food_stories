@@ -9,14 +9,14 @@ const FoodCategoriesFilter = ({ data, filterCategories }) => {
   const media = useMedia('(max-width: 600px)');
 
   useEffect(() => {
-    const subscription = watch((value) => {
+    const listener = watch((value) => {
       const filteredData = value.categories
         .filter((item) => Object.values(item)[0] === true)
         .map((item) => Object.keys(item)[0]);
       filterCategories(filteredData);
     });
 
-    return () => subscription.unsubscribe();
+    return () => listener.unsubscribe();
   }, []);
 
   const scroller = useRef(null);

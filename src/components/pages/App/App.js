@@ -14,15 +14,26 @@ import Loader from 'components/atoms/Loader/Loader';
 import { isLoaded } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
 import PrivateRoute from 'helpers/PrivateRoute';
-import { HOME, SIGNIN, SIGNUP, SETTINGS, RECIPES } from 'constants/routes';
+import {
+  HOME,
+  SIGNIN,
+  SIGNUP,
+  SETTINGS,
+  RECIPES,
+  FAVOURITES,
+  TABS,
+} from 'constants/routes';
 import Recipe from '../Recipe/Recipe';
 import Login from 'components/pages/Login/Login';
 import Register from 'components/pages/Register/Register';
 import Home from 'components/pages/Home/Home';
 import Settings from 'components/pages/Settings/Settings';
 import MainTemplate from 'components/templates/MainTemplate/MainTemplate';
+import Tabs from 'components/pages/Tabs/Tabs';
+import Favourites from '../Favourites/Favourites';
 import NoMatchFound from 'components/pages/NoMatchFound/NoMatchFound';
 import { useMedia } from 'hooks/useMedia';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const media = useMedia('(max-width: 600px)');
@@ -52,7 +63,7 @@ function App() {
             <GlobalStyle />
             <Router>
               <AppWrapper>
-                <ToastContainer position={media ? 'top-center' : 'top-right'} />
+                <ToastContainer theme="light" position={media ? 'top-center' : 'top-right'} />
 
                 <MainTemplate>
                   <Switch>
@@ -60,6 +71,8 @@ function App() {
                     <Route path={SIGNUP} component={Register} />
                     <PrivateRoute exact path={HOME} component={Home} />
                     <PrivateRoute path={SETTINGS} component={Settings} />
+                    <PrivateRoute path={FAVOURITES} component={Favourites} />
+                    <PrivateRoute path={TABS} component={Tabs} />
                     <PrivateRoute exact path={RECIPES} component={Recipe} />
                     <Route component={NoMatchFound} />
                   </Switch>

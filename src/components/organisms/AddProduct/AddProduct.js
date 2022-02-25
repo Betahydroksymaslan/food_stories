@@ -30,7 +30,7 @@ const AddProduct = ({ closeModal }) => {
     { label: 'l', value: 'l' },
     { label: 'ml', value: 'ml' },
     { label: 'ząbek', value: 'ząbek' },
-    { label: 'szt.', value: 'szt.' },
+    { label: 'sztuka/i', value: 'sztuka/i' },
     { label: 'ćwiartka', value: 'ćwiartka' },
     { label: 'połówka', value: 'połówka' },
     { label: 'szczypta/y', value: 'szczypta/y' },
@@ -63,7 +63,7 @@ const AddProduct = ({ closeModal }) => {
       units: data.productUnits.map((unit) => {
         return {
           name: unit,
-          value: Number(data.units[unit]),
+          value: Number(data.units[unit])
         };
       }),
     };
@@ -110,23 +110,21 @@ const AddProduct = ({ closeModal }) => {
   useEffect(() => {
     const ref = db.ref('/ingredients_icons');
 
-    const watch = () => {
-      ref.on('value', (snapshot) => {
-        const data = snapshot.val();
-        const temporaryData = [];
-        for (let id in data) {
-          temporaryData.push({
-            name: id,
-            path: data[id],
-            value: data[id],
-            label: id,
-          });
-        }
-        setProductTypes(temporaryData);
-      });
-    };
-    watch();
-    return () => watch;
+    const listener = ref.on('value', (snapshot) => {
+      const data = snapshot.val();
+      const temporaryData = [];
+      for (let id in data) {
+        temporaryData.push({
+          name: id,
+          path: data[id],
+          value: data[id],
+          label: id,
+        });
+      }
+      setProductTypes(temporaryData);
+    });
+
+    return () => ref.off('value', listener);
   }, []);
 
   const { Option, Control } = components;

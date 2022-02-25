@@ -6,7 +6,9 @@ const notificationsMiddleware = () => (next) => (action) => {
   const failureType = /(.*)_(ERROR)/.test(action.type);
 
   if (successType) {
-    toast.success(`🦄 ${action.payload}`);
+    toast.success(` ${action.payload}`, {
+      theme: 'light',
+    });
   } else if (failureType) {
     toast.error(action.payload);
   }

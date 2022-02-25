@@ -1,5 +1,12 @@
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { motion } from 'framer-motion';
+
+const expanseAfter = keyframes`
+    to {
+        transform: translate(-50%, -50%) scale(10);
+        opacity: 0;
+    }
+`;
 
 export const MealWrapper = styled(motion.div)`
   width: 100%;
@@ -9,10 +16,30 @@ export const MealWrapper = styled(motion.div)`
   align-items: center;
   padding: 5px;
   border-radius: 10px;
+  position: relative;
+  overflow: hidden;
 
   &:hover {
     cursor: pointer;
     background: rgba(0, 0, 0, 0.03);
+  }
+
+  &::after {
+    content: '';
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 100%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.3;
+    background: gray;
+    animation: ${({ animationState }) =>
+      animationState &&
+      css`
+        ${expanseAfter} 1 0.5s both ease-in-out
+      `};
   }
 `;
 
@@ -44,7 +71,7 @@ export const DeleteTab = styled.div`
   border-radius: 5px;
   display: grid;
   place-items: center;
-  font-weight: 400;
+  font-weight: 300;
   line-height: 0.7;
   font-size: ${({ theme }) => theme.fontSize.l};
   justify-self: center;

@@ -8,7 +8,7 @@ import {
   ExpandIconBtn,
   LinkName,
 } from './Menu.style';
-import { SETTINGS } from 'constants/routes';
+import { SETTINGS, FAVOURITES, HOME, TABS } from 'constants/routes';
 import { ReactComponent as HomeIcon } from 'assets/icons/homeIcon.svg';
 import { ReactComponent as FavouriteIcon } from 'assets/icons/favouriteIcon.svg';
 import { ReactComponent as UserIcon } from 'assets/icons/userIcon.svg';
@@ -25,19 +25,19 @@ const Menu = (props) => {
 
   const routes = [
     {
-      route: '/food_stories/',
+      route: HOME,
       name: 'Home',
       icon: <HomeIcon />,
       isExact: true,
     },
     {
-      route: '/food_stories/overlap',
+      route: TABS,
       name: 'Zakładki',
       icon: <OverlapIcon />,
       isExact: false,
     },
     {
-      route: '/food_stories/trainings',
+      route: FAVOURITES,
       name: 'Ulubione',
       icon: <FavouriteIcon />,
       isExact: false,
@@ -71,7 +71,7 @@ const Menu = (props) => {
   return (
     <>
       <ExpandIconBtn onClick={toggleMenu} isOpen={isOpen}>
-        <ExpandIcon />
+        <ExpandIcon isOpen={isOpen} />
       </ExpandIconBtn>
       {media && <Logout />}
       <MenuWrapper isOpen={isOpen}>{renderRoutes}</MenuWrapper>

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+
 export const Wrapper = styled.div`
   width: 100%;
   display: flex;
@@ -8,7 +9,7 @@ export const Wrapper = styled.div`
   position: relative;
   background: ${({ theme }) => theme.colors.white};
 
-  ${({theme}) => theme.media.desktop} {
+  ${({ theme }) => theme.media.desktop} {
     width: 100%;
     inline-size: min(100%);
     margin-inline: auto;
@@ -33,7 +34,7 @@ export const MainImageWrapper = styled.div`
   width: 100%;
   position: relative;
   height: 250px;
-  margin-bottom: 80px;
+  margin-bottom: 70px;
 
   img {
     width: 100%;
@@ -57,7 +58,7 @@ export const TittleWrapper = styled.header`
 export const MealName = styled.div`
   background: ${({ theme }) => theme.colors.mainYellow};
   width: 100%;
-  padding: 25px 0;
+  padding: 20px 0;
   display: grid;
   place-items: center;
 
@@ -88,6 +89,43 @@ export const TittleProperties = styled.div`
     }
 `;
 
+// !!!!!!!!!!!!!!!!!!!!!! MACROS !!!!!!!!!!!!!!!!!!!!!!
+
+export const ShortInfoWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  padding-left: 7%;
+  gap: 15px;
+  margin-bottom: 10px;
+`;
+
+export const MacroWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  margin: 10px 0 30px 0;
+`;
+
+export const MacroBox = styled.div`
+  width: 28%;
+  box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
+  border-radius: 15px;
+  display: flex;
+  background: ${({ indexNumber }) => {
+    if (indexNumber === 0) return '#f3f7fa';
+    if (indexNumber === 1) return '#f1fadd';
+    if (indexNumber === 2) return '#fdf1e7';
+    return '#ffffff';
+  }};
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+`;
+export const MacroName = styled.span`
+  font-size: 17px;
+  font-weight: ${({ isBold }) => (isBold ? '500' : '300')};
+`;
+
 // !!!!!!!!!!!!!!!!!!!!!! INGREDIENTS !!!!!!!!!!!!!!!!!!!!!!
 
 export const IngredientsList = styled.ul`
@@ -101,7 +139,6 @@ export const IngredientItem = styled.li`
   grid-template-columns: 58px 1fr max-content;
   align-items: center;
   justify-items: start;
-  margin: 5px 0;
   padding: 0 10px;
 
   img {
@@ -120,7 +157,6 @@ export const IngredeintName = styled.span`
 export const IngredientQuantity = styled.span`
   justify-self: end;
   font-weight: 300;
-  color: ${({ theme }) => theme.colors.lightGray};
 `;
 
 export const IngredientImageWrapper = styled.div`
@@ -128,8 +164,6 @@ export const IngredientImageWrapper = styled.div`
   height: 38px;
   display: grid;
   place-items: center;
-  border-radius: 10px;
-  background: ${({ theme }) => theme.colors.mainBGC};
 `;
 
 // !!!!!!!!!!!!!!!!!!!!!! PREPARING !!!!!!!!!!!!!!!!!!!!!!
@@ -150,10 +184,19 @@ export const StepWrapper = styled.div`
 export const StepName = styled.span`
   font-size: ${({ theme }) => theme.fontSize.m};
   font-weight: 500;
+  text-decoration: underline 2px wavy ${({ theme }) => theme.colors.darkYellow};
 `;
 export const StepBody = styled.p`
   font-size: ${({ theme }) => theme.fontSize.s};
   margin: 15px 10px;
+
+  &::first-letter {
+    font-size: 40px;
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.darkYellow};
+    float: left;
+    margin: 0 5px;
+  }
 `;
 
 // !!!!!!!!!!!!!!!!!!!!!! IMAGES !!!!!!!!!!!!!!!!!!!!!!
@@ -166,3 +209,5 @@ export const ImageWrapper = styled.div`
     width: 100%;
   }
 `;
+
+

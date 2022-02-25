@@ -28,16 +28,11 @@ import Loader from 'components/atoms/Loader/Loader';
 import { useMedia } from 'hooks/useMedia';
 
 const AddMeal = ({ closeModal }) => {
-  const [dbIngredients, setDbIngredients] = useState([]);
-  const initialIngredientsState = { id: randomid() };
-  const initialRecipesState = { id: randomid() };
-  const [ingredients, setIngredients] = useState([initialIngredientsState]);
-  const [recipes, setRecipes] = useState([initialRecipesState]);
-  const [foodCategories, setFoodcategories] = useState([]);
   const [proggressBar, setProggressBar] = useState(0);
+  const changeProggress = (proggress) => setProggressBar(proggress);
 
   const media = useMedia('(min-width: 600px)');
-
+  const errorIsRequired = 'To pole jest wymagane';
   const difficultyOptions = [
     { value: 'łatwy', label: 'łatwy' },
     { value: 'średni', label: 'średni' },
@@ -48,10 +43,6 @@ const AddMeal = ({ closeModal }) => {
   const apiCallProgress = useSelector(
     (state) => state.apiCallsReducer.apiCallProgress
   );
-  console.log(dbIngredients);
-  const addNewIngredient = () =>
-    setIngredients([...ingredients, initialIngredientsState]);
-  const addNewRecipe = () => setRecipes([...recipes, initialRecipesState]);
 
   const {
     register,
@@ -61,15 +52,11 @@ const AddMeal = ({ closeModal }) => {
     formState: { errors },
   } = useForm();
 
-  const deleteLastIngredientElement = () => {
-    const newArray = ingredients.slice(0, -1);
-    setIngredients(newArray);
-  };
+  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! RENDER INGREDIENTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
-  const deleteLastRecipeElement = () => {
-    const newArray = recipes.slice(0, -1);
-    setRecipes(newArray);
-  };
+  const [dbIngredients, setDbIngredients] = useState([]);
+  const initialIngredientsState = { id: randomid() };
+  const [ingredients, setIngredients] = useState([initialIngredientsState]);
 
   const renderIngredients = ingredients.map((item, index) => {
     const currentTypeValue = watch(`ingredients[${index}].type`);
@@ -158,39 +145,19 @@ const AddMeal = ({ closeModal }) => {
     );
   });
 
-  const mainImageRef = useRef(null);
-  const secondImageRef = useRef(null);
-  const restImagesRef = useRef(null);
+  const deleteLastIngredientElement = () => {
+    const newArray = ingredients.slice(0, -1);
+    setIngredients(newArray);
+  };
 
-  useEffect(() => {
-    const subscription = watch((value, { name }) => {
-      if (name === 'images.mainImage' && value.images.mainImage[0]) {
-        mainImageRef.current.setAttribute(
-          'src',
-          URL.createObjectURL(value.images.mainImage[0])
-        );
-      }
-      if (name === 'images.secondImage' && value.images.secondImage[0]) {
-        secondImageRef.current.setAttribute(
-          'src',
-          URL.createObjectURL(value.images.secondImage[0])
-        );
-      }
-      if (name === 'images.restImages' && value.images.restImages[0]) {
-        restImagesRef.current.setAttribute(
-          'src',
-          URL.createObjectURL(value.images.restImages[0])
-        );
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch, mainImageRef, secondImageRef, restImagesRef]);
+  const addNewIngredient = () =>
+    setIngredients([...ingredients, initialIngredientsState]);
 
-  /*const renderRestImages = restImagesList.map((item, index) => (
-    <ImagePreview key={index}>
-      <img />
-    </ImagePreview>
-  ));*/
+  console.log();
+  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! RENDER RECIPES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+  const initialRecipesState = { id: randomid() };
+  const [recipes, setRecipes] = useState([initialRecipesState]);
 
   const renderRecipes = recipes.map((item, index) => (
     <IngredientBox key={item.id}>
@@ -222,7 +189,51 @@ const AddMeal = ({ closeModal }) => {
       )}
     </IngredientBox>
   ));
-  const changeProggress = (proggress) => setProggressBar(proggress);
+
+  const addNewRecipe = () => setRecipes([...recipes, initialRecipesState]);
+
+  const deleteLastRecipeElement = () => {
+    const newArray = recipes.slice(0, -1);
+    setRecipes(newArray);
+  };
+
+  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WATCHING FOR IMAGES INPUTS - PREVIEW !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+  const mainImageRef = useRef(null);
+  const secondImageRef = useRef(null);
+  const restImagesRef = useRef(null);
+
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === 'images.mainImage' && value.images.mainImage[0]) {
+        mainImageRef.current.setAttribute(
+          'src',
+          URL.createObjectURL(value.images.mainImage[0])
+        );
+      }
+      if (name === 'images.secondImage' && value.images.secondImage[0]) {
+        secondImageRef.current.setAttribute(
+          'src',
+          URL.createObjectURL(value.images.secondImage[0])
+        );
+      }
+      if (name === 'images.restImages' && value.images.restImages[0]) {
+        restImagesRef.current.setAttribute(
+          'src',
+          URL.createObjectURL(value.images.restImages[0])
+        );
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, mainImageRef, secondImageRef, restImagesRef]);
+
+  /* const renderRestImages = restImagesList.map((item, index) => (
+    <ImagePreview key={index}>
+      <img />
+    </ImagePreview>
+  )); */
+
+  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUBMIT FORM !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
   const onSubmit = (data) => {
     const date = new Date().toLocaleString('pl', {
@@ -238,6 +249,7 @@ const AddMeal = ({ closeModal }) => {
       mealname: data.mealName,
       date,
       difficulty: data.difficulty,
+      portions: data.portions,
       cookTime: Number(data.cookTime),
       ingredients: data.ingredients.map((item) => {
         return {
@@ -245,7 +257,8 @@ const AddMeal = ({ closeModal }) => {
           ingredientQuantity: Number(item.quantity),
           ingredientType: item.type.name,
           ingredientImagePath: item.type.path,
-          ingredientUnit: item.unit,
+          ingredientUnit: item.unit.name,
+          converter: item.unit.converter,
           fat: item.type.fat,
           protein: item.type.protein,
           carbs: item.type.carbs,
@@ -279,64 +292,69 @@ const AddMeal = ({ closeModal }) => {
       )
     );
   };
-  const errorIsRequired = 'To pole jest wymagane';
+
+  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! GET DATABSE PRODUCTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
   useEffect(() => {
     const ref = db.ref('/products');
-    let unsubscribe;
-    const watch = () => {
-      unsubscribe = ref.on('value', (snapshot) => {
-        const data = snapshot.val();
-        console.log(data);
-        let unitsData = [];
-        const temporaryData = [];
-        for (let id in data) {
-          for (let i in data[id].units) {
-            unitsData.push({
-              label: data[id].units[i].name,
-              value: data[id].units[i].name,
-            });
-          }
-          temporaryData.push({
+
+    const listener = ref.on('value', (snapshot) => {
+      const data = snapshot.val();
+      let unitsData = [];
+      const temporaryData = [];
+      for (let id in data) {
+        for (let i in data[id].units) {
+          unitsData.push({
+            label: data[id].units[i].name,
             value: {
-              path: data[id].imagePath,
-              name: id,
-              carbs: data[id].carbs,
-              fat: data[id].fat,
-              protein: data[id].protein,
+              name: data[id].units[i].name,
+              converter: data[id].units[i].value,
             },
-            label: id,
-            unitsData,
           });
-          unitsData = [];
         }
-        setDbIngredients(temporaryData);
-      });
-    };
+        temporaryData.push({
+          value: {
+            path: data[id].imagePath,
+            name: id,
+            carbs: data[id].carbs,
+            fat: data[id].fat,
+            protein: data[id].protein,
+          },
+          label: id,
+          unitsData,
+        });
+        unitsData = [];
+      }
+      setDbIngredients(temporaryData);
+    });
 
     watch();
-    return () => unsubscribe;
+    return () => ref.off('value', listener);
   }, []);
+
+  console.log(dbIngredients);
+
+  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! GET DATABSE MEAL CATEGORIES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+  const [foodCategories, setFoodcategories] = useState([]);
 
   useEffect(() => {
     const ref = db.ref('/mealCategories');
-    let unsubscribe;
-    const watch = () => {
-      unsubscribe = ref.on('value', (snapshot) => {
-        const data = snapshot.val();
-        const temporaryData = [];
-        for (let id in data) {
-          temporaryData.push({
-            value: { name: data[id].name, path: data[id].imagePath },
-            label: data[id].name,
-          });
-        }
-        setFoodcategories(temporaryData);
-      });
-    };
+
+    const listener = ref.on('value', (snapshot) => {
+      const data = snapshot.val();
+      const temporaryData = [];
+      for (let id in data) {
+        temporaryData.push({
+          value: { name: data[id].name, path: data[id].imagePath },
+          label: data[id].name,
+        });
+      }
+      setFoodcategories(temporaryData);
+    });
 
     watch();
-    return () => unsubscribe;
+    return () => ref.off('value', listener);
   }, []);
 
   return (
@@ -519,6 +537,17 @@ const AddMeal = ({ closeModal }) => {
               {...register('cookTime', { required: true })}
             />
             {errors.cookTime && <ErrorMessage>{errorIsRequired}</ErrorMessage>}
+
+            <FormField
+              name="portions"
+              id="portions"
+              type="number"
+              step="1"
+              label="ilość porcji"
+              placeholder="z ilu porcji składa się posiłek?"
+              {...register('portions', { required: true })}
+            />
+            {errors.portions && <ErrorMessage>{errorIsRequired}</ErrorMessage>}
 
             <Button isBig={true} disabled={apiCallProgress === 1} type="submit">
               dodaj

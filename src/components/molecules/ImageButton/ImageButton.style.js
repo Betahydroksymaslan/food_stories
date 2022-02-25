@@ -11,6 +11,7 @@ export const Wrapper = styled.div`
   justify-content: space-evenly;
   box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
   background-color: ${({ theme }) => theme.colors.white};
+  padding-bottom: 10px;
 
   & span {
     text-align: center;
@@ -22,9 +23,11 @@ export const Wrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.white};
     cursor: pointer;
     transform-origin: center;
+    border: 3px solid transparent;
+    transition: border-color 0.2s ease-in-out;
 
-    &:hover svg {
-      transform: scale(1.1);
+    &:hover {
+      border-color: ${({ theme }) => theme.colors.secondYellow};
     }
 
     span {
@@ -35,9 +38,10 @@ export const Wrapper = styled.div`
 
 export const ImageWrapper = styled.div`
   width: 90%;
+  height: 100%;
 
-  svg {
-    transition: transform 0.2s ease-in-out;
+  img {
     width: 100%;
+    height: 100%;
   }
 `;

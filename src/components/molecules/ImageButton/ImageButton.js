@@ -2,10 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Wrapper, ImageWrapper } from './ImageButton.style';
 
-const ImageButton = ({ children, text, ...rest }) => {
+const ImageButton = ({ text, imagePath, ...rest }) => {
+  const image = '../../../assets/images/addMealImage.svg';
   return (
     <Wrapper {...rest}>
-      <ImageWrapper>{children}</ImageWrapper>
+      <ImageWrapper>
+        <img loading="lazy" src={imagePath} />
+      </ImageWrapper>
+
       <span>{text}</span>
     </Wrapper>
   );
@@ -13,7 +17,7 @@ const ImageButton = ({ children, text, ...rest }) => {
 
 ImageButton.propTypes = {
   text: PropTypes.string.isRequired,
-  children: PropTypes.element.isRequired,
+  imagePath: PropTypes.string.isRequired,
 };
 
 export default ImageButton;

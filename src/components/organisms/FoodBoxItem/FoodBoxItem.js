@@ -7,21 +7,19 @@ import {
   TopWrapper,
   ImageWrapper,
   TittlePropertiesWrapper,
-  RateWrapper
+  RateWrapper,
 } from './FoodBoxItem.style';
 import StyledLink from 'components/atoms/StyledLink/StyledLink';
 import { ReactComponent as StarIcon } from 'assets/icons/starIcon.svg';
 import { motion } from 'framer-motion';
+import { handleRatingStats } from 'helpers/mathOperations';
 
 const FoodBoxItem = ({
-  mealImage,
-  mealName,
-  mealDate,
-  mealDifficulty,
-  mealTime,
+  data: { mainImage, mealname, date, cookTime, difficulty, ratings },
 }) => {
+  const ratingStats = handleRatingStats(ratings)
   return (
-    <StyledLink to={`/food_stories/recipe/${mealName}`}>
+    <StyledLink to={`/food_stories/recipe/${mealname}`}>
       <BoxWrapper
         as={motion.div}
         layout
@@ -31,20 +29,20 @@ const FoodBoxItem = ({
       >
         <InnerWrapper>
           <TopWrapper>
-            <span>{mealDifficulty}</span>
-            <span>{mealTime} min</span>
+            <span>{difficulty}</span>
+            <span>{cookTime} min</span>
           </TopWrapper>
 
           <ImageWrapper>
-            <img src={mealImage} loading="lazy" />
+            <img src={mainImage} loading="lazy" />
           </ImageWrapper>
         </InnerWrapper>
         <TittlePropertiesWrapper>
-          <FoodTittle>{mealName}</FoodTittle>
-          <p>{mealDate}</p>
+          <FoodTittle>{mealname}</FoodTittle>
+          <p>{date}</p>
           <RateWrapper>
-            <span>4.3</span> <StarIcon />
-            (23 ocen)
+            <span>{ratingStats.average}</span> <StarIcon />
+            ({ratingStats.totalRatesNum} ocen)
           </RateWrapper>
         </TittlePropertiesWrapper>
       </BoxWrapper>

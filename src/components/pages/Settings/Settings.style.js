@@ -1,5 +1,15 @@
 import styled from 'styled-components';
 
+export const FormsWrapper = styled.div`
+  width: 100%;
+
+  ${({ theme }) => theme.media.desktop} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
 export const StyledForm = styled.form`
   width: 100%;
   display: flex;
@@ -18,7 +28,7 @@ export const StyledForm = styled.form`
     border-radius: 15px;
     box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
     padding: 20px 0;
-    margin: 30px 50px;
+    margin: 10px 50px;
 
     button {
       align-self: center;
@@ -29,10 +39,9 @@ export const StyledForm = styled.form`
 
 export const CurrentUserEmailBox = styled.div`
   width: 100%;
-  margin: 40px 0 30px;
+  margin: 20px 0 30px;
 
   ${({ theme }) => theme.media.desktop} {
-    display: none;
   }
 `;
 
