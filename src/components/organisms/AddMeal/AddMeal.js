@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from 'assets/firebase/firebase';
 import PropTypes from 'prop-types';
 import {
@@ -6,8 +6,6 @@ import {
   StyledForm,
   IngredientBox,
   InlineWrapper,
-  AddPhotoButton,
-  ImagesWrapper,
   AddRemoveButton,
   LoaderWrapper,
   ProgressBar,
@@ -26,6 +24,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addNewMealDatabase } from 'actions/databaseActions';
 import Loader from 'components/atoms/Loader/Loader';
 import { useMedia } from 'hooks/useMedia';
+import FileInput from 'components/atoms/FileInput/FileInput';
 
 const AddMeal = ({ closeModal }) => {
   const [proggressBar, setProggressBar] = useState(0);
@@ -49,8 +48,10 @@ const AddMeal = ({ closeModal }) => {
     handleSubmit,
     control,
     watch,
+    setValue,
+    unregister,
     formState: { errors },
-  } = useForm();
+  } = useForm({ shouldUnregister: true });
 
   /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! RENDER INGREDIENTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
@@ -153,7 +154,6 @@ const AddMeal = ({ closeModal }) => {
   const addNewIngredient = () =>
     setIngredients([...ingredients, initialIngredientsState]);
 
-  console.log();
   /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! RENDER RECIPES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
   const initialRecipesState = { id: randomid() };
@@ -187,6 +187,15 @@ const AddMeal = ({ closeModal }) => {
       {errors.recipes && errors.recipes[index]?.body && (
         <ErrorMessage>{errors.recipes[index].body.message}</ErrorMessage>
       )}
+      <FileInput
+        register={register}
+        setValue={setValue}
+        watch={watch}
+        errors={errors}
+        unregister={unregister}
+        type="file"
+        name={`recipes[${index}].image`}
+      />
     </IngredientBox>
   ));
 
@@ -197,41 +206,6 @@ const AddMeal = ({ closeModal }) => {
     setRecipes(newArray);
   };
 
-  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WATCHING FOR IMAGES INPUTS - PREVIEW !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-
-  const mainImageRef = useRef(null);
-  const secondImageRef = useRef(null);
-  const restImagesRef = useRef(null);
-
-  useEffect(() => {
-    const subscription = watch((value, { name }) => {
-      if (name === 'images.mainImage' && value.images.mainImage[0]) {
-        mainImageRef.current.setAttribute(
-          'src',
-          URL.createObjectURL(value.images.mainImage[0])
-        );
-      }
-      if (name === 'images.secondImage' && value.images.secondImage[0]) {
-        secondImageRef.current.setAttribute(
-          'src',
-          URL.createObjectURL(value.images.secondImage[0])
-        );
-      }
-      if (name === 'images.restImages' && value.images.restImages[0]) {
-        restImagesRef.current.setAttribute(
-          'src',
-          URL.createObjectURL(value.images.restImages[0])
-        );
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch, mainImageRef, secondImageRef, restImagesRef]);
-
-  /* const renderRestImages = restImagesList.map((item, index) => (
-    <ImagePreview key={index}>
-      <img />
-    </ImagePreview>
-  )); */
 
   /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUBMIT FORM !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
@@ -244,6 +218,8 @@ const AddMeal = ({ closeModal }) => {
       data.images.secondImage[0],
       ...data.images.restImages,
     ];
+
+    const recipeImages = [];
 
     const dataObject = {
       mealname: data.mealName,
@@ -265,10 +241,13 @@ const AddMeal = ({ closeModal }) => {
         };
       }),
 
-      recipe: data.recipes.map((item) => {
+      recipe: data.recipes.map((item, index) => {
+        if (item.image) recipeImages.push({path: index, image: item.image[0]});
+
         return {
           stepName: item.name,
           stepBody: item.body,
+          image: item?.image ? item.image[0] : null,
         };
       }),
       categories: data.foodCategories.map((item) => {
@@ -280,13 +259,14 @@ const AddMeal = ({ closeModal }) => {
     };
     const path = `meals/${data.mealName}`;
     const message = 'Pomyślnie dodano kolejny przepis!';
-
+    /* console.log(data, dataObject, imagesArray, recipeImages); */
     dispatch(
       addNewMealDatabase(
         path,
         dataObject,
         message,
         imagesArray,
+        recipeImages,
         changeProggress,
         closeModal
       )
@@ -331,8 +311,6 @@ const AddMeal = ({ closeModal }) => {
     watch();
     return () => ref.off('value', listener);
   }, []);
-
-  console.log(dbIngredients);
 
   /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! GET DATABSE MEAL CATEGORIES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
@@ -420,20 +398,16 @@ const AddMeal = ({ closeModal }) => {
           >
             Zdjęcie główne (miniatura):
           </Paragraph>
-          <ImagesWrapper>
-            <AddPhotoButton
-              accept="image/*"
-              type="file"
-              {...register('images.mainImage', {
-                required: 'wybierz zdjęcie główne!',
-              })}
-            />
-
-            <img ref={mainImageRef} />
-          </ImagesWrapper>
-          {errors.images && errors.images?.mainImage && (
-            <ErrorMessage>{errors.images.mainImage.message}</ErrorMessage>
-          )}
+          <FileInput
+            register={register}
+            setValue={setValue}
+            watch={watch}
+            errors={errors}
+            unregister={unregister}
+            required={true}
+            type="file"
+            name="images.mainImage"
+          />
 
           <Paragraph
             size={media ? 'big' : 'medium'}
@@ -442,19 +416,17 @@ const AddMeal = ({ closeModal }) => {
           >
             Zdjęcie poglądowe:
           </Paragraph>
-          <ImagesWrapper>
-            <AddPhotoButton
-              accept="image/*"
-              type="file"
-              {...register('images.secondImage', {
-                required: 'wybierz zdjęcie poglądowe!',
-              })}
-            />
-            <img ref={secondImageRef} />
-          </ImagesWrapper>
-          {errors.images && errors.images?.secondImage && (
-            <ErrorMessage>{errors.images.secondImage.message}</ErrorMessage>
-          )}
+
+          <FileInput
+            register={register}
+            setValue={setValue}
+            watch={watch}
+            errors={errors}
+            unregister={unregister}
+            required={true}
+            type="file"
+            name="images.secondImage"
+          />
 
           <Paragraph
             size={media ? 'big' : 'medium'}
@@ -463,20 +435,17 @@ const AddMeal = ({ closeModal }) => {
           >
             Pozostałe zdjęcia:
           </Paragraph>
-          <ImagesWrapper>
-            <AddPhotoButton
-              accept="image/*"
-              multiple={true}
-              type="file"
-              {...register('images.restImages', {
-                required: 'wybierz przynajmniej jedno zdjęcie!',
-              })}
-            />
-            <img ref={restImagesRef} />
-          </ImagesWrapper>
-          {errors.images && errors.images?.restImages && (
-            <ErrorMessage>{errors.images.restImages.message}</ErrorMessage>
-          )}
+
+          <FileInput
+            register={register}
+            setValue={setValue}
+            watch={watch}
+            errors={errors}
+            unregister={unregister}
+            maxFiles={0}
+            type="file"
+            name="images.restImages"
+          />
 
           <Paragraph
             size={media ? 'big' : 'medium'}

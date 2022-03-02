@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-
 export const Wrapper = styled.div`
   width: 100%;
   display: flex;
@@ -11,15 +10,15 @@ export const Wrapper = styled.div`
 
   ${({ theme }) => theme.media.desktop} {
     width: 100%;
-    inline-size: min(100%);
-    margin-inline: auto;
     grid-column: 2;
     grid-row: 1/-1;
     height: 100%;
     padding: 0;
     overflow-y: scroll;
-    align-items: flex-start;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    padding: 20px;
+    column-gap: 50px;
   }
 `;
 
@@ -28,6 +27,10 @@ export const Wrapper = styled.div`
 export const StyledHeader = styled.h1`
   text-align: center;
   font-weight: 400;
+
+  ${({ theme }) => theme.media.desktop} {
+    font-size: ${({ theme }) => theme.fontSize.m};
+  }
 `;
 
 export const MainImageWrapper = styled.div`
@@ -41,6 +44,11 @@ export const MainImageWrapper = styled.div`
     height: 100%;
     object-fit: cover;
   }
+
+  ${({ theme }) => theme.media.desktop} {
+    margin-bottom: 20px;
+    height: 500px;
+  }
 `;
 
 export const TittleWrapper = styled.header`
@@ -53,6 +61,16 @@ export const TittleWrapper = styled.header`
   overflow: hidden;
   box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
   background: ${({ theme }) => theme.colors.white};
+
+  ${({ theme }) => theme.media.desktop} {
+    position: static;
+    transform: translateX(0);
+
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+  }
 `;
 
 export const MealName = styled.div`
@@ -67,6 +85,17 @@ export const MealName = styled.div`
     color: ${({ theme }) => theme.colors.white};
     font-weight: 500;
     text-align: center;
+  }
+
+  ${({ theme }) => theme.media.desktop} {
+    background: transparent;
+    padding: 0;
+
+    span {
+      color: ${({ theme }) => theme.colors.mainDark};
+      font-size: 60px;
+      text-align: start;
+    }
   }
 `;
 
@@ -87,9 +116,12 @@ export const TittleProperties = styled.div`
             margin-right: 10px;
         }
     }
-`;
 
-// !!!!!!!!!!!!!!!!!!!!!! MACROS !!!!!!!!!!!!!!!!!!!!!!
+    ${({ theme }) => theme.media.desktop} {
+      
+      align-self: center;
+  }
+`;
 
 export const ShortInfoWrapper = styled.div`
   width: 100%;
@@ -97,13 +129,22 @@ export const ShortInfoWrapper = styled.div`
   padding-left: 7%;
   gap: 15px;
   margin-bottom: 10px;
+
+  ${({ theme }) => theme.media.desktop} {
+  }
 `;
+
+// !!!!!!!!!!!!!!!!!!!!!! MACROS !!!!!!!!!!!!!!!!!!!!!!
 
 export const MacroWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-evenly;
   margin: 10px 0 30px 0;
+
+  ${({ theme }) => theme.media.desktop} {
+    margin: 0;
+  }
 `;
 
 export const MacroBox = styled.div`
@@ -132,38 +173,9 @@ export const IngredientsList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 20px 0 40px;
-`;
-export const IngredientItem = styled.li`
-  display: inline-grid;
-  width: 100%;
-  grid-template-columns: 58px 1fr max-content;
-  align-items: center;
-  justify-items: start;
-  padding: 0 10px;
 
-  img {
-    width: 26px;
-    height: 26px;
-    border-radius: 5px;
+  ${({ theme }) => theme.media.desktop} {
   }
-`;
-
-export const IngredeintName = styled.span`
-  font-weight: 500;
-  font-size: 18px;
-  text-align: start;
-`;
-
-export const IngredientQuantity = styled.span`
-  justify-self: end;
-  font-weight: 300;
-`;
-
-export const IngredientImageWrapper = styled.div`
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
 `;
 
 // !!!!!!!!!!!!!!!!!!!!!! PREPARING !!!!!!!!!!!!!!!!!!!!!!
@@ -175,16 +187,64 @@ export const RecipeWrapper = styled.div`
   flex-direction: column;
   gap: 20px;
   margin: 20px 0;
+
+  ${({ theme }) => theme.media.desktop} {
+    padding: 0;
+    gap: 10px;
+  }
 `;
+
+const borderStyle = `2px dashed #008d6d`;
 
 export const StepWrapper = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  div {
+    width: 90%;
+    position: relative;
+    padding: 15px;
+    align-self: center;
+
+    &::before,
+    &::after {
+      content: '';
+      width: 40px;
+      height: 40px;
+      position: absolute;
+    }
+
+    &::before {
+      top: 0;
+      left: 0;
+      border-top: ${borderStyle};
+      border-left: ${borderStyle};
+    }
+
+    &::after {
+      bottom: 0;
+      right: 0;
+      border-bottom: ${borderStyle};
+      border-right: ${borderStyle};
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 export const StepName = styled.span`
   font-size: ${({ theme }) => theme.fontSize.m};
   font-weight: 500;
   text-decoration: underline 2px wavy ${({ theme }) => theme.colors.darkYellow};
+
+  ${({ theme }) => theme.media.desktop} {
+    font-size: ${({ theme }) => theme.fontSize.s};
+  }
 `;
 export const StepBody = styled.p`
   font-size: ${({ theme }) => theme.fontSize.s};
@@ -197,6 +257,15 @@ export const StepBody = styled.p`
     float: left;
     margin: 0 5px;
   }
+
+  ${({ theme }) => theme.media.desktop} {
+    margin: 15px 0;
+    font-size: ${({ theme }) => theme.fontSize.xs};
+
+    &::first-letter {
+      font-size: 30px;
+    }
+  }
 `;
 
 // !!!!!!!!!!!!!!!!!!!!!! IMAGES !!!!!!!!!!!!!!!!!!!!!!
@@ -208,6 +277,44 @@ export const ImageWrapper = styled.div`
   img {
     width: 100%;
   }
+
+  ${({ theme }) => theme.media.desktop} {
+    display: none;
+  }
 `;
 
+export const ImagesContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: relative;
+  margin-top: 50px;
+  padding: 0 15px;
 
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 100%;
+    background-color: ${({ theme }) => theme.colors.mainYellow};
+  }
+
+  &::before {
+    top: -45px;
+    right: 40%;
+  }
+  &::after {
+    top: -45px;
+    left: 40%;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  ${({ theme }) => theme.media.desktop} {
+  }
+`;

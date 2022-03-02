@@ -1,8 +1,9 @@
 import { db, storage } from 'assets/firebase/firebase';
 import { DATABASE_ADD_ERROR, DATABASE_ADD_SUCCESS } from 'constants/database';
 import { beginApiCall, apiCallError } from './beginApiCallAction';
+import get from 'lodash/get';
 
-export const addDatabase = (ref, object, message ) => async (dispatch) => {
+export const addDatabase = (ref, object, message) => async (dispatch) => {
   try {
     dispatch(beginApiCall());
     db.ref(ref)
@@ -26,7 +27,7 @@ export const addDatabase = (ref, object, message ) => async (dispatch) => {
   }
 };
 
-export const removeDatabase = (ref, message ) => async (dispatch) => {
+export const removeDatabase = (ref, message) => async (dispatch) => {
   try {
     dispatch(beginApiCall());
     db.ref(ref)
@@ -49,7 +50,6 @@ export const removeDatabase = (ref, message ) => async (dispatch) => {
     });
   }
 };
-
 
 export const addDatabaseWithFiles =
   (ref, object, message, fileObject, callback) => async (dispatch) => {
@@ -92,16 +92,40 @@ export const addDatabaseWithFiles =
   };
 
 export const addNewMealDatabase =
-  (ref, object, message, images = [], setProggress, callback) =>
+  (
+    ref,
+    object,
+    message,
+    images = [],
+    recipeImages = [],
+    setProggress,
+    callback
+  ) =>
   async (dispatch) => {
     const uploadAllImages = async () => {
       let proggress = 0;
       await db.ref(ref).set(object);
 
+      /* SET PLACE FOR IMAGES IN DATABASE */
+
       for await (const image of images) {
         const imageName = image.name.replace('.', 'Format');
         const imageRef = `${ref}/images/${imageName}`;
         await db.ref(imageRef).update({ name: imageName });
+      }
+
+
+      /* UPLOAD IMAGES TO STORAGE AND THEN UPDATA PATHS IN DATABASE */
+
+      for await (const recipe of recipeImages) {
+        const imageName = recipe.image.name.replace('.', 'RECIPE');
+        const imageDbIndex = recipe.path;
+        const imageRefDb = `${ref}/recipe/${imageDbIndex}`;
+        const imageRefStorage = `${ref}/${imageName}`;
+
+        const uploadTask = await storage.ref(imageRefStorage).put(recipe.image);
+        const downloadURL = await uploadTask.ref.getDownloadURL();
+        await db.ref(imageRefDb).update({ image: downloadURL });
       }
 
       for await (const image of images) {

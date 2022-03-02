@@ -35,6 +35,10 @@ export const StyledForm = styled.form`
     grid-template-columns: 1fr 1fr;
     gap: 0 15px;
 
+    & > div:last-of-type {
+      grid-column: 1/-1;
+    }
+
     button {
       grid-column: 1 / -1;
       justify-self: center;

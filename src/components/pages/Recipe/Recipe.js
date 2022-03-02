@@ -8,11 +8,7 @@ import {
   MealName,
   TittleProperties,
   IngredientsList,
-  IngredientItem,
-  IngredientImageWrapper,
   StyledHeader,
-  IngredeintName,
-  IngredientQuantity,
   StepName,
   RecipeWrapper,
   StepWrapper,
@@ -22,6 +18,7 @@ import {
   MacroBox,
   MacroName,
   ShortInfoWrapper,
+  ImagesContainer,
 } from './Recipe.style';
 import { db } from 'assets/firebase/firebase';
 import Loader from 'components/atoms/Loader/Loader';
@@ -38,21 +35,31 @@ import { ReactComponent as PortionIcon } from 'assets/icons/portionIcon.svg';
 import { ReactComponent as CaloriesIcon } from 'assets/icons/caloriesIcon.svg';
 import RatingStars from 'components/organisms/RatingStars/RatingStars';
 import { handleRatingStats } from 'helpers/mathOperations';
+import IngredientItem from 'components/molecules/IngredientItem/IngredientItem';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useMedia } from 'hooks/useMedia';
 
 const Recipe = (props) => {
   const { recipeName } = useParams();
   const [meal, setMeal] = useState([]);
   const [rating, setRating] = useState(0);
+  const media = useMedia('(min-width: 600px)');
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.firebase.auth);
 
+  console.log(meal);
   useEffect(() => {
     const ref = db.ref(`meals/${recipeName}`);
     const listener = ref.on('value', (snapshot) => {
       const data = snapshot.val();
+      const imagesArray = [];
 
       if (data?.ratings?.[auth.uid]) {
         setRating(data.ratings[auth.uid].rate);
+      }
+
+      for (let id in data.images) {
+        imagesArray.push(data.images[id]);
       }
 
       const realIngredients = data.ingredients.map((item) => ({
@@ -61,26 +68,28 @@ const Recipe = (props) => {
           (item.ingredientQuantity * item.converter * item.protein) / 100,
         carbs: (item.ingredientQuantity * item.converter * item.carbs) / 100,
       }));
-      setMeal({ ...data, realIngredients });
+
+      setMeal({ ...data, realIngredients, imagesArray });
+      if (meal.length) {
+      }
     });
 
     return () => ref.off('value', listener);
   }, [recipeName]);
 
   const renderIngredients = meal?.ingredients?.map((item) => (
-    <IngredientItem key={item.ingredientName}>
-      <IngredientImageWrapper>
-        <img src={item.ingredientImagePath} />
-      </IngredientImageWrapper>
-      <IngredeintName>{item.ingredientName}</IngredeintName>
-      <IngredientQuantity>{`${item.ingredientQuantity} ${item.ingredientUnit}`}</IngredientQuantity>
-    </IngredientItem>
+    <IngredientItem key={item.ingredientName} data={item} />
   ));
 
   const renderRecipe = meal?.recipe?.map((item) => (
     <StepWrapper key={item.stepName}>
       <StepName>{item.stepName}</StepName>
       <StepBody>{item.stepBody}</StepBody>
+      {item.image ? (
+        <div>
+          <img loading="lazy" src={item.image} />
+        </div>
+      ) : null}
     </StepWrapper>
   ));
 
@@ -159,6 +168,10 @@ const Recipe = (props) => {
     0
   );
 
+  const renderRestOfImages = meal?.imagesArray?.map((item) => (
+    <img key={item.name} src={item.imagePath} loading="lazy" />
+  ));
+
   const rateMeal = (value) => {
     const ref = `meals/${recipeName}/ratings/${auth.uid}`;
     const message = 'Dodano ocenę!';
@@ -169,7 +182,66 @@ const Recipe = (props) => {
 
   const ratingStats = handleRatingStats(meal.ratings);
 
-  return meal ? (
+  return media ? (
+    <Wrapper>
+      <div>
+        <MainImageWrapper>
+          <img src={meal.mainImage} />
+        </MainImageWrapper>
+        <StyledHeader>Składniki</StyledHeader>
+        <IngredientsList>{renderIngredients}</IngredientsList>
+      </div>
+
+      <div>
+        <TittleWrapper>
+          <MealName>
+            <span>{meal.mealname}</span>
+          </MealName>
+        </TittleWrapper>
+        <TittleProperties>
+          <div>
+            <StarIcon />
+            {ratingStats.average}
+          </div>
+          <div>
+            <TimeIcon />
+            {meal.cookTime}min
+          </div>
+          <div>
+            <CookHatIcon />
+            {meal.difficulty}
+          </div>
+        </TittleProperties>
+        <ShortInfoWrapper>
+          <RecipeShortInfo name={meal.portions} tipText="ilość porcji">
+            <PortionIcon />
+          </RecipeShortInfo>
+          <RecipeShortInfo
+            name={`${totalCalories} kcal`}
+            tipText="łączna ilość kalorii"
+          >
+            <CaloriesIcon />
+          </RecipeShortInfo>
+        </ShortInfoWrapper>
+        <MacroWrapper>{meal && renderMakroBoxes}</MacroWrapper>
+
+        <ImageWrapper>
+          <img src={meal.secondImage} alt="secondImage" />
+        </ImageWrapper>
+
+        <StyledHeader>Przygotowanie</StyledHeader>
+        <RecipeWrapper>{renderRecipe}</RecipeWrapper>
+
+        <ImagesContainer>{renderRestOfImages}</ImagesContainer>
+
+        <RatingStars
+          activeStars={rating}
+          rateFunction={rateMeal}
+          rateName="Oceń przepis!"
+        />
+      </div>
+    </Wrapper>
+  ) : (
     <Wrapper>
       <DisplayOptions options={options} />
       <Back />
@@ -218,14 +290,14 @@ const Recipe = (props) => {
       <StyledHeader>Przygotowanie</StyledHeader>
       <RecipeWrapper>{renderRecipe}</RecipeWrapper>
 
+      <ImagesContainer>{renderRestOfImages}</ImagesContainer>
+
       <RatingStars
         activeStars={rating}
         rateFunction={rateMeal}
         rateName="Oceń przepis!"
       />
     </Wrapper>
-  ) : (
-    <Loader />
   );
 };
 

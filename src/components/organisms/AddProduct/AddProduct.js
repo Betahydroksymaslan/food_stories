@@ -56,6 +56,7 @@ const AddProduct = ({ closeModal }) => {
 
     const dataObject = {
       name: data.productName,
+      nameExtended: data.productNameExtended,
       protein: Number(data.productProtein),
       carbs: Number(data.productCarbs),
       fat: Number(data.productFat),
@@ -63,7 +64,7 @@ const AddProduct = ({ closeModal }) => {
       units: data.productUnits.map((unit) => {
         return {
           name: unit,
-          value: Number(data.units[unit])
+          value: Number(data.units[unit]),
         };
       }),
     };
@@ -164,6 +165,16 @@ const AddProduct = ({ closeModal }) => {
           {watchDatabase && (
             <ErrorMessage>Taki produkt już istnieje</ErrorMessage>
           )}
+        </div>
+
+        <div>
+          <FormField
+            name="productNameExtended"
+            id="productNameExtended"
+            placeholder="dodaj szczegóły"
+            label="Szczegóły (np. marka)"
+            {...register('productNameExtended')}
+          />
         </div>
 
         <div>

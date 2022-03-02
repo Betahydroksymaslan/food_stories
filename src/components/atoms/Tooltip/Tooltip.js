@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyledTooltip } from './Tooltip.style';
 import { motion } from 'framer-motion';
 
-const Tooltip = ({ children, close }) => {
+const Tooltip = ({ children, close, xPosition }) => {
   const tooltipRef = useRef(null);
 
   useEffect(() => {
@@ -28,6 +28,7 @@ const Tooltip = ({ children, close }) => {
       layout
       animate={{ opacity: 1 }}
       initial={{ opacity: 0 }}
+      xPosition={xPosition}
       as={motion.span}
     >
       {children}
@@ -35,6 +36,10 @@ const Tooltip = ({ children, close }) => {
   );
 };
 
-Tooltip.propTypes = {};
+Tooltip.propTypes = {
+  xPosition: PropTypes.string,
+  close: PropTypes.func,
+  children: PropTypes.string,
+};
 
 export default Tooltip;
