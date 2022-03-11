@@ -3,22 +3,23 @@ import PropTypes from 'prop-types';
 import { StyledTooltip } from './Tooltip.style';
 import { motion } from 'framer-motion';
 
-const Tooltip = ({ children, close, xPosition }) => {
+const Tooltip = ({ children, close, xPosition, boxRef }) => {
   const tooltipRef = useRef(null);
 
   useEffect(() => {
     if (!tooltipRef.current) return;
 
     const handleOutsideClick = (e) => {
-      if (tooltipRef.current && !tooltipRef.current.contains(e.target)) {
+      if (true) {
         close && close();
       }
     };
 
     document.addEventListener('click', handleOutsideClick, true);
 
-    return () =>
+    return () => {
       document.removeEventListener('click', handleOutsideClick, true);
+    };
   }, [close]);
 
   return (

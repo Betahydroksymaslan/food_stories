@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   MealWrapper,
   ImageWrapper,
   MealName,
   DeleteTab,
+  LinkWrapper,
 } from './FoodBoxShortcut.style';
 import { cutTooLongString } from 'helpers/stringOperations';
 import { useDispatch } from 'react-redux';
@@ -17,11 +18,12 @@ const FoodBoxShortcut = ({ tabName, tabImage }) => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.firebase.auth);
   const [startAnimation, setStartAnimation] = useState(false);
+  let timeoutID;
   const changeAnimationState = () => {
     const changeState = () => setStartAnimation((prevState) => !prevState);
 
     changeState();
-    setTimeout(changeState, 500);
+    timeoutID = setTimeout(changeState, 500);
   };
 
   const removeTab = async () => {
@@ -30,29 +32,35 @@ const FoodBoxShortcut = ({ tabName, tabImage }) => {
 
     dispatch(removeDatabase(ref, message));
   };
+
+  useEffect(() => {
+    return () => clearTimeout(timeoutID);
+  }, []);
+
   return (
-    <StyledLink to={`/food_stories/recipe/${tabName}`}>
-      <MealWrapper
-        as={motion.div}
-        layout
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        initial={{ opacity: 0 }}
-        onClick={changeAnimationState}
-        animationState={startAnimation}
-      >
-        <ImageWrapper>
-          <img src={tabImage} alt={tabName} />
-        </ImageWrapper>
-        <MealName>{cutTooLongString(tabName, 40)}</MealName>
-        <DeleteTab onClick={removeTab}>-</DeleteTab>
-      </MealWrapper>
-    </StyledLink>
+    <LinkWrapper
+      as={motion.div}
+      layout
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      initial={{ opacity: 0 }}
+    >
+      <StyledLink to={`/food_stories/recipe/${tabName}`}>
+        <MealWrapper
+          onClick={changeAnimationState}
+          animationState={startAnimation}
+        >
+          <ImageWrapper>
+            <img src={tabImage} alt={tabName} />
+          </ImageWrapper>
+          <MealName>{cutTooLongString(tabName, 40)}</MealName>
+        </MealWrapper>
+      </StyledLink>
+      <DeleteTab onClick={removeTab}>-</DeleteTab>
+    </LinkWrapper>
   );
 };
 
-FoodBoxShortcut.propTypes = {
-  data: PropTypes.object,
-};
+FoodBoxShortcut.propTypes = {};
 
 export default FoodBoxShortcut;

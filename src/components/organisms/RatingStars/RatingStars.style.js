@@ -6,6 +6,9 @@ export const RatingWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  ${({ theme }) => theme.media.desktop} {
+    gap: 10px;
+  }
 `;
 
 export const StarsWrapper = styled.div`

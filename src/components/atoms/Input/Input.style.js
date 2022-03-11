@@ -6,7 +6,7 @@ export const StyledInput = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.inputBorder};
   background-color: ${({ theme }) => theme.colors.mainBGCLight};
   box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
-  border-radius: ${({textareaSize}) => textareaSize ? '10px' : '30px'};
+  border-radius: ${({ rounded }) => (rounded ? '40px' : '10px')};
   font-size: ${({ theme }) => theme.fontSize.m};
   padding: ${({ isSearch }) =>
     isSearch ? '12px 10px 10px 60px' : '12px 0 10px 20px'};
@@ -29,15 +29,25 @@ export const SearchInputWrapper = styled.div`
 `;
 
 export const IconWrapper = styled.div`
-  width: 20px;
+  width: 25px;
   position: absolute;
+  display: grid;
+  place-items: center;
   top: 50%;
   left: 20px;
   transform: translateY(-50%);
+  opacity: 0.6;
   svg {
     width: 100%;
+
     path {
       fill: ${({ theme }) => theme.colors.mainDark};
+    }
+  }
+
+  ${({ theme }) => theme.media.desktop} {
+    svg {
+      width: 100%;
     }
   }
 `;

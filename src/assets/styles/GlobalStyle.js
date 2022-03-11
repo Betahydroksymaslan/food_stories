@@ -80,6 +80,9 @@ export const GlobalStyle = createGlobalStyle`
 .ReactModal__Overlay--before-close{
     opacity: 0;
 }
+.ReactModal__Overlay.ReactModal__Overlay--after-open {
+    z-index: 1000;
+}
 ::-webkit-scrollbar{
 width: 6px;
 height: 4px;

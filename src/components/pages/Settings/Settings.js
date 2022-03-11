@@ -34,7 +34,7 @@ const Settings = (props) => {
   const apiCallProgress = useSelector(
     (state) => state.apiCallsReducer.apiCallsReducer
   );
-
+console.log(auth)
   const {
     register,
     handleSubmit,
@@ -96,7 +96,7 @@ const Settings = (props) => {
             {errors.email && (
               <ErrorMessage role="alert">{errors.email.message}</ErrorMessage>
             )}
-            <Button type="submit" disabled={apiCallProgress === 1}>
+            <Button size="s" type="submit" disabled={apiCallProgress === 1}>
               zmień
             </Button>
           </StyledForm>
@@ -123,7 +123,7 @@ const Settings = (props) => {
                 {errorsPassword.password.message}
               </ErrorMessage>
             )}
-            <Button type="submit" disabled={apiCallProgress === 1}>
+            <Button size="s" type="submit" disabled={apiCallProgress === 1}>
               zmień
             </Button>
           </StyledForm>

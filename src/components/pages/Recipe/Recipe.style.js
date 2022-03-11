@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding-bottom: 40px;
+  padding-bottom: 80px;
   position: relative;
   background: ${({ theme }) => theme.colors.white};
 
@@ -13,13 +13,30 @@ export const Wrapper = styled.div`
     grid-column: 2;
     grid-row: 1/-1;
     height: 100%;
-    padding: 0;
     overflow-y: scroll;
     display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    padding: 20px;
+    grid-template-columns: 40% calc(60% - 50px);
+    grid-template-row: auto auto;
+    padding: 20px 20px 60px;
     column-gap: 50px;
   }
+`;
+
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! GRID CELLS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+
+export const FirstCell = styled.div`
+  grid-column: 1;
+  grid-row: 1;
+`;
+
+export const SecondCell = styled.div`
+  grid-column: 2;
+  grid-row: 1;
+`;
+
+export const LastCell = styled.div`
+  grid-column: 1 / -1;
+  grid-row: 2;
 `;
 
 // !!!!!!!!!!!!!!!!!!!!!! HEADER WITH PHOTO AND TITLE BOX !!!!!!!!!!!!!!!!!!!!!!
@@ -27,6 +44,10 @@ export const Wrapper = styled.div`
 export const StyledHeader = styled.h1`
   text-align: center;
   font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 5px;
 
   ${({ theme }) => theme.media.desktop} {
     font-size: ${({ theme }) => theme.fontSize.m};
@@ -95,6 +116,8 @@ export const MealName = styled.div`
       color: ${({ theme }) => theme.colors.mainDark};
       font-size: 60px;
       text-align: start;
+      margin: 50px 0;
+      justify-self: start;
     }
   }
 `;
@@ -116,21 +139,18 @@ export const TittleProperties = styled.div`
             margin-right: 10px;
         }
     }
-
-    ${({ theme }) => theme.media.desktop} {
-      
-      align-self: center;
-  }
 `;
 
 export const ShortInfoWrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
   padding-left: 7%;
   gap: 15px;
   margin-bottom: 10px;
 
   ${({ theme }) => theme.media.desktop} {
+    padding: 0;
   }
 `;
 
@@ -143,28 +163,8 @@ export const MacroWrapper = styled.div`
   margin: 10px 0 30px 0;
 
   ${({ theme }) => theme.media.desktop} {
-    margin: 0;
+    margin: 50px 0;
   }
-`;
-
-export const MacroBox = styled.div`
-  width: 28%;
-  box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
-  border-radius: 15px;
-  display: flex;
-  background: ${({ indexNumber }) => {
-    if (indexNumber === 0) return '#f3f7fa';
-    if (indexNumber === 1) return '#f1fadd';
-    if (indexNumber === 2) return '#fdf1e7';
-    return '#ffffff';
-  }};
-  flex-direction: column;
-  align-items: center;
-  padding: 10px 0;
-`;
-export const MacroName = styled.span`
-  font-size: 17px;
-  font-weight: ${({ isBold }) => (isBold ? '500' : '300')};
 `;
 
 // !!!!!!!!!!!!!!!!!!!!!! INGREDIENTS !!!!!!!!!!!!!!!!!!!!!!
@@ -173,8 +173,34 @@ export const IngredientsList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 20px 0 40px;
+`;
+
+export const AddMoreIngredients = styled.p`
+  font-size: 18px;
+  width: 100%;
+  font-weight: 500;
+  margin: 10px 0 0;
+  text-decoration: underline;
+  text-align: center;
+
+  &::before {
+    content: '+';
+    margin-right: 5px;
+    font-weight: 600;
+  }
 
   ${({ theme }) => theme.media.desktop} {
+    font-weight: 400;
+    font-size: ${({ theme }) => theme.fontSize.xs};
+
+    &::before {
+      font-weight: 400;
+    }
+
+    &:hover {
+      cursor: pointer;
+      color: ${({ theme }) => theme.colors.secondColor};
+    }
   }
 `;
 
@@ -194,7 +220,7 @@ export const RecipeWrapper = styled.div`
   }
 `;
 
-const borderStyle = `2px dashed #008d6d`;
+const borderStyle = `5px solid`;
 
 export const StepWrapper = styled.div`
   width: 100%;
@@ -204,29 +230,19 @@ export const StepWrapper = styled.div`
   div {
     width: 90%;
     position: relative;
-    padding: 15px;
+    padding: 20px;
     align-self: center;
 
-    &::before,
     &::after {
       content: '';
       width: 40px;
       height: 40px;
       position: absolute;
-    }
-
-    &::before {
       top: 0;
       left: 0;
       border-top: ${borderStyle};
       border-left: ${borderStyle};
-    }
-
-    &::after {
-      bottom: 0;
-      right: 0;
-      border-bottom: ${borderStyle};
-      border-right: ${borderStyle};
+      border-color: ${({ theme }) => theme.colors.darkYellow};
     }
   }
 
@@ -244,8 +260,10 @@ export const StepName = styled.span`
 
   ${({ theme }) => theme.media.desktop} {
     font-size: ${({ theme }) => theme.fontSize.s};
+    text-decoration: underline 2px ${({ theme }) => theme.colors.darkYellow};
   }
 `;
+
 export const StepBody = styled.p`
   font-size: ${({ theme }) => theme.fontSize.s};
   margin: 15px 10px;
@@ -263,7 +281,44 @@ export const StepBody = styled.p`
     font-size: ${({ theme }) => theme.fontSize.xs};
 
     &::first-letter {
-      font-size: 30px;
+      font-size: ${({ theme }) => theme.fontSize.xs};
+      font-weight: 400;
+      color: ${({ theme }) => theme.colors.mainDark};
+      float: none;
+      margin: 0;
+    }
+  }
+`;
+
+// !!!!!!!!!!!!!!!!!!!!!! TIPS !!!!!!!!!!!!!!!!!!!!!!
+
+export const TipsWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+  margin: 10px 0 30px;
+`;
+
+export const Tip = styled.div`
+  width: 90%;
+  border-left: 6px solid ${({ theme }) => theme.colors.darkYellow};
+  background: ${({ theme }) => theme.colors.lightYellow};
+  display: grid;
+  place-items: center;
+  padding: 5px 10px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+
+  span {
+    font-size: ${({ theme }) => theme.fontSize.s};
+  }
+
+  ${({ theme }) => theme.media.desktop} {
+    width: 100%;
+    span {
+      font-size: ${({ theme }) => theme.fontSize.xs};
     }
   }
 `;
@@ -276,10 +331,6 @@ export const ImageWrapper = styled.div`
 
   img {
     width: 100%;
-  }
-
-  ${({ theme }) => theme.media.desktop} {
-    display: none;
   }
 `;
 
@@ -316,5 +367,21 @@ export const ImagesContainer = styled.div`
   }
 
   ${({ theme }) => theme.media.desktop} {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 50px;
+
+    img {
+      width: 47%;
+    }
+
+    &::before {
+      right: 45%;
+    }
+    &::after {
+      left: 45%;
+    }
   }
 `;

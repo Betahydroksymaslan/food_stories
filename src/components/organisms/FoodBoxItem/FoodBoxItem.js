@@ -17,36 +17,38 @@ import { handleRatingStats } from 'helpers/mathOperations';
 const FoodBoxItem = ({
   data: { mainImage, mealname, date, cookTime, difficulty, ratings },
 }) => {
-  const ratingStats = handleRatingStats(ratings)
+  const ratingStats = handleRatingStats(ratings);
   return (
-    <StyledLink to={`/food_stories/recipe/${mealname}`}>
-      <BoxWrapper
-        as={motion.div}
-        layout
-        animate={{ opacity: 1 }}
-        initial={{ opacity: 0 }}
-        exit={{ opacity: 0 }}
-      >
-        <InnerWrapper>
-          <TopWrapper>
-            <span>{difficulty}</span>
-            <span>{cookTime} min</span>
-          </TopWrapper>
+    mealname && (
+      <StyledLink to={`/food_stories/recipe/${mealname}`}>
+        <BoxWrapper
+          as={motion.div}
+          layout
+          animate={{ opacity: 1 }}
+          initial={{ opacity: 0 }}
+          exit={{ opacity: 0 }}
+        >
+          <InnerWrapper>
+            <TopWrapper>
+              <span>{difficulty}</span>
+              <span>{cookTime} min</span>
+            </TopWrapper>
 
-          <ImageWrapper>
-            <img src={mainImage} loading="lazy" />
-          </ImageWrapper>
-        </InnerWrapper>
-        <TittlePropertiesWrapper>
-          <FoodTittle>{mealname}</FoodTittle>
-          <p>{date}</p>
-          <RateWrapper>
-            <span>{ratingStats.average}</span> <StarIcon />
-            ({ratingStats.totalRatesNum} ocen)
-          </RateWrapper>
-        </TittlePropertiesWrapper>
-      </BoxWrapper>
-    </StyledLink>
+            <ImageWrapper>
+              <img src={mainImage} loading="lazy" />
+            </ImageWrapper>
+          </InnerWrapper>
+          <TittlePropertiesWrapper>
+            <FoodTittle>{mealname}</FoodTittle>
+            <p>{date}</p>
+            <RateWrapper>
+              <span>{ratingStats.average}</span> <StarIcon />(
+              {ratingStats.totalRatesNum} ocen)
+            </RateWrapper>
+          </TittlePropertiesWrapper>
+        </BoxWrapper>
+      </StyledLink>
+    )
   );
 };
 

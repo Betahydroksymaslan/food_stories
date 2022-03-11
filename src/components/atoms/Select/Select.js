@@ -13,6 +13,7 @@ const Select = ({
   name,
   inputSize,
   defaultValue,
+  placeholder = 'wybierz...',
   ...rest
 }) => {
   return (
@@ -21,11 +22,11 @@ const Select = ({
       <SelectInput
         options={optionsValue}
         classNamePrefix="Select"
-        placeholder="wybierz..."
+        placeholder={placeholder}
         id={id}
         name={name}
         isMulti={isMulti}
-        defaultValue={defaultValue}
+        defaultValue={optionsValue}
         value={
           isMulti
             ? optionsValue.filter((item) => value?.includes(item.value))
@@ -48,6 +49,7 @@ Select.propTypes = {
   id: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
 };
 
 export default Select;

@@ -9,7 +9,8 @@ export const Wrapper = styled.div`
   align-items: center;
   position: relative;
 
-  svg {
+  svg,
+  img {
     width: 20px;
     height: 20px;
     margin-right: 10px;
@@ -18,6 +19,15 @@ export const Wrapper = styled.div`
   span {
     font-size: ${({ theme }) => theme.fontSize.xs};
     line-height: 1em;
+    white-space: nowrap;
+  }
+
+  ${({ theme }) => theme.media.desktop} {
+    border-radius: 12px;
+
+    &:hover {
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.07);
+    }
   }
 `;
-

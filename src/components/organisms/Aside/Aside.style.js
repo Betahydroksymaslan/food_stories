@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion';
 
 export const AsideWrapper = styled.aside`
   display: none;
@@ -52,4 +52,4 @@ export const MealsWrapper = styled(motion.div)`
   display: flex;
   flex-direction: column;
   gap: 15px;
-`
+`;

@@ -6,7 +6,7 @@ export const SelectInput = styled(Select)`
   width: 100%;
   font-size: ${({ theme }) => theme.fontSize.m};
   .Select__control {
-    border-radius: 30px;
+    border-radius: 10px;
     background-color: ${({ theme }) => theme.colors.mainBGCLight};
     padding: 7px 0 5px 20px;
     box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
@@ -36,7 +36,7 @@ export const SelectInput = styled(Select)`
   }
   .Select__placeholder {
     color: ${({ theme }) => theme.colors.inputBorder};
-    font-weight: 500;
+    font-weight: 400;
   }
 
   ${({theme}) => theme.media.desktop} {

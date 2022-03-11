@@ -11,6 +11,7 @@ import {
   ProgressBar,
   IngredientAndRecipesWrapper,
   InlineWrapperForButtons,
+  TipsWrapper,
 } from './AddMeal.style';
 import Close from 'components/atoms/Close/Close';
 import FormField from 'components/molecules/FormField/FormField';
@@ -125,7 +126,7 @@ const AddMeal = ({ closeModal }) => {
                 value={value}
                 optionsValue={
                   currentTypeValue
-                    ? renderOptions[0].unitsData
+                    ? renderOptions[0]?.unitsData
                     : defaultUnitOption
                 }
                 name={name}
@@ -206,6 +207,29 @@ const AddMeal = ({ closeModal }) => {
     setRecipes(newArray);
   };
 
+  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! RENDER TIPS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+  const tipInitialValue = { id: randomid() };
+  const [tips, setTips] = useState([tipInitialValue]);
+
+  const renderTips = tips.map((item, index) => (
+    <FormField
+      key={item.id}
+      label="treść wskazówki"
+      id={`tips[${index}].body`}
+      name={`tips[${index}].body`}
+      textareaSize
+      placeholder="wpisz treść..."
+      {...register(`tips[${index}].body`)}
+    />
+  ));
+
+  const addNewTip = () => setTips([...tips, initialRecipesState]);
+
+  const deleteLastTipElement = () => {
+    const newArray = tips.slice(0, -1);
+    setTips(newArray);
+  };
 
   /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUBMIT FORM !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
@@ -213,11 +237,13 @@ const AddMeal = ({ closeModal }) => {
     const date = new Date().toLocaleString('pl', {
       dateStyle: 'long',
     });
-    const imagesArray = [
-      data.images.mainImage[0],
-      data.images.secondImage[0],
-      ...data.images.restImages,
-    ];
+    const imagesArray = typeof data?.images?.restImages === 'undefined'
+      ? [data.images.mainImage[0], data.images.secondImage[0]]
+      : [
+          data.images.mainImage[0],
+          data.images.secondImage[0],
+          data.images.restImages,
+        ].flat();
 
     const recipeImages = [];
 
@@ -231,6 +257,7 @@ const AddMeal = ({ closeModal }) => {
         return {
           ingredientName: item.name,
           ingredientQuantity: Number(item.quantity),
+          ingredientNameExtended: item.type.nameExtended,
           ingredientType: item.type.name,
           ingredientImagePath: item.type.path,
           ingredientUnit: item.unit.name,
@@ -242,7 +269,8 @@ const AddMeal = ({ closeModal }) => {
       }),
 
       recipe: data.recipes.map((item, index) => {
-        if (item.image) recipeImages.push({path: index, image: item.image[0]});
+        if (item.image)
+          recipeImages.push({ path: index, image: item.image[0] });
 
         return {
           stepName: item.name,
@@ -254,6 +282,11 @@ const AddMeal = ({ closeModal }) => {
         return {
           categoryName: item.name,
           categoryPath: item.path,
+        };
+      }),
+      tips: data.tips?.map((item) => {
+        return {
+          body: item.body,
         };
       }),
     };
@@ -280,6 +313,7 @@ const AddMeal = ({ closeModal }) => {
 
     const listener = ref.on('value', (snapshot) => {
       const data = snapshot.val();
+      
       let unitsData = [];
       const temporaryData = [];
       for (let id in data) {
@@ -295,6 +329,7 @@ const AddMeal = ({ closeModal }) => {
         temporaryData.push({
           value: {
             path: data[id].imagePath,
+            nameExtended: data[id]?.nameExtended,
             name: id,
             carbs: data[id].carbs,
             fat: data[id].fat,
@@ -305,10 +340,10 @@ const AddMeal = ({ closeModal }) => {
         });
         unitsData = [];
       }
+      console.log(data)
       setDbIngredients(temporaryData);
     });
 
-    watch();
     return () => ref.off('value', listener);
   }, []);
 
@@ -390,6 +425,26 @@ const AddMeal = ({ closeModal }) => {
               />
             </InlineWrapperForButtons>
           </IngredientAndRecipesWrapper>
+
+          <Paragraph
+            size={media ? 'big' : 'medium'}
+            customMargin="30px 0 20px"
+            isBold
+          >
+            Wskazówki / porady:
+          </Paragraph>
+          <TipsWrapper>
+            {renderTips}
+            <InlineWrapperForButtons>
+              <AddRemoveButton type="button" onClick={addNewTip} />
+
+              <AddRemoveButton
+                remove={true}
+                type="button"
+                onClick={deleteLastTipElement}
+              />
+            </InlineWrapperForButtons>
+          </TipsWrapper>
 
           <Paragraph
             size={media ? 'big' : 'medium'}
@@ -518,7 +573,7 @@ const AddMeal = ({ closeModal }) => {
             />
             {errors.portions && <ErrorMessage>{errorIsRequired}</ErrorMessage>}
 
-            <Button isBig={true} disabled={apiCallProgress === 1} type="submit">
+            <Button wide disabled={apiCallProgress === 1} type="submit">
               dodaj
             </Button>
           </div>

@@ -37,6 +37,8 @@ const AddProduct = ({ closeModal }) => {
     { label: 'szklanka/i', value: 'szklanka/i' },
     { label: 'łyżka/i', value: 'łyżka/i' },
     { label: 'łyżeczka/i', value: 'łyżeczka/i' },
+    { label: 'plaster/y', value: 'plaster/y' },
+    { label: 'garść', value: 'garść' },
   ];
 
   const {
@@ -56,6 +58,7 @@ const AddProduct = ({ closeModal }) => {
 
     const dataObject = {
       name: data.productName,
+      path: `${data.productName}(${data.productNameExtended})`,
       nameExtended: data.productNameExtended,
       protein: Number(data.productProtein),
       carbs: Number(data.productCarbs),
@@ -68,7 +71,7 @@ const AddProduct = ({ closeModal }) => {
         };
       }),
     };
-    const path = `products/${data.productName}`;
+    const path = `products/${data.productName}(${data.productNameExtended})`;
     const message = 'Dodano nowy produkt!';
 
     dispatch(addDatabase(path, dataObject, message));
@@ -268,7 +271,7 @@ const AddProduct = ({ closeModal }) => {
 
         {renderUnitBoxes}
 
-        <Button isBig={true} type="submit">
+        <Button wide type="submit">
           dodaj produkt
         </Button>
       </StyledForm>

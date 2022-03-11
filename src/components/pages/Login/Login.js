@@ -2,22 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   StyledForm,
-  LogoWrapper,
   StyledButton,
   StyledSpan,
-  Wrapper
+  Wrapper,
+  SocialButton,
+  ButtonIconWrapper,
+  SpanGroup,
+  StyledHeader,
 } from './Login.style';
 import Input from 'components/atoms/Input/Input';
-import { ReactComponent as Logo } from 'assets/icons/logo.svg';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { signin } from 'actions/authActions';
+import { signin, googleSignin, facebookSignin } from 'actions/authActions';
 import { SIGNUP } from 'constants/routes';
 import { HOME } from 'constants/routes';
 import { Link } from 'react-router-dom';
 import Loader from 'components/atoms/Loader/Loader';
 import { useHistory } from 'react-router-dom';
 import ErrorMessage from 'components/atoms/ErrorMessage/ErrorMessage';
+import { BsFacebook } from 'react-icons/bs';
 
 const Login = (props) => {
   const history = useHistory();
@@ -33,12 +36,12 @@ const Login = (props) => {
   const onSubmit = (data) => {
     dispatch(signin(data.email, data.password, goHome));
   };
+  const loginWithGoogle = () => dispatch(googleSignin(goHome));
+  const loginWithFacebook = () => dispatch(facebookSignin(goHome));
 
   return (
     <Wrapper>
-      <LogoWrapper>
-        <Logo />
-      </LogoWrapper>
+      <StyledHeader>Zaloguj się</StyledHeader>
       <StyledForm onSubmit={handleSubmit(onSubmit)}>
         <Input
           placeholder="Email"
@@ -59,12 +62,32 @@ const Login = (props) => {
         <StyledButton disabled={apiCallProgress === 1} type="submit">
           Zaloguj się
         </StyledButton>
+
+        <SocialButton onClick={loginWithGoogle} isGoogle={true} type="button">
+          <ButtonIconWrapper>
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+              alt="google icon"
+            />
+          </ButtonIconWrapper>
+          Zaloguj się z Google
+        </SocialButton>
+
+        <SocialButton onClick={loginWithFacebook} type="button">
+          <ButtonIconWrapper>
+            <BsFacebook />
+          </ButtonIconWrapper>
+          Zaloguj się z Facebook
+        </SocialButton>
       </StyledForm>
 
-      <StyledSpan>Nie masz jeszcze konta?</StyledSpan>
-      <Link to={SIGNUP}>
-        <StyledSpan isColor={true}>Zarejestruj się!</StyledSpan>
-      </Link>
+      <SpanGroup>
+        <StyledSpan>Nie masz jeszcze konta?</StyledSpan>
+        <Link to={SIGNUP}>
+          <StyledSpan isColor={true}>Zarejestruj się!</StyledSpan>
+        </Link>
+      </SpanGroup>
+
       {apiCallProgress === 1 ? <Loader /> : null}
     </Wrapper>
   );

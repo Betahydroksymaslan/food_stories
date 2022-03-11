@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Wrapper } from 'components/pages/Login/Login.style';
 import {
   StyledForm,
-  LogoWrapper,
   StyledButton,
   StyledSpan,
+  StyledHeader,
+  SpanGroup,
 } from 'components/pages/Login/Login.style';
 import Input from 'components/atoms/Input/Input';
-import { ReactComponent as Logo } from 'assets/icons/logo.svg';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { signup } from 'actions/authActions';
@@ -35,9 +35,7 @@ const Register = (props) => {
   };
   return (
     <Wrapper>
-      <LogoWrapper>
-        <Logo />
-      </LogoWrapper>
+      <StyledHeader>Zarejestruj się</StyledHeader>
       <StyledForm onSubmit={handleSubmit(onSubmit)}>
         <Input
           placeholder="Email"
@@ -82,10 +80,12 @@ const Register = (props) => {
         </StyledButton>
       </StyledForm>
 
-      <StyledSpan>Masz już konto?</StyledSpan>
-      <Link to={SIGNIN}>
-        <StyledSpan isColor={true}>Zaloguj się!</StyledSpan>
-      </Link>
+      <SpanGroup>
+        <StyledSpan>Masz już konto?</StyledSpan>
+        <Link to={SIGNIN}>
+          <StyledSpan isColor={true}>Zaloguj się!</StyledSpan>
+        </Link>
+      </SpanGroup>
 
       {apiCallProgress === 1 ? <Loader /> : null}
     </Wrapper>

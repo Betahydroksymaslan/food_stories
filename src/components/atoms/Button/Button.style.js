@@ -15,12 +15,19 @@ const clickAnimation = keyframes`
 `;
 
 export const StyledButton = styled.button`
-  border: none;
-  width: ${({isBig}) => isBig && '100%'};
-  background-color: ${({ theme }) => theme.colors.secondYellow};
-  color: ${({ theme }) => theme.colors.secondColor};
-  border-radius: ${({isBig}) => isBig ? '10px' : '20px'};
-  padding: ${({isBig}) => isBig ? '10px 20px' : '8px 20px'};
+  border: ${({ theme }) => `2px solid ${theme.colors.secondColor}`};
+  width: ${({ wide }) => wide && '100%'};
+  background-color: ${({ theme, secondary }) =>
+    secondary ? theme.colors.white : theme.colors.secondColor};
+  color: ${({ theme, secondary }) =>
+    secondary ? theme.colors.secondColor : theme.colors.white};
+  border-radius: 10px;
+  padding: ${({ wide, size }) => {
+    if (wide) return '10px 20px';
+    if (size === 's') return '6px 15px';
+    if (size === 'm') return '10px 20px';
+    if (size === 'l') return '12px 25px';
+  }};
   font-size: ${({ theme }) => theme.fontSize.xs};
   font-weight: 600;
   outline: none;
@@ -41,8 +48,8 @@ export const StyledButton = styled.button`
     transform: translate(-50%, -50%) scale(0);
     border-radius: 100%;
     background-color: #cbf7f7;
-    width: ${({isBig}) => isBig ? '60px' : '20px'};
-    height: ${({isBig}) => isBig ? '60px' : '20px'};
+    width: ${({ wide }) => (wide ? '60px' : '20px')};
+    height: ${({ wide }) => (wide ? '60px' : '20px')};
     animation: ${({ animationTriger }) =>
       animationTriger &&
       css`
@@ -51,7 +58,7 @@ export const StyledButton = styled.button`
       `};
   }
 
-  ${({theme}) => theme.media.desktop} {
+  ${({ theme }) => theme.media.desktop} {
     font-size: ${({ theme }) => theme.fontSize.xs};
     cursor: pointer;
     transition: opacity 0.2s ease-in-out;

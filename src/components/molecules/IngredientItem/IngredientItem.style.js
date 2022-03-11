@@ -4,7 +4,7 @@ export const StyledIngredientItem = styled.li`
   display: inline-grid;
   width: 100%;
   grid-template-columns: 58px 1fr max-content;
-  grid-template-rows: 38px;
+  grid-template-rows: 35px;
   align-items: center;
   justify-items: start;
   padding: 0 10px;
@@ -40,12 +40,19 @@ export const IngredeintName = styled.span`
 
   ${({ theme }) => theme.media.desktop} {
     font-weight: 400;
+    font-size: ${({ theme }) => theme.fontSize.xs};
+    transform: ${({ isTooltipOpen }) =>
+      isTooltipOpen ? 'translateY(-180%)' : 'translateY(0)'};
   }
 `;
 
 export const IngredientQuantity = styled.span`
   justify-self: end;
   font-weight: 300;
+
+  ${({ theme }) => theme.media.desktop} {
+    font-size: ${({ theme }) => theme.fontSize.xxs};
+  }
 `;
 
 export const IngredientImageWrapper = styled.div`
@@ -65,6 +72,28 @@ export const IngredientImageWrapper = styled.div`
     img {
       width: 25px;
       height: 25px;
+    }
+  }
+`;
+
+export const DeleteIcon = styled.span`
+  font-size: 30px;
+  width: 28px;
+  height: 28px;
+  border-radius: 100%;
+  display: grid;
+  place-items: center;
+  line-height: 0.8;
+  background: ${({ theme }) => theme.colors.error};
+  color: ${({ theme }) => theme.colors.white};
+
+  ${({ theme }) => theme.media.desktop} {
+    width: 24px;
+    height: 24px;
+    line-height: 0.83;
+
+    &:hover {
+      background: #b54f4a;
     }
   }
 `;

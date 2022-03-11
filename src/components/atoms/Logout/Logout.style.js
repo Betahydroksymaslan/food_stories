@@ -3,10 +3,10 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`
   display: flex;
   padding: 10px 30px;
-  border-radius: 40px;
+  border-radius: 10px;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.secondYellow};
-  box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
+  background-color: transparent /* ${({ theme }) => theme.colors.white} */;
+  border: 2px solid ${({ theme }) => theme.colors.secondColor};
 
   span {
     font-size: ${({ theme }) => theme.fontSize.s};
@@ -17,6 +17,7 @@ export const Wrapper = styled.div`
 
   ${({ theme }) => theme.media.desktop} {
     position: absolute;
+    border: none;
     bottom: 40px;
     left: 5px;
     z-index: 1000;
@@ -55,9 +56,9 @@ export const IconWrapper = styled.div`
     transform: translate(-3px, 2px);
 
     svg {
-    path {
-      fill: ${({ theme }) => theme.colors.mainDark};
+      path {
+        fill: ${({ theme }) => theme.colors.mainDark};
+      }
     }
-  }
   }
 `;

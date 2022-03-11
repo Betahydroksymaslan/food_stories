@@ -8,10 +8,15 @@ const expanseAfter = keyframes`
     }
 `;
 
-export const MealWrapper = styled(motion.div)`
+export const LinkWrapper = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 20% auto 20px;
+  grid-template-columns: 90% 10%;
+`;
+
+export const MealWrapper = styled(motion.div)`
+  display: grid;
+  grid-template-columns: 20% 80%;
   grid-template-rows: max-content;
   align-items: center;
   padding: 5px;
@@ -59,22 +64,21 @@ export const ImageWrapper = styled.div`
 `;
 
 export const MealName = styled.span`
-  width: 100%;
   font-size: 13px;
   font-weight: 600;
   padding: 0 15px;
 `;
 
 export const DeleteTab = styled.div`
-  width: 20px;
-  height: 20px;
+  width: 90%;
+  aspect-ratio: 1/1;
   border-radius: 5px;
   display: grid;
   place-items: center;
   font-weight: 300;
-  line-height: 0.7;
-  font-size: ${({ theme }) => theme.fontSize.l};
-  justify-self: center;
+  line-height: 0.4;
+  font-size: ${({ theme }) => theme.fontSize.xl};
+  align-self: center;
 
   &:hover {
     cursor: pointer;

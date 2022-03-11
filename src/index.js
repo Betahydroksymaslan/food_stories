@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import App from 'components/pages/App/App';
 import * as serviceWorkerRegistration from 'serviceWorkerRegistration';
 import reportWebVitals from 'reportWebVitals';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#modals');
 
 ReactDOM.render(
   <React.StrictMode>

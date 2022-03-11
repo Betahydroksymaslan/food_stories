@@ -103,7 +103,7 @@ const AddNewMealCategory = ({ closeModal }) => {
         {errors.categoryImage && (
           <ErrorMessage>{errors.categoryImage.message}</ErrorMessage>
         )}
-        <Button isBig={true} disabled={apiCallProgress === 1} type="submit">
+        <Button wide disabled={apiCallProgress === 1} type="submit">
           dodaj kategorię
         </Button>
         {apiCallProgress === 1 ? <Loader /> : null}

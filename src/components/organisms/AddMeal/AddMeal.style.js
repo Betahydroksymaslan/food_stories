@@ -72,6 +72,20 @@ export const IngredientBox = styled.div`
   }
 `;
 
+export const TipsWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  ${({ theme }) => theme.media.desktop} {
+    flex-direction: row;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+`;
+
 export const InlineWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -105,11 +119,6 @@ export const AddRemoveButton = styled.button`
   position: relative;
   transition: background-color 0.2s ease-in-out;
 
-  &:hover {
-    cursor: pointer;
-    background-color: ${({ theme: { colors } }) => colors.secondYellow};
-  }
-
   &::before,
   &::after {
     content: '';
@@ -127,6 +136,13 @@ export const AddRemoveButton = styled.button`
     display: ${({ remove }) => (remove ? 'none' : 'block')};
     transform: translate(-50%, -50%) rotate(90deg);
     transform-origin: center;
+  }
+
+  ${({ theme }) => theme.media.desktop} {
+    &:hover {
+      cursor: pointer;
+      background-color: ${({ theme: { colors } }) => colors.secondYellow};
+    }
   }
 `;
 

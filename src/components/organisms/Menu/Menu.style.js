@@ -167,6 +167,7 @@ export const StyledLink = styled(NavLink).attrs({ activeClassName })`
     svg {
       path,
       line {
+        
         transition: all 0.3s ease-in-out;
         stroke-width: 18;
       stroke: ${({theme}) => theme.colors.mainGreen};

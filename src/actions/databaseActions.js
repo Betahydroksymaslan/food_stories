@@ -27,13 +27,19 @@ export const addDatabase = (ref, object, message) => async (dispatch) => {
   }
 };
 
-export const removeDatabase = (ref, message) => async (dispatch) => {
+export const removeDatabase = (ref, message, callback) => async (dispatch) => {
+  db.ref(ref)
+    .get()
+    .then((snapshot) => {
+      if (!snapshot.exists()) return console.log('Data doesnt exists in DB');
+    });
+
   try {
     dispatch(beginApiCall());
     db.ref(ref)
       .remove()
       .then((data) => {
-        dispatch({ type: DATABASE_ADD_SUCCESS, payload: message });
+        message && dispatch({ type: DATABASE_ADD_SUCCESS, payload: message });
       })
       .catch((error) => {
         dispatch(apiCallError());
@@ -42,6 +48,7 @@ export const removeDatabase = (ref, message) => async (dispatch) => {
           payload: 'Coś poszło nie tak, spróbuj jeszcze raz!',
         });
       });
+    callback && callback();
   } catch (error) {
     dispatch(apiCallError());
     dispatch({
@@ -108,12 +115,13 @@ export const addNewMealDatabase =
 
       /* SET PLACE FOR IMAGES IN DATABASE */
 
-      for await (const image of images) {
-        const imageName = image.name.replace('.', 'Format');
-        const imageRef = `${ref}/images/${imageName}`;
-        await db.ref(imageRef).update({ name: imageName });
+      if (images.length) {
+        for await (const image of images) {
+          const imageName = image.name.replace('.', 'Format');
+          const imageRef = `${ref}/images/${imageName}`;
+          await db.ref(imageRef).update({ name: imageName });
+        }
       }
-
 
       /* UPLOAD IMAGES TO STORAGE AND THEN UPDATA PATHS IN DATABASE */
 
@@ -147,7 +155,7 @@ export const addNewMealDatabase =
       }
 
       dispatch({ type: DATABASE_ADD_SUCCESS, payload: message });
-      callback();
+      callback && callback();
     };
 
     try {

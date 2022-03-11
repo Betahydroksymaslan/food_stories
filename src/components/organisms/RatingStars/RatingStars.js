@@ -45,7 +45,7 @@ const RatingStars = ({
   ));
   return (
     <RatingWrapper>
-      <RateName>{rateName}</RateName>
+      {rateName && <RateName>{rateName}</RateName>}
       <StarsWrapper>{renderStars}</StarsWrapper>
     </RatingWrapper>
   );

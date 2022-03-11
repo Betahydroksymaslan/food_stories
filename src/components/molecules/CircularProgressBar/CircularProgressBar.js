@@ -7,7 +7,7 @@ import {
 } from './CircularProgressBar.style';
 
 const CircularProgressBar = ({
-  percent = 70,
+  percent = 0,
   recountSize = 0.75,
   indexNumber,
 }) => {

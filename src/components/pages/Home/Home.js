@@ -73,7 +73,7 @@ console.log(meals)
     );
 
   const renderFoodBoxes = filterMeals.map((meal) => (
-    <AnimatePresence key={meal.mealname}>
+    <AnimatePresence key={meal?.mealname}>
       <FoodBoxItem
         data={meal}
       />
