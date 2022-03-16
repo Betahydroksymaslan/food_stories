@@ -385,3 +385,84 @@ export const ImagesContainer = styled.div`
     }
   }
 `;
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!! MODALS !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+export const EditQuantityWrapper = styled.div`
+  width: 80vw;
+  padding: 20px;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const InlineWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+`;
+
+export const EndEditionButton = styled.button`
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: none;
+  border-radius: 50px;
+  background: ${({ theme }) => theme.colors.secondColor};
+  color: ${({ theme }) => theme.colors.white};
+  padding: 15px 30px;
+  font-weight: 500;
+  box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
+`;
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! VARIANTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+export const VariantsWrapper = styled.div`
+  width: 90%;
+  align-self: center;
+  padding: 15px 0;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid ${({ theme }) => theme.colors.mainYellow};
+  align-items: center;
+  gap: 20px;
+  margin: 5px 0 15px;
+  position: relative;
+
+  &::before {
+    content: 'warianty';
+    font-weight: 500;
+    height: 20px;
+    padding: 0 5px;
+    background: ${({ theme }) => theme.colors.white};
+    position: absolute;
+    top: -10px;
+    left: 10%;
+  }
+`;
+
+export const VariantItem = styled.div`
+  width: 90%;
+  display: grid;
+  grid-template-columns: 50px auto 20px;
+  padding: 5px;
+  align-items: center;
+
+  span {
+    font-size: ${({ theme }) => theme.fontSize.xs};
+  }
+`;
+
+export const VariantIcon = styled.div`
+  grid-column: 1;
+
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  background: ${({ color }) => color};
+`;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useParams, useHistory } from 'react-router-dom';
 import {
@@ -23,6 +23,12 @@ import {
   TipsWrapper,
   Tip,
   AddMoreIngredients,
+  EditQuantityWrapper,
+  InlineWrapper,
+  EndEditionButton,
+  VariantsWrapper,
+  VariantItem,
+  VariantIcon,
 } from './Recipe.style';
 import { db } from 'assets/firebase/firebase';
 import { ReactComponent as TimeIcon } from 'assets/icons/clockIcon.svg';
@@ -32,7 +38,11 @@ import { ReactComponent as CookHatIconBlack } from 'assets/icons/cookHatIconBlac
 import Back from 'components/atoms/Back/Back';
 import DisplayOptions from 'components/molecules/DisplayOptions/DisplayOptions';
 import { useDispatch, useSelector } from 'react-redux';
-import { addDatabase, removeDatabase } from 'actions/databaseActions';
+import {
+  addDatabase,
+  removeDatabase,
+  pushDatabase,
+} from 'actions/databaseActions';
 import RecipeShortInfo from 'components/molecules/RecipeShortInfo/RecipeShortInfo';
 import { ReactComponent as PortionIcon } from 'assets/icons/portionIcon.svg';
 import { ReactComponent as CaloriesIcon } from 'assets/icons/caloriesIcon.svg';
@@ -50,6 +60,10 @@ import MacroBox from 'components/organisms/MacroBox/MacroBox';
 import Edit from 'components/atoms/Edit/Edit';
 import SocialShare from 'components/molecules/SocialShare/SocialShare';
 import RatingPrompt from 'components/organisms/RatingPrompt/RatingPrompt';
+import Button from 'components/atoms/Button/Button';
+import Paragraph from 'components/atoms/Paragraph/Paragraph';
+import FormField from 'components/molecules/FormField/FormField';
+import AddNewMealVariant from 'components/organisms/AddNewMealVariant/AddNewMealVariant';
 
 const Recipe = (props) => {
   const { recipeName } = useParams();
@@ -60,11 +74,43 @@ const Recipe = (props) => {
   const auth = useSelector((state) => state.firebase.auth);
   const history = useHistory();
   const ratingStats = handleRatingStats(meal.ratings);
+  const topPageRef = useRef(null);
+
+  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! MODALS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+  const [isConfirmBoxVisible, setIsConfirmBoxVisible] = useState(false);
+
+  const openModal = () => setIsConfirmBoxVisible(true);
+  const closeModal = () => setIsConfirmBoxVisible(false);
+
+  const [addIngredientModal, setAddIngredientModal] = useState(false);
+
+  const openIngredientModal = () => setAddIngredientModal(true);
+  const closeIngredientModal = () => setAddIngredientModal(false);
+  const addNewIngredientTemporary = (object) => setMeal(object);
+
+  const [isRatingModalVisible, setIsRatingModalVisible] = useState(false);
+
+  const openRatingModal = () => setIsRatingModalVisible(true);
+  const closeRatingModal = () => setIsRatingModalVisible(false);
+
+  const [isEditQuantityModalOpen, setEditQiantityModalOpen] = useState(false);
+  const [editQuantityValue, setEditQuantityValue] = useState('');
+  const handleEditQuantityOnChange = (e) =>
+    setEditQuantityValue(e.target.value);
+
+  const openEditQuantityModal = () => setEditQiantityModalOpen(true);
+  const closeEditQuantityModal = () => setEditQiantityModalOpen(false);
+
+  const [isAddVariantVisible, setSsAddVariantVisible] = useState(false);
+
+  const openAddVariantModal = () => setSsAddVariantVisible(true);
+  const closeAddVariantModal = () => setSsAddVariantVisible(false);
 
   /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! EDITING TEMP !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
   const [editModeTemp, setEditModeTemp] = useState(false);
-  const editTempOn = () => setEditModeTemp((prevState) => !prevState);
+  const editTempOn = () => setEditModeTemp(true);
   const editTempOff = () => setEditModeTemp(false);
 
   const deleteIngredientTemp = (target) => {
@@ -79,6 +125,41 @@ const Recipe = (props) => {
       ingredients: newIngredients,
       realIngredients: newRealIngredients,
     });
+  };
+
+  const [ingredientTargetName, setIngredientTargetName] = useState('');
+
+  const getNameAndOpenModal = (targetName) => {
+    setIngredientTargetName(targetName);
+    openEditQuantityModal();
+  };
+
+  const changeIngredientQuantityTemp = () => {
+    if (!editModeTemp) return;
+
+    const mealCopy = JSON.parse(JSON.stringify(meal)); // deep copy of meal object
+
+    if (editQuantityValue) {
+      for (const item of mealCopy.ingredients) {
+        if (item.ingredientName === ingredientTargetName) {
+          item.ingredientQuantity = Number(editQuantityValue);
+        }
+      }
+
+      const realIngredients = mealCopy.ingredients.map((item) => ({
+        name: item.ingredientName,
+        fat: (item.ingredientQuantity * item.converter * item.fat) / 100,
+        protein:
+          (item.ingredientQuantity * item.converter * item.protein) / 100,
+        carbs: (item.ingredientQuantity * item.converter * item.carbs) / 100,
+      }));
+
+      mealCopy.realIngredients = realIngredients;
+
+      setMeal(mealCopy);
+      setEditQuantityValue('');
+      closeEditQuantityModal();
+    }
   };
 
   const translateFoodMacro = (name) => {
@@ -208,6 +289,7 @@ const Recipe = (props) => {
       }));
       setShortcutsDataAsync(categoriesData);
       setMeal({ ...data, realIngredients, imagesArray });
+      setOriginalMeal({ ...data, realIngredients, imagesArray });
     });
 
     return () => ref.off('value', listener);
@@ -222,6 +304,7 @@ const Recipe = (props) => {
   const renderIngredients = meal?.ingredients?.map((item) => (
     <AnimatePresence key={item.ingredientName}>
       <IngredientItem
+        changeQuantityTemp={getNameAndOpenModal}
         deleteTemp={deleteIngredientTemp}
         modeTemp={editModeTemp}
         data={item}
@@ -241,25 +324,15 @@ const Recipe = (props) => {
     </StepWrapper>
   ));
 
-  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! MODALS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-
-  const [isConfirmBoxVisible, setIsConfirmBoxVisible] = useState(false);
-
-  const openModal = () => setIsConfirmBoxVisible(true);
-  const closeModal = () => setIsConfirmBoxVisible(false);
-
-  const [addIngredientModal, setAddIngredientModal] = useState(false);
-
-  const openIngredientModal = () => setAddIngredientModal(true);
-  const closeIngredientModal = () => setAddIngredientModal(false);
-  const addNewIngredientTemporary = (object) => setMeal(object);
-
-  const [isRatingModalVisible, setIsRatingModalVisible] = useState(false);
-
-  const openRatingModal = () => setIsRatingModalVisible(true);
-  const closeRatingModal = () => setIsRatingModalVisible(false);
-
   /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! OPTIONS AREA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+
+  const addVariant = async (name, color) => {
+    const ref = `users/${auth.uid}/mealsVariants/${recipeName}`;
+    const object = { ...meal, variantName: name, variantColor: color };
+    const message = 'Dodano nowy wariant posiłku!';
+
+    dispatch(pushDatabase(ref, object, message));
+  };
 
   const addToFastList = async () => {
     const ref = `users/${auth.uid}/fastList/${recipeName}`;
@@ -296,6 +369,7 @@ const Recipe = (props) => {
     { name: 'Dodaj do ulubionych', optionFunction: addToFavourite },
     { name: 'Edytuj przepis', optionFunction: addToFavourite },
     { name: 'Usuń przepis', optionFunction: openModal },
+    { name: 'Dodaj wariant', optionFunction: openAddVariantModal },
   ];
 
   const renderRestOfImages = meal?.imagesArray?.map((item) => (
@@ -318,15 +392,67 @@ const Recipe = (props) => {
       </Tip>
     ));
 
-    const checkIsRated = () => {
-      const rateState = JSON.parse(localStorage.getItem('userRateModalsOn'));
-      if(rateState.ratingOn) {
-        openRatingModal()
-      }
-      
+  const rateState = JSON.parse(localStorage.getItem('userRateModalsOn'));
+
+  const checkIsRated = () => {
+    if (rateState.ratingOn) {
+      openRatingModal();
     }
-    
-    
+  };
+
+  const [mealVariants, setMealVariants] = useState([]);
+
+  useEffect(() => {
+    const ref = db.ref(`users/${auth.uid}/mealsVariants/${recipeName}`);
+
+    const listener = ref.on('value', (snapshot) => {
+      if (!snapshot.exists()) return;
+
+      const tempData = [];
+      const data = snapshot.val();
+
+      for (let id in data) {
+        tempData.push({ ...data[id], id });
+      }
+      setMealVariants(tempData);
+    });
+
+    return () => ref.off('value', listener);
+  }, [recipeName]);
+
+  const [originalMeal, setOriginalMeal] = useState({});
+  const mealVariantsList = [
+    {
+      ...originalMeal,
+      variantName: 'Oryginalny przepis',
+      variantColor: '#ffe795',
+    },
+    ...mealVariants,
+  ];
+
+  const removeVariant = (id) => {
+    const ref = `users/${auth.uid}/mealsVariants/${recipeName}/${id}`;
+    const message = 'usunięto wariant';
+
+    dispatch(removeDatabase(ref, message));
+  };
+
+  const chooseVariant = (item) => {
+    setMeal(item);
+    topPageRef.current.scrollIntoView({
+      behavior: 'smooth',
+    });
+  };
+
+  const renderVariants = mealVariantsList.map((item, index) => (
+    <VariantItem key={index} onClick={() => chooseVariant(item)}>
+      <VariantIcon color={item.variantColor} />
+      <span>{item.variantName}</span>
+      {index !== 0 && (
+        <span onClick={() => removeVariant(item.id)}>&#10005;</span>
+      )}
+    </VariantItem>
+  ));
 
   return media ? (
     /* !!!!!!!!!!!!!!!!!!!!!!!!!! DESKTOP LAYOUT  !!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -336,8 +462,10 @@ const Recipe = (props) => {
         <MainImageWrapper>
           <img src={meal.mainImage} />
         </MainImageWrapper>
-        <StyledHeader>Składniki <Edit onClick={editTempOn} /></StyledHeader>
-        
+        <StyledHeader>
+          Składniki <Edit onClick={editTempOn} />
+        </StyledHeader>
+
         <IngredientsList as={motion.div} layout>
           {renderIngredients}
           {editModeTemp && (
@@ -388,11 +516,11 @@ const Recipe = (props) => {
       </Modal>
     </Wrapper>
   ) : (
-    /* !!!!!!!!!!!!!!!!!!!!!!!!!! PHONE LAYOUT  !!!!!!!!!!!!!!!!!!!!!!!!!!*/
+    /* !!!!!!!!!!!!!!!!!!!!!!!!!! MOBILE LAYOUT  !!!!!!!!!!!!!!!!!!!!!!!!!!*/
     <Wrapper>
       <DisplayOptions options={options} />
-      <Back callback={!rating && checkIsRated} />
-      <MainImageWrapper>
+      <Back callback={!rating && !rateState && checkIsRated} />
+      <MainImageWrapper ref={topPageRef}>
         <img src={meal.mainImage} />
         <TittleWrapper>
           <MealName>
@@ -414,12 +542,14 @@ const Recipe = (props) => {
           </TittleProperties>
         </TittleWrapper>
       </MainImageWrapper>
-      
+
       <ShortInfoWrapper>{meal && renderShortCuts}</ShortInfoWrapper>
       <MacroWrapper>{meal && renderMakroBoxes}</MacroWrapper>
-      
-      <StyledHeader>Składniki <Edit onClick={editTempOn} /></StyledHeader>
-      
+
+      <StyledHeader>
+        Składniki <Edit onClick={editTempOn} />
+      </StyledHeader>
+
       <IngredientsList as={motion.div} layout>
         {renderIngredients}
         {editModeTemp && (
@@ -445,10 +575,35 @@ const Recipe = (props) => {
         rateFunction={rateMeal}
         rateName="Oceń przepis!"
       />
+
+      {mealVariants.length ? (
+        <VariantsWrapper>{renderVariants}</VariantsWrapper>
+      ) : null}
+
       <SocialShare />
 
+      <AnimatePresence>
+        {editModeTemp && (
+          <EndEditionButton
+            onClick={editTempOff}
+            type="button"
+            transition={{ type: 'tween' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            initial={{ opacity: 0, y: 100, x: '-50%' }}
+            exit={{ opacity: 0, y: 100, x: '-50%' }}
+            as={motion.button}
+          >
+            &#10005; zakończ edycję
+          </EndEditionButton>
+        )}
+      </AnimatePresence>
+
       <Modal isOpen={isRatingModalVisible} handleClose={closeRatingModal}>
-        <RatingPrompt activeStars={rating} rateFunction={rateMeal} handleClose={closeRatingModal} />
+        <RatingPrompt
+          activeStars={rating}
+          rateFunction={rateMeal}
+          handleClose={closeRatingModal}
+        />
       </Modal>
 
       <Modal isOpen={isConfirmBoxVisible} handleClose={closeModal}>
@@ -461,6 +616,40 @@ const Recipe = (props) => {
           closeModal={closeIngredientModal}
           callback={addNewIngredientTemporary}
         />
+      </Modal>
+
+      <Modal isOpen={isAddVariantVisible} handleClose={closeAddVariantModal}>
+        <AddNewMealVariant
+          handleClose={closeAddVariantModal}
+          callback={addVariant}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isEditQuantityModalOpen}
+        handleClose={closeEditQuantityModal}
+      >
+        <EditQuantityWrapper>
+          <Paragraph>Podaj zmienioną ilość składnika</Paragraph>
+          <Paragraph>{ingredientTargetName}</Paragraph>
+          <FormField
+            type="number"
+            ingredientName={ingredientTargetName}
+            onChange={handleEditQuantityOnChange}
+            value={editQuantityValue}
+            name="changeQuantity"
+            small
+            id="changeQuantity"
+          />
+          <InlineWrapper>
+            <Button size="s" onClick={changeIngredientQuantityTemp}>
+              edytuj
+            </Button>
+            <Button size="s" onClick={closeEditQuantityModal}>
+              wróć
+            </Button>
+          </InlineWrapper>
+        </EditQuantityWrapper>
       </Modal>
     </Wrapper>
   );

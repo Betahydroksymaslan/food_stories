@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Wrapper, InlineWrapper } from './RatingPrompt.style';
 import RatingStars from '../RatingStars/RatingStars';
@@ -6,12 +6,16 @@ import Button from 'components/atoms/Button/Button';
 import { useSelector } from 'react-redux';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import { useHistory } from 'react-router-dom';
+import StyledCheckbox from 'components/atoms/StyledCheckbox/StyledCheckbox';
 
 const RatingPrompt = ({ rateFunction, activeStars, handleClose }) => {
   const history = useHistory();
   const auth = useSelector((state) => state.firebase.auth);
   const userData = auth.displayName;
   const userName = userData.split(' ');
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleOnCheckboxChange = () => setIsChecked((prevState) => !prevState);
 
   const gender =
     userName[0][userName[0].length - 1] === 'a' ? 'female' : 'male';
@@ -21,6 +25,14 @@ const RatingPrompt = ({ rateFunction, activeStars, handleClose }) => {
   } z tego przepisu, proszę, oceń go!`;
 
   const handleClick = () => {
+    const modifiedStorage = {
+      ratingOn: false,
+    };
+    if (isChecked) {
+      localStorage.setItem('userRateModalsOn', JSON.stringify(modifiedStorage));
+      handleClose();
+      history.goBack();
+    }
     handleClose();
     history.goBack();
   };
@@ -29,9 +41,16 @@ const RatingPrompt = ({ rateFunction, activeStars, handleClose }) => {
     <Wrapper>
       <Paragraph>{generatedString}</Paragraph>
       <RatingStars activeStars={activeStars} rateFunction={rateFunction} />
+
       <Button onClick={handleClick} secondary size="s">
         ocenię później
       </Button>
+      <StyledCheckbox
+        value={isChecked}
+        onChange={handleOnCheckboxChange}
+        id="disableRatePrompt"
+        label="Nie pokazuj mi więcej tego okna"
+      />
     </Wrapper>
   );
 };

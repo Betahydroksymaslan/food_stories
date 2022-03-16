@@ -2,16 +2,26 @@ import styled from 'styled-components';
 
 export const StyledInput = styled.input`
   width: ${({ small }) => (small ? '100px' : '100%')};
-  height: ${({ textareaSize }) => (textareaSize ? '120px' : 'auto')};
+  height: ${({ textareaSize, type }) => {
+    if (textareaSize) return '120px';
+    if (type === 'color') return '50px';
+    return 'auto';
+  }};
   border: 1px solid ${({ theme }) => theme.colors.inputBorder};
   background-color: ${({ theme }) => theme.colors.mainBGCLight};
   box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
   border-radius: ${({ rounded }) => (rounded ? '40px' : '10px')};
   font-size: ${({ theme }) => theme.fontSize.m};
-  padding: ${({ isSearch }) =>
-    isSearch ? '12px 10px 10px 60px' : '12px 0 10px 20px'};
+  padding: ${({ isSearch, type }) => {
+    if (isSearch) return '12px 10px 10px 60px';
+    if (type === 'color') return '5px';
+    return '12px 0 10px 20px';
+  }};
+
   outline: none;
   resize: none;
+  position: relative;
+  overflow: hidden;
   color: ${({ theme }) => theme.colors.mainDark};
   &::placeholder {
     color: ${({ theme }) => theme.colors.inputBorder};

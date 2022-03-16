@@ -82,7 +82,7 @@ console.log(meals)
 
   return (
     <PageWrapper>
-      <Search onChange={onSearchChange} value={searchValue} />
+      <Search rounded onChange={onSearchChange} value={searchValue} />
       <FoodCategoriesFilter
         data={categories}
         filterCategories={setFilteredCategories}

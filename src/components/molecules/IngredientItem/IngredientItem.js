@@ -6,12 +6,14 @@ import {
   IngredeintName,
   IngredientQuantity,
   DeleteIcon,
+  EditIcon,
 } from './IngredientItem.style';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const IngredientItem = ({
   modeTemp,
   deleteTemp,
+  changeQuantityTemp,
   data: {
     ingredientName,
     ingredientImagePath,
@@ -29,16 +31,22 @@ const IngredientItem = ({
     const targetName = e.target.dataset.name;
     deleteTemp(targetName);
   };
+
+  const getName = (e) => {
+    const targetName = e.target.dataset.name;
+    changeQuantityTemp(targetName);
+  };
+
   return (
     <StyledIngredientItem
+      isEditOn={modeTemp}
       as={motion.li}
       layout
       key={ingredientName}
-      onClick={toggleTooltip}
     >
-      <IngredientImageWrapper>
-        <AnimatePresence>
-          {modeTemp ? (
+      <IngredientImageWrapper isEditOn={modeTemp}>
+        {modeTemp ? (
+          <>
             <DeleteIcon
               initial={{ x: -20, rotate: '45deg' }}
               animate={{ x: 0, rotate: '45deg' }}
@@ -49,16 +57,31 @@ const IngredientItem = ({
             >
               +
             </DeleteIcon>
-          ) : (
-            <img src={ingredientImagePath} />
-          )}
-        </AnimatePresence>
+
+            <EditIcon
+              initial={{ x: -20 }}
+              animate={{ x: 0 }}
+              exit={{ x: 20 }}
+              as={motion.span}
+              onClick={getName}
+              data-name={`${ingredientName}`}
+            >
+              &#9998;
+            </EditIcon>
+          </>
+        ) : (
+          <img src={ingredientImagePath} />
+        )}
       </IngredientImageWrapper>
 
-      <IngredeintName isTooltipOpen={isTooltipOpen}>
+      <IngredeintName onClick={toggleTooltip} isTooltipOpen={isTooltipOpen}>
         {ingredientName}
       </IngredeintName>
-      <IngredeintName isTooltipOpen={isTooltipOpen} isToolTip={true}>
+      <IngredeintName
+        onClick={toggleTooltip}
+        isTooltipOpen={isTooltipOpen}
+        isToolTip={true}
+      >
         {ingredientNameExtended ? ingredientNameExtended : 'Brak szczegółów'}
       </IngredeintName>
 

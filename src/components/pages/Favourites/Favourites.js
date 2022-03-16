@@ -50,7 +50,7 @@ const Favourites = (props) => {
         <FavouritesIcon />
       </PageHeader>
 
-      <Search value={searchValue} onChange={handleOnChange} />
+      <Search rounded value={searchValue} onChange={handleOnChange} />
 
       <FoodWrapper layout>{meals && renderFoodBoxes}</FoodWrapper>
     </PageWrapper>

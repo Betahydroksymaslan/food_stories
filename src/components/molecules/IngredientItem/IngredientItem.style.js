@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const StyledIngredientItem = styled.li`
   display: inline-grid;
   width: 100%;
-  grid-template-columns: 58px 1fr max-content;
+  grid-template-columns: ${({isEditOn}) => isEditOn ? '85px 1fr max-content' : '58px 1fr max-content'} ;
   grid-template-rows: 35px;
   align-items: center;
   justify-items: start;
@@ -56,10 +56,12 @@ export const IngredientQuantity = styled.span`
 `;
 
 export const IngredientImageWrapper = styled.div`
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
+  width: ${({isEditOn}) => isEditOn ? '80px' : '38px'};
+  aspect-ratio: 1/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 
   img {
     width: 28px;
@@ -97,3 +99,24 @@ export const DeleteIcon = styled.span`
     }
   }
 `;
+
+export const EditIcon = styled.span`
+  width: 28px;
+  height: 28px;
+  border-radius: 100%;
+  display: grid;
+  place-items: center;
+  background: ${({ theme }) => theme.colors.warning};
+  color: ${({ theme }) => theme.colors.white};
+  font-size: 18px;
+
+  ${({ theme }) => theme.media.desktop} {
+    width: 24px;
+    height: 24px;
+    line-height: 0.83;
+
+    &:hover {
+      background: #b54f4a;
+    }
+  }
+`
