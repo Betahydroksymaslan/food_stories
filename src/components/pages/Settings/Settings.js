@@ -34,7 +34,7 @@ const Settings = (props) => {
   const apiCallProgress = useSelector(
     (state) => state.apiCallsReducer.apiCallsReducer
   );
-console.log(auth)
+  console.log(auth);
   const {
     register,
     handleSubmit,
@@ -163,11 +163,19 @@ console.log(auth)
           <AddProduct closeModal={closeAddProductModal} />
         </Modal>
 
-        <Modal isOpen={isAddMealOpen} handleClose={closeAddmealModal}>
+        <Modal
+          isOpen={isAddMealOpen}
+          handleClose={closeAddmealModal}
+          shouldCloseOnOverlayClick={false}
+        >
           <AddMeal closeModal={closeAddmealModal} />
         </Modal>
 
-        <Modal isOpen={isAddNewCategoryOpen} handleClose={closeAddNewCategory}>
+        <Modal
+          isOpen={isAddNewCategoryOpen}
+          handleClose={closeAddNewCategory}
+          shouldCloseOnOverlayClick={false}
+        >
           <AddNewMealCategory closeModal={closeAddNewCategory} />
         </Modal>
       </PageWrapper>

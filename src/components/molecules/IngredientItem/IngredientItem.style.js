@@ -69,8 +69,8 @@ export const IngredientImageWrapper = styled.div`
   }
 
   ${({ theme }) => theme.media.desktop} {
-    width: 34px;
-    height: 34px;
+    width: 70px;
+    height: 70px;
     img {
       width: 25px;
       height: 25px;

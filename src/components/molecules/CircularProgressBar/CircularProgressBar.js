@@ -27,7 +27,7 @@ const CircularProgressBar = ({
           ></circle>
         </svg>
         <Percent>
-          <PercentSymbol>{percent}</PercentSymbol>
+          <PercentSymbol>{ isNaN(percent)  ? 0 : percent}</PercentSymbol>
           <PercentSymbol small={true}>%</PercentSymbol>
         </Percent>
       </PercentBox>

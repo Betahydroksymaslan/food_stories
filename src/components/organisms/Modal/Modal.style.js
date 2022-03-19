@@ -5,7 +5,8 @@ export const ModalWrapper = styled(Modal)`
   position: absolute;
   top: 50%;
   left: 50%;
-  border: 2px solid ${({theme}) =>theme.colors.secondColor};
+  border: ${({ border }) =>
+    border ? `2px solid ${({ theme }) => theme.colors.secondColor}` : 'none'};
   transform: translate(-50%, -50%);
   min-width: 250px;
   min-height: 150px;

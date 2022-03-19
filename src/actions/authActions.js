@@ -20,11 +20,13 @@ import { db } from 'assets/firebase/firebase';
 
 const errorMessage = 'Coś poszło nie tak, spróbuj jeszcze raz!';
 
-const setLocalStorageItem = () => {
+const setLocalStorageItem = (userUid) => {
   const localStorageItem = {
     ratingOn: true,
+    recipeTutorialOn: true,
   };
-  localStorage.setItem('userRateModalsOn', JSON.stringify(localStorageItem));
+  const objectName = `food_stories_user_${userUid}`
+  localStorage.setItem(objectName, JSON.stringify(localStorageItem));
 };
 
 export const signup = (email, password, name, callback) => async (dispatch) => {
@@ -41,6 +43,7 @@ export const signup = (email, password, name, callback) => async (dispatch) => {
               name,
             });
             user.updateProfile({ displayName: name });
+            setLocalStorageItem(user.uid);
             dispatch({
               type: SIGNUP_SUCCESS,
               payload: 'Rejestracja przebiegła pomyślnie!',
@@ -59,7 +62,6 @@ export const signup = (email, password, name, callback) => async (dispatch) => {
               : errorMessage,
         });
       });
-    setLocalStorageItem();
     callback();
   } catch (error) {
     dispatch(apiCallError());
@@ -116,13 +118,13 @@ export const googleSignin = (callback) => async (dispatch) => {
             uid: user.uid,
             email: user.email,
           });
+          setLocalStorageItem(user.uid);
           /* user.updateProfile({ displayName: name }); */
           dispatch({
             type: SIGNUP_SUCCESS,
             payload: 'Rejestracja przebiegła pomyślnie!',
           });
         }
-        setLocalStorageItem();
         callback();
       })
       .catch((error) => {
@@ -159,13 +161,13 @@ export const facebookSignin = (callback) => async (dispatch) => {
             uid: user.uid,
             email: user.email,
           });
+          setLocalStorageItem(user.uid);
           /* user.updateProfile({ displayName: name }); */
           dispatch({
             type: SIGNUP_SUCCESS,
             payload: 'Rejestracja przebiegła pomyślnie!',
           });
         }
-        setLocalStorageItem();
         callback();
       })
       .catch((error) => {

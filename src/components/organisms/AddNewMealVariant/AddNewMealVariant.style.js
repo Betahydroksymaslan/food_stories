@@ -6,10 +6,14 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 20px 0;
+
+  ${({ theme }) => theme.media.desktop} {
+    width: 300px;
+  }
 `;
 
 export const StyledForm = styled.form`
-width: 80%;
+  width: 80%;
 `;
 
 export const InlineWrapper = styled.div`

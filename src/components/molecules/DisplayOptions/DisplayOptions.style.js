@@ -10,14 +10,14 @@ from {
 `;
 
 export const ComponentContainer = styled.div`
-position: absolute;
-right: 20px;
-top: 20px;
-z-index: 1;
-width: fit-content;
-display: flex;
-flex-direction: column;
-align-items: flex-end;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 1;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 `;
 
 export const OptionsWrapper = styled.button`
@@ -84,10 +84,26 @@ export const OptionsList = styled(motion.div)`
     padding: 5px 2px;
   }
 
-  ${({theme}) => theme.media.desktop} {
+
+  ${({ theme }) => theme.media.desktop} {
     span:hover {
       text-decoration: underline;
       cursor: pointer;
     }
   }
+`;
+
+export const Option = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  &:last-child {
+    color: #df3d34;
+  }
+`;
+
+export const IconWrapper = styled.div`
+  font-size: 25px;
 `;

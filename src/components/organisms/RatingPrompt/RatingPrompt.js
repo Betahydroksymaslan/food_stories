@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Wrapper, InlineWrapper } from './RatingPrompt.style';
+import { Wrapper } from './RatingPrompt.style';
 import RatingStars from '../RatingStars/RatingStars';
 import Button from 'components/atoms/Button/Button';
 import { useSelector } from 'react-redux';
@@ -25,11 +25,15 @@ const RatingPrompt = ({ rateFunction, activeStars, handleClose }) => {
   } z tego przepisu, proszę, oceń go!`;
 
   const handleClick = () => {
+    const objectName = `food_stories_user_${auth.uid}`
+    const getStorage = JSON.parse(localStorage.getItem(objectName))
+
     const modifiedStorage = {
+      ...getStorage,
       ratingOn: false,
     };
     if (isChecked) {
-      localStorage.setItem('userRateModalsOn', JSON.stringify(modifiedStorage));
+      localStorage.setItem(objectName, JSON.stringify(modifiedStorage));
       handleClose();
       history.goBack();
     }

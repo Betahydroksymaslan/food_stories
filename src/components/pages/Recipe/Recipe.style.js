@@ -395,6 +395,10 @@ export const EditQuantityWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  ${({ theme }) => theme.media.desktop} {
+    width: max-content;
+  }
 `;
 
 export const InlineWrapper = styled.div`
@@ -408,7 +412,6 @@ export const EndEditionButton = styled.button`
   position: fixed;
   bottom: 20px;
   left: 50%;
-  transform: translateX(-50%);
   border: none;
   border-radius: 50px;
   background: ${({ theme }) => theme.colors.secondColor};
@@ -416,6 +419,16 @@ export const EndEditionButton = styled.button`
   padding: 15px 30px;
   font-weight: 500;
   box-shadow: ${({ theme }) => theme.boxShadow.inputShadow};
+
+  ${({ theme }) => theme.media.desktop} {
+    padding: 10px 25px;
+    font-size: ${({ theme }) => theme.fontSize.xs};
+
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.05);
+    }
+  }
 `;
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! VARIANTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -430,7 +443,7 @@ export const VariantsWrapper = styled.div`
   align-items: center;
   border: 1px solid ${({ theme }) => theme.colors.mainYellow};
   align-items: center;
-  gap: 20px;
+  gap: 10px;
   margin: 5px 0 15px;
   position: relative;
 
@@ -444,6 +457,11 @@ export const VariantsWrapper = styled.div`
     top: -10px;
     left: 10%;
   }
+
+  ${({ theme }) => theme.media.desktop} {
+    width: 100%;
+    gap: 5px;
+  }
 `;
 
 export const VariantItem = styled.div`
@@ -456,13 +474,42 @@ export const VariantItem = styled.div`
   span {
     font-size: ${({ theme }) => theme.fontSize.xs};
   }
+
+  ${({ theme }) => theme.media.desktop} {
+    grid-template-columns: 40px auto 20px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.03);
+      cursor: pointer;
+      border-radius: 10px;
+    }
+  }
 `;
 
 export const VariantIcon = styled.div`
   grid-column: 1;
-
   width: 30px;
   height: 30px;
   border-radius: 100%;
   background: ${({ color }) => color};
+
+  ${({ theme }) => theme.media.desktop} {
+    width: 25px;
+    height: 25px;
+  }
+`;
+
+export const VariantItemDelete = styled.span`
+  ${({ theme }) => theme.media.desktop} {
+    width: 20px;
+    height: 20px;
+    display: grid;
+    place-items: center;
+    border-radius: 5px;
+
+    &:hover {
+      background: ${({ theme }) => theme.colors.error};
+      color: ${({ theme }) => theme.colors.white};
+    }
+  }
 `;

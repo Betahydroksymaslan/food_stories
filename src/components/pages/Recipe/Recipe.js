@@ -29,6 +29,7 @@ import {
   VariantsWrapper,
   VariantItem,
   VariantIcon,
+  VariantItemDelete,
 } from './Recipe.style';
 import { db } from 'assets/firebase/firebase';
 import { ReactComponent as TimeIcon } from 'assets/icons/clockIcon.svg';
@@ -64,6 +65,12 @@ import Button from 'components/atoms/Button/Button';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import FormField from 'components/molecules/FormField/FormField';
 import AddNewMealVariant from 'components/organisms/AddNewMealVariant/AddNewMealVariant';
+import { RiHeartAddFill } from 'react-icons/ri';
+import { MdLibraryAdd } from 'react-icons/md';
+import { FaEdit } from 'react-icons/fa';
+import { AiTwotoneDelete } from 'react-icons/ai';
+import { BsQuestionLg } from 'react-icons/bs';
+import RecipeTutorial from 'components/organisms/RecipeTutorial/RecipeTutorial';
 
 const Recipe = (props) => {
   const { recipeName } = useParams();
@@ -75,8 +82,22 @@ const Recipe = (props) => {
   const history = useHistory();
   const ratingStats = handleRatingStats(meal.ratings);
   const topPageRef = useRef(null);
+  const objectName = `food_stories_user_${auth.uid}`;
+  const localStorageItem = JSON.parse(localStorage.getItem(objectName));
 
   /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! MODALS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+  const [isTutorialVisible, setIsTutorialVisible] = useState(false);
+
+  const closeTutorial = () => {
+    const newStorageItem = {
+      ...localStorageItem,
+      recipeTutorialOn: false,
+    };
+    setIsTutorialVisible(false);
+    localStorage.setItem(objectName, JSON.stringify(newStorageItem));
+  };
+  const openTutorial = () => setIsTutorialVisible(true);
 
   const [isConfirmBoxVisible, setIsConfirmBoxVisible] = useState(false);
 
@@ -176,13 +197,18 @@ const Recipe = (props) => {
   const countMacro = () => {
     let data = [];
 
-    const reducedMacros = meal?.realIngredients?.reduce((acc, item) => {
-      return {
-        fat: acc.fat + item.fat,
-        carbs: acc.carbs + item.carbs,
-        protein: acc.protein + item.protein,
-      };
-    });
+    let reducedMacros;
+
+    reducedMacros = meal?.realIngredients?.reduce(
+      (acc, item) => {
+        return {
+          fat: acc.fat + item.fat,
+          carbs: acc.carbs + item.carbs,
+          protein: acc.protein + item.protein,
+        };
+      },
+      { fat: 0, carbs: 0, protein: 0 }
+    );
 
     let totalValue = 0;
 
@@ -200,7 +226,7 @@ const Recipe = (props) => {
     }));
   };
 
-  const renderMakroBoxes = countMacro().map((item, index) => (
+  const renderMakroBoxes = countMacro()?.map((item, index) => (
     <MacroBox
       key={item.name}
       percent={item.percentValue}
@@ -210,7 +236,7 @@ const Recipe = (props) => {
     />
   ));
 
-  const totalCalories = countMacro().reduce(
+  const totalCalories = countMacro()?.reduce(
     (acc, item) => Math.round(acc + item.kcal),
     0
   );
@@ -273,7 +299,7 @@ const Recipe = (props) => {
         imagesArray.push(data.images[id]);
       }
 
-      const realIngredients = data.ingredients.map((item) => ({
+      const realIngredients = data?.ingredients?.map((item) => ({
         name: item.ingredientName,
         fat: (item.ingredientQuantity * item.converter * item.fat) / 100,
         protein:
@@ -304,6 +330,7 @@ const Recipe = (props) => {
   const renderIngredients = meal?.ingredients?.map((item) => (
     <AnimatePresence key={item.ingredientName}>
       <IngredientItem
+        layout
         changeQuantityTemp={getNameAndOpenModal}
         deleteTemp={deleteIngredientTemp}
         modeTemp={editModeTemp}
@@ -365,11 +392,36 @@ const Recipe = (props) => {
   };
 
   const options = [
-    { name: 'Dodaj zakładkę', optionFunction: addToFastList },
-    { name: 'Dodaj do ulubionych', optionFunction: addToFavourite },
-    { name: 'Edytuj przepis', optionFunction: addToFavourite },
-    { name: 'Usuń przepis', optionFunction: openModal },
-    { name: 'Dodaj wariant', optionFunction: openAddVariantModal },
+    {
+      name: 'Dodaj zakładkę',
+      optionFunction: addToFastList,
+      icon: <MdLibraryAdd />,
+    },
+    {
+      name: 'Dodaj do ulubionych',
+      optionFunction: addToFavourite,
+      icon: <RiHeartAddFill />,
+    },
+    {
+      name: 'Edytuj przepis',
+      optionFunction: addToFavourite,
+      icon: <FaEdit />,
+    },
+    {
+      name: 'Dodaj wariant',
+      optionFunction: openAddVariantModal,
+      icon: <RiHeartAddFill />,
+    },
+    {
+      name: 'Pomoc',
+      optionFunction: openTutorial,
+      icon: <BsQuestionLg />,
+    },
+    {
+      name: 'Usuń przepis',
+      optionFunction: openModal,
+      icon: <AiTwotoneDelete />,
+    },
   ];
 
   const renderRestOfImages = meal?.imagesArray?.map((item) => (
@@ -392,10 +444,8 @@ const Recipe = (props) => {
       </Tip>
     ));
 
-  const rateState = JSON.parse(localStorage.getItem('userRateModalsOn'));
-
   const checkIsRated = () => {
-    if (rateState.ratingOn) {
+    if (localStorageItem.ratingOn) {
       openRatingModal();
     }
   };
@@ -449,17 +499,24 @@ const Recipe = (props) => {
       <VariantIcon color={item.variantColor} />
       <span>{item.variantName}</span>
       {index !== 0 && (
-        <span onClick={() => removeVariant(item.id)}>&#10005;</span>
+        <VariantItemDelete onClick={() => removeVariant(item.id)}>
+          &#10005;
+        </VariantItemDelete>
       )}
     </VariantItem>
   ));
+
+  useEffect(() => {
+    if (!localStorageItem.recipeTutorialOn) return;
+    openTutorial();
+  }, [localStorageItem, openTutorial]);
 
   return media ? (
     /* !!!!!!!!!!!!!!!!!!!!!!!!!! DESKTOP LAYOUT  !!!!!!!!!!!!!!!!!!!!!!!!!!*/
     <Wrapper>
       <FirstCell>
         <DisplayOptions options={options} />
-        <MainImageWrapper>
+        <MainImageWrapper ref={topPageRef}>
           <img src={meal.mainImage} />
         </MainImageWrapper>
         <StyledHeader>
@@ -478,6 +535,10 @@ const Recipe = (props) => {
         <ImageWrapper>
           <img src={meal.secondImage} alt="secondImage" />
         </ImageWrapper>
+
+        {mealVariants.length ? (
+          <VariantsWrapper>{renderVariants}</VariantsWrapper>
+        ) : null}
       </FirstCell>
 
       <SecondCell>
@@ -514,117 +575,13 @@ const Recipe = (props) => {
           callback={addNewIngredientTemporary}
         />
       </Modal>
-    </Wrapper>
-  ) : (
-    /* !!!!!!!!!!!!!!!!!!!!!!!!!! MOBILE LAYOUT  !!!!!!!!!!!!!!!!!!!!!!!!!!*/
-    <Wrapper>
-      <DisplayOptions options={options} />
-      <Back callback={!rating && !rateState && checkIsRated} />
-      <MainImageWrapper ref={topPageRef}>
-        <img src={meal.mainImage} />
-        <TittleWrapper>
-          <MealName>
-            <span>{meal.mealname}</span>
-          </MealName>
-          <TittleProperties>
-            <div>
-              <StarIcon />
-              {ratingStats.average}
-            </div>
-            <div>
-              <TimeIcon />
-              {meal.cookTime}min
-            </div>
-            <div>
-              <CookHatIcon />
-              {meal.difficulty}
-            </div>
-          </TittleProperties>
-        </TittleWrapper>
-      </MainImageWrapper>
-
-      <ShortInfoWrapper>{meal && renderShortCuts}</ShortInfoWrapper>
-      <MacroWrapper>{meal && renderMakroBoxes}</MacroWrapper>
-
-      <StyledHeader>
-        Składniki <Edit onClick={editTempOn} />
-      </StyledHeader>
-
-      <IngredientsList as={motion.div} layout>
-        {renderIngredients}
-        {editModeTemp && (
-          <AddMoreIngredients onClick={openIngredientModal}>
-            Dodaj kolejny składnik
-          </AddMoreIngredients>
-        )}
-      </IngredientsList>
-
-      <ImageWrapper>
-        <img src={meal.secondImage} alt="secondImage" />
-      </ImageWrapper>
-
-      <StyledHeader>Przygotowanie</StyledHeader>
-      <RecipeWrapper>{renderRecipe}</RecipeWrapper>
-
-      <TipsWrapper>{meal.tips && renderTips}</TipsWrapper>
-
-      <ImagesContainer>{renderRestOfImages}</ImagesContainer>
-
-      <RatingStars
-        activeStars={rating}
-        rateFunction={rateMeal}
-        rateName="Oceń przepis!"
-      />
-
-      {mealVariants.length ? (
-        <VariantsWrapper>{renderVariants}</VariantsWrapper>
-      ) : null}
-
-      <SocialShare />
-
-      <AnimatePresence>
-        {editModeTemp && (
-          <EndEditionButton
-            onClick={editTempOff}
-            type="button"
-            transition={{ type: 'tween' }}
-            animate={{ opacity: 1, y: 0, x: '-50%' }}
-            initial={{ opacity: 0, y: 100, x: '-50%' }}
-            exit={{ opacity: 0, y: 100, x: '-50%' }}
-            as={motion.button}
-          >
-            &#10005; zakończ edycję
-          </EndEditionButton>
-        )}
-      </AnimatePresence>
-
-      <Modal isOpen={isRatingModalVisible} handleClose={closeRatingModal}>
-        <RatingPrompt
-          activeStars={rating}
-          rateFunction={rateMeal}
-          handleClose={closeRatingModal}
-        />
+      <Modal
+        shouldCloseOnOverlayClick={false}
+        isOpen={isTutorialVisible}
+        handleClose={closeTutorial}
+      >
+        <RecipeTutorial handleClose={closeTutorial} />
       </Modal>
-
-      <Modal isOpen={isConfirmBoxVisible} handleClose={closeModal}>
-        <ConfirmDecision closeModal={closeModal} callback={removeRecipe} />
-      </Modal>
-
-      <Modal isOpen={addIngredientModal} handleClose={closeIngredientModal}>
-        <FindIngredient
-          meal={meal}
-          closeModal={closeIngredientModal}
-          callback={addNewIngredientTemporary}
-        />
-      </Modal>
-
-      <Modal isOpen={isAddVariantVisible} handleClose={closeAddVariantModal}>
-        <AddNewMealVariant
-          handleClose={closeAddVariantModal}
-          callback={addVariant}
-        />
-      </Modal>
-
       <Modal
         isOpen={isEditQuantityModalOpen}
         handleClose={closeEditQuantityModal}
@@ -645,13 +602,191 @@ const Recipe = (props) => {
             <Button size="s" onClick={changeIngredientQuantityTemp}>
               edytuj
             </Button>
-            <Button size="s" onClick={closeEditQuantityModal}>
+            <Button size="s" secondary onClick={closeEditQuantityModal}>
               wróć
             </Button>
           </InlineWrapper>
         </EditQuantityWrapper>
       </Modal>
+      <Modal isOpen={isAddVariantVisible} handleClose={closeAddVariantModal}>
+        <AddNewMealVariant
+          handleClose={closeAddVariantModal}
+          callback={addVariant}
+        />
+      </Modal>
+      <AnimatePresence>
+        {editModeTemp && (
+          <EndEditionButton
+            onClick={editTempOff}
+            type="button"
+            key="endEditionButton"
+            style={{ position: 'fixed' }}
+            transition={{ type: 'tween' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            initial={{ opacity: 0, y: 100, x: '-50%' }}
+            exit={{ opacity: 0, y: 100, x: '-50%' }}
+            as={motion.button}
+          >
+            &#10005; zakończ edycję
+          </EndEditionButton>
+        )}
+      </AnimatePresence>
     </Wrapper>
+  ) : (
+    /* !!!!!!!!!!!!!!!!!!!!!!!!!! MOBILE LAYOUT  !!!!!!!!!!!!!!!!!!!!!!!!!!*/
+    <AnimatePresence>
+      <Wrapper
+        as={motion.div}
+        key="recipeWrapper"
+        initial={{ x: '100%', opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: '-100%', opacity: 0 }}
+        transition={{ duration: 0.3, type: 'tween' }}
+      >
+        <DisplayOptions options={options} />
+        <Back callback={!rating && localStorageItem.ratingOn && checkIsRated} />
+        <MainImageWrapper ref={topPageRef}>
+          <img src={meal.mainImage} />
+          <TittleWrapper>
+            <MealName>
+              <span>{meal.mealname}</span>
+            </MealName>
+            <TittleProperties>
+              <div>
+                <StarIcon />
+                {ratingStats.average}
+              </div>
+              <div>
+                <TimeIcon />
+                {meal.cookTime}min
+              </div>
+              <div>
+                <CookHatIcon />
+                {meal.difficulty}
+              </div>
+            </TittleProperties>
+          </TittleWrapper>
+        </MainImageWrapper>
+
+        <ShortInfoWrapper>{meal && renderShortCuts}</ShortInfoWrapper>
+        <MacroWrapper>{meal && renderMakroBoxes}</MacroWrapper>
+
+        <StyledHeader>
+          Składniki <Edit onClick={editTempOn} />
+        </StyledHeader>
+
+        <IngredientsList as={motion.div} layout>
+          {renderIngredients}
+          {editModeTemp && (
+            <AddMoreIngredients onClick={openIngredientModal}>
+              Dodaj kolejny składnik
+            </AddMoreIngredients>
+          )}
+        </IngredientsList>
+
+        {mealVariants.length ? (
+          <VariantsWrapper>{renderVariants}</VariantsWrapper>
+        ) : null}
+
+        <ImageWrapper>
+          <img src={meal.secondImage} alt="secondImage" />
+        </ImageWrapper>
+
+        <StyledHeader>Przygotowanie</StyledHeader>
+        <RecipeWrapper>{renderRecipe}</RecipeWrapper>
+
+        <TipsWrapper>{meal.tips && renderTips}</TipsWrapper>
+
+        <ImagesContainer>{renderRestOfImages}</ImagesContainer>
+
+        <RatingStars
+          activeStars={rating}
+          rateFunction={rateMeal}
+          rateName="Oceń przepis!"
+        />
+
+        <SocialShare />
+
+        <Modal
+          shouldCloseOnOverlayClick={false}
+          isOpen={isTutorialVisible}
+          handleClose={closeTutorial}
+        >
+          <RecipeTutorial handleClose={closeTutorial} />
+        </Modal>
+
+        <Modal isOpen={isRatingModalVisible} handleClose={closeRatingModal}>
+          <RatingPrompt
+            activeStars={rating}
+            rateFunction={rateMeal}
+            handleClose={closeRatingModal}
+          />
+        </Modal>
+
+        <Modal isOpen={isConfirmBoxVisible} handleClose={closeModal}>
+          <ConfirmDecision closeModal={closeModal} callback={removeRecipe} />
+        </Modal>
+
+        <Modal isOpen={addIngredientModal} handleClose={closeIngredientModal}>
+          <FindIngredient
+            meal={meal}
+            closeModal={closeIngredientModal}
+            callback={addNewIngredientTemporary}
+          />
+        </Modal>
+
+        <Modal isOpen={isAddVariantVisible} handleClose={closeAddVariantModal}>
+          <AddNewMealVariant
+            handleClose={closeAddVariantModal}
+            callback={addVariant}
+          />
+        </Modal>
+
+        <Modal
+          isOpen={isEditQuantityModalOpen}
+          handleClose={closeEditQuantityModal}
+        >
+          <EditQuantityWrapper>
+            <Paragraph>Podaj zmienioną ilość składnika</Paragraph>
+            <Paragraph>{ingredientTargetName}</Paragraph>
+            <FormField
+              type="number"
+              ingredientName={ingredientTargetName}
+              onChange={handleEditQuantityOnChange}
+              value={editQuantityValue}
+              name="changeQuantity"
+              small
+              id="changeQuantity"
+            />
+            <InlineWrapper>
+              <Button size="s" onClick={changeIngredientQuantityTemp}>
+                edytuj
+              </Button>
+              <Button size="s" secondary onClick={closeEditQuantityModal}>
+                wróć
+              </Button>
+            </InlineWrapper>
+          </EditQuantityWrapper>
+        </Modal>
+      </Wrapper>
+      <AnimatePresence>
+        {editModeTemp && (
+          <EndEditionButton
+            onClick={editTempOff}
+            type="button"
+            key="endEditionButton"
+            style={{ position: 'fixed' }}
+            transition={{ type: 'tween' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            initial={{ opacity: 0, y: 100, x: '-50%' }}
+            exit={{ opacity: 0, y: 100, x: '-50%' }}
+            as={motion.button}
+          >
+            &#10005; zakończ edycję
+          </EndEditionButton>
+        )}
+      </AnimatePresence>
+    </AnimatePresence>
   );
 };
 

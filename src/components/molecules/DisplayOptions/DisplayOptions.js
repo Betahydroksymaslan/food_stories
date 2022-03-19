@@ -5,6 +5,8 @@ import {
   Circles,
   OptionsList,
   ComponentContainer,
+  Option,
+  IconWrapper,
 } from './DisplayOptions.style';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -18,12 +20,13 @@ const DisplayOptions = ({ options }) => {
   };
 
   const renderOptions = options.map((item) => (
-    <span
+    <Option
       key={item.name}
       onClick={() => handleOptionClick(item.optionFunction)}
     >
-      {item.name}
-    </span>
+      <IconWrapper>{item.icon}</IconWrapper>
+      <span>{item.name}</span>
+    </Option>
   ));
   return (
     <ComponentContainer>
