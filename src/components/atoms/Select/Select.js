@@ -12,7 +12,6 @@ const Select = ({
   inputRef,
   name,
   inputSize,
-  defaultValue,
   placeholder = 'wybierz...',
   ...rest
 }) => {
@@ -26,7 +25,6 @@ const Select = ({
         id={id}
         name={name}
         isMulti={isMulti}
-        defaultValue={optionsValue}
         value={
           isMulti
             ? optionsValue.filter((item) => value?.includes(item.value))

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { SIGNIN } from 'constants/routes';
 import { isLoaded, isEmpty } from 'react-redux-firebase';
 
-export default function PrivateRoute({ component: Component, ...rest }) {
+ const PrivateRoute = ({ component: Component, ...rest }) => {
   const auth = useSelector((state) => state.firebase.auth);
   return (
     <Route
@@ -19,3 +19,5 @@ export default function PrivateRoute({ component: Component, ...rest }) {
     ></Route>
   );
 }
+
+export default PrivateRoute

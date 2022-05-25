@@ -24,15 +24,41 @@ import { RiHeartAddFill } from 'react-icons/ri';
 import { BsQuestionLg } from 'react-icons/bs';
 
 const container = {
-  hidden: { x: '100%', opacity: 0 },
+  hidden: {},
   show: {
-    x: 0,
-    opacity: 1,
-    transition: { delay: 0.4 },
+    transition: {
+      staggerChildren: 0.05,
+    },
+    zIndex: 1,
+  },
+  hide: {
+    zIndex: 0,
+    transition: {
+      staggerChildren: 0.03,
+      staggerDirection: -1,
+    },
   },
 };
 
-const RecipeTutorial = ({ handleClose }) => {
+const item = {
+  hidden: { x: 1000, opacity: 0 },
+  show: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+    },
+  },
+  hide: {
+    x: -1000,
+    opacity: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
+};
+
+const RecipeTutorial = ({ handleClose, objectName }) => {
   const pageFirst = (
     <StepWrapper
       key="stepOne"
@@ -40,9 +66,12 @@ const RecipeTutorial = ({ handleClose }) => {
       variants={container}
       initial="hidden"
       animate="show"
+      exit="hide"
     >
-      <Paragraph size="big">Poznaj szczegóły</Paragraph>
-      <AnimationBox>
+      <Paragraph size="big" as={motion.p} variants={item}>
+        Poznaj szczegóły
+      </Paragraph>
+      <AnimationBox as={motion.div} variants={item}>
         <LookMoreProductInfo>
           <img
             src="https://firebasestorage.googleapis.com/v0/b/food-stories-89472.appspot.com/o/ingredients_icons%2FbeerIcon.svg?alt=media&token=35d27182-aab9-422a-a0a4-9dda6d09fe40"
@@ -68,7 +97,7 @@ const RecipeTutorial = ({ handleClose }) => {
         </LookMoreProductInfo>
       </AnimationBox>
 
-      <Paragraph>
+      <Paragraph as={motion.p} variants={item}>
         Kliknij na składnik na liście aby zobaczyć więcej szczegółów takich, jak
         marka czy gramatura opakowania zakupionego produktu
       </Paragraph>
@@ -82,15 +111,18 @@ const RecipeTutorial = ({ handleClose }) => {
       variants={container}
       initial="hidden"
       animate="show"
+      exit="hide"
     >
-      <Paragraph size="big">Szybka edycja</Paragraph>
-      <Paragraph>
+      <Paragraph size="big" as={motion.p} variants={item}>
+        Szybka edycja
+      </Paragraph>
+      <Paragraph as={motion.p} variants={item}>
         Jeśli potrzebujesz szybko sprawdzić, jak wyglądałby posiłek z inną
         ilością składników, bez części z nich, lub z jeszcze innymi, nie
         zawartymi oryginalnie w przepisie - masz taką mażliwość za pomocą
         szybkiej edycji!
       </Paragraph>
-      <Paragraph>
+      <Paragraph as={motion.p} variants={item}>
         Aby ją uruchomić wystarczy kliknąć w przycisk edycji
         <EditIcon style={{ width: '18px' }} /> tuż obok nagłówka składników.
       </Paragraph>
@@ -104,19 +136,22 @@ const RecipeTutorial = ({ handleClose }) => {
       variants={container}
       initial="hidden"
       animate="show"
+      exit="hide"
     >
-      <Paragraph size="big">Dodawaj, usuwaj, zmieniaj</Paragraph>
-      <Paragraph>
+      <Paragraph size="big" as={motion.p} variants={item}>
+        Dodawaj, usuwaj, zmieniaj
+      </Paragraph>
+      <Paragraph as={motion.p} variants={item}>
         <DeleteIconTut>+</DeleteIconTut> - usuń składnik
       </Paragraph>
-      <Paragraph>
+      <Paragraph as={motion.p} variants={item}>
         <EditIconTut>&#9998;</EditIconTut> - edytuj składnik, aby zmienić jego
         ilość
       </Paragraph>
-      <Paragraph>
+      <Paragraph as={motion.p} variants={item}>
         Aby dodać kolejny składnik, kliknij w przycisk u dołu listy
       </Paragraph>
-      <Paragraph>
+      <Paragraph as={motion.p} variants={item}>
         Jeśli chcesz zakończyć edycję wystarczy kliknąć{' '}
         <EndEditionTut>&#10005; zakończ edycję</EndEditionTut> znajdujący się u
         dołu ekranu
@@ -131,16 +166,19 @@ const RecipeTutorial = ({ handleClose }) => {
       variants={container}
       initial="hidden"
       animate="show"
+      exit="hide"
     >
-      <Paragraph size="big">Zapisz wariant</Paragraph>
-      <Paragraph>
+      <Paragraph size="big" as={motion.p} variants={item}>
+        Zapisz wariant
+      </Paragraph>
+      <Paragraph as={motion.p} variants={item}>
         Jeśli nie chcesz utracić poczynionych zmian, możesz je zapisać jako nowy
         wariant! Z menu kontekstowego w prawym, górnym rogu wybierz
       </Paragraph>
-      <Option>
+      <Option as={motion.span} variants={item}>
         <RiHeartAddFill /> Dodaj wariant
       </Option>
-      <Paragraph>
+      <Paragraph as={motion.p} variants={item}>
         Nadaj mu nazwę, wybierz kolor ikony i od teraz będzie już zawsze
         widoczny pod listą składników, w przepisie, dla którego został
         stworzony. Możesz stworzyć więcej niż jeden wariant
@@ -155,16 +193,21 @@ const RecipeTutorial = ({ handleClose }) => {
       variants={container}
       initial="hidden"
       animate="show"
+      exit="hide"
     >
-      <Paragraph size="big">To już wszystko :)</Paragraph>
-      <Paragraph>
+      <Paragraph size="big" as={motion.p} variants={item}>
+        To już wszystko :)
+      </Paragraph>
+      <Paragraph as={motion.p} variants={item}>
         Jeśli będziesz tego potrzebować, zawsze możesz tu wrócić wybierając
       </Paragraph>
-      <Option>
+      <Option as={motion.span} variants={item}>
         <BsQuestionLg /> Pomoc
       </Option>
 
-      <Paragraph>z menu kontekstowego</Paragraph>
+      <Paragraph as={motion.p} variants={item}>
+        z menu kontekstowego
+      </Paragraph>
     </StepWrapper>
   );
 
@@ -179,19 +222,33 @@ const RecipeTutorial = ({ handleClose }) => {
     <Dot current={index === currentIndex} key={index} />
   ));
 
+  const handleClick = () => {
+    const localStorageItem = JSON.parse(localStorage.getItem(objectName));
+
+    const newStorageItem = {
+      ...localStorageItem,
+      recipeTutorialOn: false,
+    };
+
+    localStorage.setItem(objectName, JSON.stringify(newStorageItem));
+    handleClose();
+  };
+
   useEffect(() => {
     setPage(pages[currentIndex]);
   }, [setPage, currentIndex]);
 
   return (
     <Wrapper>
-      <AnimationWrapper>{page && page}</AnimationWrapper>
+      <AnimationWrapper>
+        <AnimatePresence>{page && page}</AnimatePresence>
+      </AnimationWrapper>
 
       <BottomWrapper>
         {currentIndex < pages.length - 1 ? (
           <NextButton onClick={nextPage}>Zrozumiałem, idę dalej!</NextButton>
         ) : (
-          <NextButton onClick={handleClose}>Super, kończę!</NextButton>
+          <NextButton onClick={handleClick}>Super, kończę!</NextButton>
         )}
         <DotsWrapper>{renderDots}</DotsWrapper>
       </BottomWrapper>

@@ -8,10 +8,10 @@ const Modal = ({ handleClose, shouldCloseOnOverlayClick = true, isOpen, border =
       closeTimeoutMS={
         100
       } /* Clases for transitions available in GlobalStyled */
-      contentElement={
-        (props, children) => <div {...props}>{children}</div>
-        /* Custom Content element. */
-      }
+      style={{overlay: {
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+        backdropFilter: 'blur(3px)',
+      }}}
       border={border}
       isOpen={isOpen}
       onRequestClose={handleClose}

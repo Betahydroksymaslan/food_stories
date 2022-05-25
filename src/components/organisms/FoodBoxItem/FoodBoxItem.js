@@ -16,18 +16,13 @@ import { handleRatingStats } from 'helpers/mathOperations';
 
 const FoodBoxItem = ({
   data: { mainImage, mealname, date, cookTime, difficulty, ratings },
+  ...rest
 }) => {
   const ratingStats = handleRatingStats(ratings);
   return (
     mealname && (
       <StyledLink to={`/food_stories/recipe/${mealname}`}>
-        <BoxWrapper
-          as={motion.div}
-          layout
-          animate={{ opacity: 1 }}
-          initial={{ opacity: 0 }}
-          exit={{ opacity: 0 }}
-        >
+        <BoxWrapper layout {...rest}>
           <InnerWrapper>
             <TopWrapper>
               <span>{difficulty}</span>

@@ -39,6 +39,7 @@ const AddProduct = ({ closeModal }) => {
     { label: 'łyżeczka/i', value: 'łyżeczka/i' },
     { label: 'plaster/y', value: 'plaster/y' },
     { label: 'garść', value: 'garść' },
+    { label: 'opakowanie', value: 'opakowanie' },
   ];
 
   const {
@@ -93,6 +94,7 @@ const AddProduct = ({ closeModal }) => {
             defaultValue={countDefaultUnitValue(item)}
             id={item}
             name={item}
+            step="0.1"
             type="number"
             label={`"${item}" to (w gramach):`}
             placeholder="wartość w gramch"

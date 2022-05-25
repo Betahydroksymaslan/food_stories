@@ -34,10 +34,12 @@ export const AnimationWrapper = styled.div`
   height: 80%;
   overflow: hidden;
   display: flex;
+  position: relative;
 `;
 
 export const StepWrapper = styled.div`
   display: flex;
+  position: absolute;
   flex-direction: column;
   align-items: center;
   justify-content: center;

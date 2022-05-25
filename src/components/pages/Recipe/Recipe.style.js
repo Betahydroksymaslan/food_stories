@@ -5,6 +5,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding-bottom: 80px;
+
   position: relative;
   background: ${({ theme }) => theme.colors.white};
 
@@ -388,26 +389,6 @@ export const ImagesContainer = styled.div`
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!! MODALS !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-export const EditQuantityWrapper = styled.div`
-  width: 80vw;
-  padding: 20px;
-  gap: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  ${({ theme }) => theme.media.desktop} {
-    width: max-content;
-  }
-`;
-
-export const InlineWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-evenly;
-  align-items: center;
-`;
-
 export const EndEditionButton = styled.button`
   position: fixed;
   bottom: 20px;
@@ -512,4 +493,12 @@ export const VariantItemDelete = styled.span`
       color: ${({ theme }) => theme.colors.white};
     }
   }
+`;
+
+export const NotesWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  margin: 20px 0;
 `;

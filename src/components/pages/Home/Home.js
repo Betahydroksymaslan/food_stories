@@ -25,6 +25,39 @@ const testIsValueEqual = (obj, tab) => {
   }
 };
 
+const container = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+  hide: {
+    transition: {
+      staggerChildren: 0.03,
+      staggerDirection: -1,
+    },
+  },
+};
+
+const item = {
+  hidden: { y: 200, opacity: 0 },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.3,
+    },
+  },
+  hide: {
+    y: -200,
+    opacity: 0,
+    transition: {
+      duration: 0.3,
+    },
+  },
+};
+
 const Home = (props) => {
   const [categories, setCategories] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState([]);
@@ -63,7 +96,7 @@ const Home = (props) => {
 
     return () => ref.off('value', listener);
   }, []);
-console.log(meals)
+  console.log(meals);
   const onSearchChange = (e) => setSearchValue(e.target.value);
 
   const filterMeals = meals
@@ -73,11 +106,12 @@ console.log(meals)
     );
 
   const renderFoodBoxes = filterMeals.map((meal) => (
-    <AnimatePresence key={meal?.mealname}>
-      <FoodBoxItem
-        data={meal}
-      />
-    </AnimatePresence>
+    <FoodBoxItem
+      key={meal?.mealname}
+      data={meal}
+      as={motion.div}
+      variants={item}
+    />
   ));
 
   return (
@@ -87,9 +121,18 @@ console.log(meals)
         data={categories}
         filterCategories={setFilteredCategories}
       />
-      <FoodBoxesWrapper layout as={motion.div}>
-        {meals && renderFoodBoxes}
-      </FoodBoxesWrapper>
+      <AnimatePresence>
+        <FoodBoxesWrapper
+          variants={container}
+          initial="hidden"
+          animate="show"
+          exit="hide"
+          layout
+          as={motion.div}
+        >
+          {meals && renderFoodBoxes}
+        </FoodBoxesWrapper>
+      </AnimatePresence>
     </PageWrapper>
   );
 };

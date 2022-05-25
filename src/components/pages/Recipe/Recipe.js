@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useParams, useHistory } from 'react-router-dom';
 import {
@@ -23,13 +23,12 @@ import {
   TipsWrapper,
   Tip,
   AddMoreIngredients,
-  EditQuantityWrapper,
-  InlineWrapper,
   EndEditionButton,
   VariantsWrapper,
   VariantItem,
   VariantIcon,
   VariantItemDelete,
+  NotesWrapper
 } from './Recipe.style';
 import { db } from 'assets/firebase/firebase';
 import { ReactComponent as TimeIcon } from 'assets/icons/clockIcon.svg';
@@ -54,23 +53,18 @@ import IngredientItem from 'components/molecules/IngredientItem/IngredientItem';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMedia } from 'hooks/useMedia';
 import { HOME } from 'constants/routes';
-import ConfirmDecision from 'components/organisms/ConfirmDecision/ConfirmDecision';
-import Modal from 'components/organisms/Modal/Modal';
-import FindIngredient from 'components/organisms/FindIngredient/FindIngredient';
 import MacroBox from 'components/organisms/MacroBox/MacroBox';
 import Edit from 'components/atoms/Edit/Edit';
 import SocialShare from 'components/molecules/SocialShare/SocialShare';
-import RatingPrompt from 'components/organisms/RatingPrompt/RatingPrompt';
-import Button from 'components/atoms/Button/Button';
-import Paragraph from 'components/atoms/Paragraph/Paragraph';
-import FormField from 'components/molecules/FormField/FormField';
-import AddNewMealVariant from 'components/organisms/AddNewMealVariant/AddNewMealVariant';
 import { RiHeartAddFill } from 'react-icons/ri';
 import { MdLibraryAdd } from 'react-icons/md';
 import { FaEdit } from 'react-icons/fa';
 import { AiTwotoneDelete } from 'react-icons/ai';
 import { BsQuestionLg } from 'react-icons/bs';
-import RecipeTutorial from 'components/organisms/RecipeTutorial/RecipeTutorial';
+import { BiMessageAdd } from 'react-icons/bi';
+import { HiViewGridAdd } from 'react-icons/hi';
+import RecipeModals from 'components/organisms/RecipeModals';
+import Note from 'components/molecules/Note/Note';
 
 const Recipe = (props) => {
   const { recipeName } = useParams();
@@ -87,46 +81,21 @@ const Recipe = (props) => {
 
   /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! MODALS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
-  const [isTutorialVisible, setIsTutorialVisible] = useState(false);
-
-  const closeTutorial = () => {
-    const newStorageItem = {
-      ...localStorageItem,
-      recipeTutorialOn: false,
-    };
-    setIsTutorialVisible(false);
-    localStorage.setItem(objectName, JSON.stringify(newStorageItem));
+  const initialModalState = {
+    isTutorialVisible: false,
+    isConfirmBoxVisible: false,
+    addIngredientModal: false,
+    isRatingModalVisible: false,
+    isEditQuantityModalOpen: false,
+    isAddVariantVisible: false,
+    isAddNoteModalVisible: false,
   };
-  const openTutorial = () => setIsTutorialVisible(true);
 
-  const [isConfirmBoxVisible, setIsConfirmBoxVisible] = useState(false);
+  const [modalsState, setModalsState] = useState(initialModalState);
 
-  const openModal = () => setIsConfirmBoxVisible(true);
-  const closeModal = () => setIsConfirmBoxVisible(false);
-
-  const [addIngredientModal, setAddIngredientModal] = useState(false);
-
-  const openIngredientModal = () => setAddIngredientModal(true);
-  const closeIngredientModal = () => setAddIngredientModal(false);
-  const addNewIngredientTemporary = (object) => setMeal(object);
-
-  const [isRatingModalVisible, setIsRatingModalVisible] = useState(false);
-
-  const openRatingModal = () => setIsRatingModalVisible(true);
-  const closeRatingModal = () => setIsRatingModalVisible(false);
-
-  const [isEditQuantityModalOpen, setEditQiantityModalOpen] = useState(false);
-  const [editQuantityValue, setEditQuantityValue] = useState('');
-  const handleEditQuantityOnChange = (e) =>
-    setEditQuantityValue(e.target.value);
-
-  const openEditQuantityModal = () => setEditQiantityModalOpen(true);
-  const closeEditQuantityModal = () => setEditQiantityModalOpen(false);
-
-  const [isAddVariantVisible, setSsAddVariantVisible] = useState(false);
-
-  const openAddVariantModal = () => setSsAddVariantVisible(true);
-  const closeAddVariantModal = () => setSsAddVariantVisible(false);
+  const changeModalsState = useCallback((modal, state) => {
+    setModalsState({ ...modalsState, [modal]: state });
+  }, []);
 
   /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! EDITING TEMP !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
@@ -152,15 +121,19 @@ const Recipe = (props) => {
 
   const getNameAndOpenModal = (targetName) => {
     setIngredientTargetName(targetName);
-    openEditQuantityModal();
+    changeModalsState('isEditQuantityModalOpen', true);
   };
+
+  const [editQuantityValue, setEditQuantityValue] = useState('');
+  const handleEditQuantityOnChange = (e) =>
+    setEditQuantityValue(e.target.value);
 
   const changeIngredientQuantityTemp = () => {
     if (!editModeTemp) return;
 
     const mealCopy = JSON.parse(JSON.stringify(meal)); // deep copy of meal object
 
-    if (editQuantityValue) {
+    if (editQuantityValue && editQuantityValue > 0) {
       for (const item of mealCopy.ingredients) {
         if (item.ingredientName === ingredientTargetName) {
           item.ingredientQuantity = Number(editQuantityValue);
@@ -179,9 +152,11 @@ const Recipe = (props) => {
 
       setMeal(mealCopy);
       setEditQuantityValue('');
-      closeEditQuantityModal();
+      changeModalsState('isEditQuantityModalOpen', false);
     }
   };
+
+  const addNewIngredientTemporary = (object) => setMeal(object);
 
   const translateFoodMacro = (name) => {
     if (name === 'fat') return 'tłuszcze';
@@ -383,7 +358,7 @@ const Recipe = (props) => {
     const tabsRef = `users/${auth.uid}/fastList/${recipeName}`;
     const message = 'Usunięto przepis!';
     const goHome = () => {
-      closeModal();
+      changeModalsState('isConfirmBoxVisible', false);
       history.push(HOME);
     };
     dispatch(removeDatabase(favouriteRef));
@@ -409,17 +384,22 @@ const Recipe = (props) => {
     },
     {
       name: 'Dodaj wariant',
-      optionFunction: openAddVariantModal,
-      icon: <RiHeartAddFill />,
+      optionFunction: () => changeModalsState('isAddVariantVisible', true),
+      icon: <HiViewGridAdd />,
+    },
+    {
+      name: 'Dodaj notatkę',
+      optionFunction: () => changeModalsState('isAddNoteModalVisible', true),
+      icon: <BiMessageAdd />,
     },
     {
       name: 'Pomoc',
-      optionFunction: openTutorial,
+      optionFunction: () => changeModalsState('isTutorialVisible', true),
       icon: <BsQuestionLg />,
     },
     {
       name: 'Usuń przepis',
-      optionFunction: openModal,
+      optionFunction: () => changeModalsState('isConfirmBoxVisible', true),
       icon: <AiTwotoneDelete />,
     },
   ];
@@ -446,7 +426,7 @@ const Recipe = (props) => {
 
   const checkIsRated = () => {
     if (localStorageItem.ratingOn) {
-      openRatingModal();
+      changeModalsState('isRatingModalVisible', true);
     }
   };
 
@@ -456,7 +436,7 @@ const Recipe = (props) => {
     const ref = db.ref(`users/${auth.uid}/mealsVariants/${recipeName}`);
 
     const listener = ref.on('value', (snapshot) => {
-      if (!snapshot.exists()) return;
+      if (!snapshot.exists()) return setMealVariants([]);
 
       const tempData = [];
       const data = snapshot.val();
@@ -471,6 +451,7 @@ const Recipe = (props) => {
   }, [recipeName]);
 
   const [originalMeal, setOriginalMeal] = useState({});
+
   const mealVariantsList = [
     {
       ...originalMeal,
@@ -487,19 +468,27 @@ const Recipe = (props) => {
     dispatch(removeDatabase(ref, message));
   };
 
-  const chooseVariant = (item) => {
+  const chooseVariant = (e, item) => {
+    const scrollTop = () =>
+      topPageRef.current.scrollIntoView({
+        behavior: 'smooth',
+      });
+
+    if (e.target?.dataset?.remove) return scrollTop();
+
     setMeal(item);
-    topPageRef.current.scrollIntoView({
-      behavior: 'smooth',
-    });
+    scrollTop();
   };
 
   const renderVariants = mealVariantsList.map((item, index) => (
-    <VariantItem key={index} onClick={() => chooseVariant(item)}>
+    <VariantItem key={index} onClick={(e) => chooseVariant(e, item)}>
       <VariantIcon color={item.variantColor} />
       <span>{item.variantName}</span>
       {index !== 0 && (
-        <VariantItemDelete onClick={() => removeVariant(item.id)}>
+        <VariantItemDelete
+          data-remove="remove"
+          onClick={() => removeVariant(item.id)}
+        >
           &#10005;
         </VariantItemDelete>
       )}
@@ -508,8 +497,50 @@ const Recipe = (props) => {
 
   useEffect(() => {
     if (!localStorageItem.recipeTutorialOn) return;
-    openTutorial();
-  }, [localStorageItem, openTutorial]);
+
+    changeModalsState('isTutorialVisible', true);
+  }, [changeModalsState]);
+
+  const [notes, setNotes] = useState([]);
+
+  useEffect(() => {
+    const ref = db.ref(`users/${auth.uid}/notes/${recipeName}`);
+    const tempData = [];
+
+    const listener = ref.on('value', (snapshot) => {
+      const data = snapshot.val();
+
+      for (let id in data) {
+        tempData.push({ id, ...data[id] });
+      }
+      setNotes(tempData);
+    });
+
+    return () => ref.off('value', listener);
+  }, []);
+
+  console.log(notes);
+
+  const modalsProps = {
+    modalsState,
+    changeModalsState,
+    ingredientTargetName,
+    rating,
+    rateMeal,
+    removeRecipe,
+    meal,
+    addNewIngredientTemporary,
+    addVariant,
+    recipeName,
+    changeIngredientQuantityTemp,
+    handleEditQuantityOnChange,
+    editQuantityValue,
+    objectName,
+  };
+
+  const renderNotes = notes.map(item => (
+    <Note key={item.id} recipeName={recipeName} id={item.id}>{item.body}</Note>
+  ))
 
   return media ? (
     /* !!!!!!!!!!!!!!!!!!!!!!!!!! DESKTOP LAYOUT  !!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -520,13 +551,15 @@ const Recipe = (props) => {
           <img src={meal.mainImage} />
         </MainImageWrapper>
         <StyledHeader>
-          Składniki <Edit onClick={editTempOn} />
+          Składniki <Edit callback={editTempOn} />
         </StyledHeader>
 
         <IngredientsList as={motion.div} layout>
           {renderIngredients}
           {editModeTemp && (
-            <AddMoreIngredients onClick={openIngredientModal}>
+            <AddMoreIngredients
+              onClick={() => changeModalsState('addIngredientModal', true)}
+            >
               Dodaj kolejny składnik
             </AddMoreIngredients>
           )}
@@ -564,56 +597,9 @@ const Recipe = (props) => {
           rateName="Oceń przepis!"
         />
       </LastCell>
-      <Modal isOpen={isConfirmBoxVisible} handleClose={closeModal}>
-        <ConfirmDecision closeModal={closeModal} callback={removeRecipe} />
-      </Modal>
 
-      <Modal isOpen={addIngredientModal} handleClose={closeIngredientModal}>
-        <FindIngredient
-          meal={meal}
-          closeModal={closeIngredientModal}
-          callback={addNewIngredientTemporary}
-        />
-      </Modal>
-      <Modal
-        shouldCloseOnOverlayClick={false}
-        isOpen={isTutorialVisible}
-        handleClose={closeTutorial}
-      >
-        <RecipeTutorial handleClose={closeTutorial} />
-      </Modal>
-      <Modal
-        isOpen={isEditQuantityModalOpen}
-        handleClose={closeEditQuantityModal}
-      >
-        <EditQuantityWrapper>
-          <Paragraph>Podaj zmienioną ilość składnika</Paragraph>
-          <Paragraph>{ingredientTargetName}</Paragraph>
-          <FormField
-            type="number"
-            ingredientName={ingredientTargetName}
-            onChange={handleEditQuantityOnChange}
-            value={editQuantityValue}
-            name="changeQuantity"
-            small
-            id="changeQuantity"
-          />
-          <InlineWrapper>
-            <Button size="s" onClick={changeIngredientQuantityTemp}>
-              edytuj
-            </Button>
-            <Button size="s" secondary onClick={closeEditQuantityModal}>
-              wróć
-            </Button>
-          </InlineWrapper>
-        </EditQuantityWrapper>
-      </Modal>
-      <Modal isOpen={isAddVariantVisible} handleClose={closeAddVariantModal}>
-        <AddNewMealVariant
-          handleClose={closeAddVariantModal}
-          callback={addVariant}
-        />
-      </Modal>
+      <RecipeModals modalsProps={modalsProps} />
+
       <AnimatePresence>
         {editModeTemp && (
           <EndEditionButton
@@ -672,19 +658,26 @@ const Recipe = (props) => {
         <MacroWrapper>{meal && renderMakroBoxes}</MacroWrapper>
 
         <StyledHeader>
-          Składniki <Edit onClick={editTempOn} />
+          Składniki <Edit callback={editTempOn} />
         </StyledHeader>
 
-        <IngredientsList as={motion.div} layout>
+        <IngredientsList
+          as={motion.div}
+          layout
+          animate={{ opacity: 1 }}
+          initial={{ opacity: 0 }}
+        >
           {renderIngredients}
           {editModeTemp && (
-            <AddMoreIngredients onClick={openIngredientModal}>
+            <AddMoreIngredients
+              onClick={() => changeModalsState('addIngredientModal', true)}
+            >
               Dodaj kolejny składnik
             </AddMoreIngredients>
           )}
         </IngredientsList>
 
-        {mealVariants.length ? (
+        {mealVariants.length > 0 ? (
           <VariantsWrapper>{renderVariants}</VariantsWrapper>
         ) : null}
 
@@ -697,6 +690,8 @@ const Recipe = (props) => {
 
         <TipsWrapper>{meal.tips && renderTips}</TipsWrapper>
 
+        {notes && <NotesWrapper>{renderNotes}</NotesWrapper>}
+
         <ImagesContainer>{renderRestOfImages}</ImagesContainer>
 
         <RatingStars
@@ -707,67 +702,7 @@ const Recipe = (props) => {
 
         <SocialShare />
 
-        <Modal
-          shouldCloseOnOverlayClick={false}
-          isOpen={isTutorialVisible}
-          handleClose={closeTutorial}
-        >
-          <RecipeTutorial handleClose={closeTutorial} />
-        </Modal>
-
-        <Modal isOpen={isRatingModalVisible} handleClose={closeRatingModal}>
-          <RatingPrompt
-            activeStars={rating}
-            rateFunction={rateMeal}
-            handleClose={closeRatingModal}
-          />
-        </Modal>
-
-        <Modal isOpen={isConfirmBoxVisible} handleClose={closeModal}>
-          <ConfirmDecision closeModal={closeModal} callback={removeRecipe} />
-        </Modal>
-
-        <Modal isOpen={addIngredientModal} handleClose={closeIngredientModal}>
-          <FindIngredient
-            meal={meal}
-            closeModal={closeIngredientModal}
-            callback={addNewIngredientTemporary}
-          />
-        </Modal>
-
-        <Modal isOpen={isAddVariantVisible} handleClose={closeAddVariantModal}>
-          <AddNewMealVariant
-            handleClose={closeAddVariantModal}
-            callback={addVariant}
-          />
-        </Modal>
-
-        <Modal
-          isOpen={isEditQuantityModalOpen}
-          handleClose={closeEditQuantityModal}
-        >
-          <EditQuantityWrapper>
-            <Paragraph>Podaj zmienioną ilość składnika</Paragraph>
-            <Paragraph>{ingredientTargetName}</Paragraph>
-            <FormField
-              type="number"
-              ingredientName={ingredientTargetName}
-              onChange={handleEditQuantityOnChange}
-              value={editQuantityValue}
-              name="changeQuantity"
-              small
-              id="changeQuantity"
-            />
-            <InlineWrapper>
-              <Button size="s" onClick={changeIngredientQuantityTemp}>
-                edytuj
-              </Button>
-              <Button size="s" secondary onClick={closeEditQuantityModal}>
-                wróć
-              </Button>
-            </InlineWrapper>
-          </EditQuantityWrapper>
-        </Modal>
+        <RecipeModals modalsProps={modalsProps} />
       </Wrapper>
       <AnimatePresence>
         {editModeTemp && (
