@@ -13,10 +13,12 @@ const Button = ({
   secondary = false,
   wide,
   size = 'm',
+  ...rest
 }: ButtonProps) => {
   const [startAnimation, setStartAnimation] = useState(false);
   const changeAnimationState = () =>
     setStartAnimation((prevState) => !prevState);
+    
   return (
     <StyledButton
       animationTriger={startAnimation}
@@ -25,6 +27,7 @@ const Button = ({
       secondary={secondary}
       wide={wide}
       size={size}
+      {...rest}
     >
       {children}
     </StyledButton>

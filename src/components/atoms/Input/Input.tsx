@@ -11,7 +11,7 @@ interface InputProps {
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ search, type = 'text', textareaSize, rounded = false, small }, ref) => {
+  ({ search, type = 'text', textareaSize, rounded = false, small, ...rest }, ref) => {
     return search ? (
       <SearchInputWrapper>
         <IconWrapper>
@@ -25,6 +25,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           rounded={rounded}
           ref={ref}
           textareaSize={textareaSize}
+          {...rest}
         ></StyledInput>
       </SearchInputWrapper>
     ) : (
@@ -35,6 +36,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         isSearch={search}
         textareaSize={textareaSize}
         ref={ref}
+        {...rest}
       />
     );
   }

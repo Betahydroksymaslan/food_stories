@@ -334,6 +334,7 @@ const Recipe = (props) => {
     const message = 'Dodano nowy wariant posiłku!';
 
     dispatch(pushDatabase(ref, object, message));
+    changeModalsState('isAddVariantVisible', false)
   };
 
   const addToFastList = async () => {

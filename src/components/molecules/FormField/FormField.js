@@ -23,7 +23,7 @@ const FormField = forwardRef(
   ) => {
     return (
       <Wrapper>
-        <StyledLabel htmlFor={id} {...rest}>
+        <StyledLabel htmlFor={id}>
           {label}
         </StyledLabel>
         <Input
@@ -38,6 +38,7 @@ const FormField = forwardRef(
           defaultValue={defaultValue}
           small={small}
           textareaSize={textareaSize}
+          {...rest}
         />
       </Wrapper>
     );

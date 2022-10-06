@@ -13,12 +13,12 @@ import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import StyledLink from 'components/atoms/StyledLink/StyledLink';
 
-interface FoodBoxType {
+/* interface FoodBoxType {
   tabName: string;
   tabImage: string;
 }
-
-const FoodBoxShortcut = ({ tabName, tabImage }: FoodBoxType) => {
+ */
+const FoodBoxShortcut = ({ tabName, tabImage }) => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.firebase.auth);
   const [startAnimation, setStartAnimation] = useState(false);
